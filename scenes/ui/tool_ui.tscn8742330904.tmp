@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://bwdt41l74cwc"]
+
+[ext_resource type="PackedScene" uid="uid://by8jim8330212" path="res://scenes/ui/tool_ui_texture.tscn" id="1_440vi"]
+[ext_resource type="Script" uid="uid://kpxf4nb1wlpu" path="res://scripts/ui/tool_ui.gd" id="1_s80dt"]
+
+[node name="ToolUI" type="Control" unique_id=378385836]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s80dt")
+
+[node name="ToolContainer" type="HBoxContainer" parent="." unique_id=454129147]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -40.0
+offset_right = 50.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ToolUITexture" parent="ToolContainer" unique_id=1064460399 instance=ExtResource("1_440vi")]
+layout_mode = 2
+
+[node name="ToolUITexture2" parent="ToolContainer" unique_id=2028150592 instance=ExtResource("1_440vi")]
+layout_mode = 2
+
+[node name="ToolUITexture3" parent="ToolContainer" unique_id=1221837873 instance=ExtResource("1_440vi")]
+layout_mode = 2

@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://4t651cjey82n"]
+
+[ext_resource type="Script" uid="uid://dkow82ww6ewmh" path="res://scripts/ui/keyboard_control_hint_ui.gd" id="1_hgofo"]
+
+[node name="KeyboardControlHintUI" type="Control" unique_id=588791315]
+modulate = Color(1, 1, 1, 0.78431374)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hgofo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=490350486]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -75.0
+offset_top = 50.0
+offset_bottom = -25.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 50

@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://tqv0e2o3f1h1"]
+
+[ext_resource type="Script" uid="uid://c08rkxwhuhqrq" path="res://scripts/ui/shop_ui.gd" id="1_ygcrn"]
+[ext_resource type="Texture2D" uid="uid://dp3635b8kjtx0" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Gamepad/ButtonRight.png" id="2_nwxdi"]
+[ext_resource type="Texture2D" uid="uid://dsvbwwfuhevqb" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Keyboard/KeyEscape.png" id="3_a65e2"]
+
+[node name="ShopUI" type="Control" unique_id=1397887581]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ygcrn")
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=609050978]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.1
+anchor_right = 0.75
+anchor_bottom = 0.7
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1559314994]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+
+[node name="ExitButton" type="TextureRect" parent="HBoxContainer" unique_id=216202831]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("2_nwxdi")
+stretch_mode = 5
+
+[node name="ExitButton2" type="TextureRect" parent="HBoxContainer" unique_id=1933003864]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("3_a65e2")
+stretch_mode = 5

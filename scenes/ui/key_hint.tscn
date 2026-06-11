@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://cntwusalej16x"]
+
+[ext_resource type="Script" uid="uid://dfq6mh7nx1ox4" path="res://scripts/ui/key_hint.gd" id="1_d6sch"]
+[ext_resource type="Texture2D" uid="uid://c81fdc5t1a2nt" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Keyboard/KeyE.png" id="2_8gr2x"]
+[ext_resource type="Texture2D" uid="uid://df5gmpi5o20ww" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Items/Tool/Hammer.png" id="3_d6sch"]
+
+[node name="KeyHint" type="Control" unique_id=134922051]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_d6sch")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=894426303]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -30.0
+offset_right = 52.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+theme_override_constants/separation = 10
+
+[node name="Key" type="TextureRect" parent="HBoxContainer" unique_id=1233731138]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("2_8gr2x")
+stretch_mode = 5
+
+[node name="Item" type="TextureRect" parent="HBoxContainer" unique_id=1282579138]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("3_d6sch")
+stretch_mode = 5

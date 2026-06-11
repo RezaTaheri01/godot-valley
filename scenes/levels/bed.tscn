@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://dh6ybk44v1xuu"]
+
+[ext_resource type="Script" uid="uid://lx88lj4lycwa" path="res://scripts/bed.gd" id="1_7op6d"]
+[ext_resource type="Texture2D" uid="uid://cp17uql2yvcxi" path="res://graphics/objects/bed.png" id="1_co7c2"]
+[ext_resource type="Texture2D" uid="uid://ctq86sgkfof6j" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Emote/emote21.png" id="2_5cltx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7op6d"]
+size = Vector2(16, 22)
+
+[node name="bed" type="StaticBody2D" unique_id=2076695548]
+scale = Vector2(1.25, 1.25)
+collision_layer = 36
+collision_mask = 2
+script = ExtResource("1_7op6d")
+
+[node name="InteractSign" type="Sprite2D" parent="." unique_id=2146484999]
+position = Vector2(0, -17)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_5cltx")
+
+[node name="BedSprite2D" type="Sprite2D" parent="." unique_id=1376069899]
+texture = ExtResource("1_co7c2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=399111409]
+shape = SubResource("RectangleShape2D_7op6d")

@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://iqt34unfal58"]
+
+[ext_resource type="Script" uid="uid://cb1ijawtv7hc1" path="res://scripts/objects/tree.gd" id="1_2c5pw"]
+[ext_resource type="PackedScene" uid="uid://b1a4cl0kv3lpw" path="res://scenes/vfx/flash_sprite_2d.tscn" id="2_r0ico"]
+[ext_resource type="Shader" uid="uid://b6nm5dtkeitqy" path="res://shaders/flash.tres" id="3_xpdpm"]
+[ext_resource type="Texture2D" uid="uid://br5wl5dq24jqc" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetNature.png" id="4_2c5pw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7yu6v"]
+resource_local_to_scene = true
+shader = ExtResource("3_xpdpm")
+shader_parameter/Color = Color(1, 1, 1, 1)
+shader_parameter/Progress = 0.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_r6wkp"]
+radius = 5.0
+height = 16.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mbbxw"]
+radius = 5.0
+height = 14.0
+
+[node name="tree" type="StaticBody2D" unique_id=1522359988 groups=["Axe_able", "Objects", "Tree"]]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_2c5pw")
+
+[node name="FlashSprite2D" parent="." unique_id=116580978 instance=ExtResource("2_r0ico")]
+material = SubResource("ShaderMaterial_7yu6v")
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("4_2c5pw")
+hframes = 2
+region_enabled = true
+region_rect = Rect2(0, 288, 96, 48)
+
+[node name="CollisionShapeTree2D" type="CollisionShape2D" parent="." unique_id=950309322]
+position = Vector2(0, 7)
+shape = SubResource("CapsuleShape2D_r6wkp")
+
+[node name="Stump" type="Sprite2D" parent="." unique_id=455528689]
+visible = false
+position = Vector2(0, 11.500001)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("4_2c5pw")
+region_enabled = true
+region_rect = Rect2(64, 128, 16, 16)
+
+[node name="CollisionShapeStumpD2" type="CollisionShape2D" parent="." unique_id=146765302]
+position = Vector2(0, 11)
+shape = SubResource("CapsuleShape2D_mbbxw")
+disabled = true
+
+[node name="AppleSpawnPositions" type="Node2D" parent="." unique_id=1824654575]
+
+[node name="Marker2D" type="Marker2D" parent="AppleSpawnPositions" unique_id=1856716710]
+position = Vector2(5, 3)
+
+[node name="Marker2D2" type="Marker2D" parent="AppleSpawnPositions" unique_id=632102853]
+position = Vector2(-5, 2)
+
+[node name="Marker2D3" type="Marker2D" parent="AppleSpawnPositions" unique_id=1970060707]
+position = Vector2(-8, -5)
+
+[node name="Marker2D4" type="Marker2D" parent="AppleSpawnPositions" unique_id=2031795664]
+position = Vector2(0, -9)
+
+[node name="Marker2D5" type="Marker2D" parent="AppleSpawnPositions" unique_id=1441628844]
+position = Vector2(9, -4)
+
+[node name="Apples" type="Node2D" parent="." unique_id=22309007]

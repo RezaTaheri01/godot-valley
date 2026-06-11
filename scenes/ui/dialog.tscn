@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://dsbyrwcvju07b"]
+
+[ext_resource type="Theme" uid="uid://bv8t0obbc2n47" path="res://scenes/ui/game_theme.tres" id="1_t7mmw"]
+[ext_resource type="Script" uid="uid://b6w0tf7nxqsys" path="res://scripts/ui/dialog.gd" id="2_xqt65"]
+
+[node name="Dialog" type="Control" unique_id=1795916384]
+z_index = 50
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_t7mmw")
+script = ExtResource("2_xqt65")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=209400842]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=177248852]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer" unique_id=1218801366]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "test dialog"

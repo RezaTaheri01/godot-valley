@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://cgk6tybuxf1yi"]
+
+[ext_resource type="Texture2D" uid="uid://bldxvi5dvro6k" path="res://graphics/icons/apple.png" id="1_g48uh"]
+[ext_resource type="Script" uid="uid://d25ybotb17ukr" path="res://scripts/ui/resourse_texture.gd" id="2_12anh"]
+[ext_resource type="Theme" uid="uid://bv8t0obbc2n47" path="res://scenes/ui/game_theme.tres" id="3_d1wnn"]
+
+[node name="ResourseTexture" type="TextureRect" unique_id=408232875]
+custom_minimum_size = Vector2(40, 40)
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 4
+texture = ExtResource("1_g48uh")
+expand_mode = 3
+stretch_mode = 5
+script = ExtResource("2_12anh")
+
+[node name="Label" type="Label" parent="." unique_id=1847458954]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_bottom = -85.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_d1wnn")
+theme_override_colors/font_color = Color(0.9401983, 0.9401984, 0.9401983, 1)
+text = "0"
+horizontal_alignment = 1

@@ -1,0 +1,5 @@
+tool_ui 50
+house roof 5
+player 0
+house floor -1
+fish game 50

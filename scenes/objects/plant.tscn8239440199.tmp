@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bv1vvvyi8rgs0"]
+
+[ext_resource type="Script" uid="uid://b2lwnunl7gvuw" path="res://scripts/objects/plant.gd" id="1_fvfks"]
+[ext_resource type="Script" uid="uid://c5j2u705jok42" path="res://resources/plant_res.gd" id="2_0a33w"]
+[ext_resource type="Texture2D" uid="uid://cnur3o7y688kk" path="res://graphics/plants/tomato.png" id="3_yb5fs"]
+
+[sub_resource type="Resource" id="Resource_7bmar"]
+resource_local_to_scene = true
+script = ExtResource("2_0a33w")
+texture = ExtResource("3_yb5fs")
+metadata/_custom_type_script = "uid://c5j2u705jok42"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fvfks"]
+radius = 2.5
+height = 6.0
+
+[node name="Plant" type="StaticBody2D" unique_id=1540031936 groups=["Plants"]]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_fvfks")
+res = SubResource("Resource_7bmar")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1523201392]
+position = Vector2(-1, -10)
+hframes = 4
+region_rect = Rect2(0, 2, 64, 30)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=797922335]
+position = Vector2(-0.5, 1)
+shape = SubResource("CapsuleShape2D_fvfks")

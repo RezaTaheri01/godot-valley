@@ -1,0 +1,127 @@
+[gd_scene format=4 uid="uid://bfjaiku70hbc8"]
+
+[ext_resource type="Script" uid="uid://x1lxu5p2uw37" path="res://scripts/house.gd" id="1_g6yoe"]
+[ext_resource type="TileSet" uid="uid://cw45kfg2c8mfk" path="res://premade/HouseTileSet.tres" id="1_mfwd8"]
+[ext_resource type="Texture2D" uid="uid://dpvg3yddudamn" path="res://graphics/tilesets/walls_floor_tile.png" id="3_bbbus"]
+[ext_resource type="Texture2D" uid="uid://cwbhys0nypuq" path="res://graphics/tilesets/roof.png" id="4_jfia5"]
+[ext_resource type="PackedScene" uid="uid://bk2s3d813v044" path="res://scenes/levels/tv.tscn" id="5_ap60n"]
+[ext_resource type="PackedScene" uid="uid://dh6ybk44v1xuu" path="res://scenes/levels/bed.tscn" id="6_4yql1"]
+[ext_resource type="Texture2D" uid="uid://c6gdvovhpj0oj" path="res://graphics/objects/plant.png" id="7_e6eqm"]
+[ext_resource type="Texture2D" uid="uid://dvaxmp1m08kte" path="res://graphics/objects/carpet.png" id="8_dg1t0"]
+[ext_resource type="Texture2D" uid="uid://baujryqqid5kt" path="res://graphics/objects/bookshelf.png" id="9_dg1t0"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jfia5"]
+texture = ExtResource("3_bbbus")
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ap60n"]
+sources/0 = SubResource("TileSetAtlasSource_jfia5")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ap60n"]
+texture = ExtResource("4_jfia5")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_4yql1"]
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Terrain 0"
+terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
+sources/0 = SubResource("TileSetAtlasSource_ap60n")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dvuk3"]
+size = Vector2(8, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ctgqc"]
+size = Vector2(26, 20)
+
+[node name="House" type="Node2D" unique_id=728922479]
+y_sort_enabled = true
+script = ExtResource("1_g6yoe")
+
+[node name="WallsLayer" type="TileMapLayer" parent="." unique_id=1080318064]
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAD//wIAAAACAAEAAAD//wEAAAACAAEAAAD+/wIAAAABAAEAAAD+/wEAAAABAAEAAAD9/wIAAAABAAEAAAD9/wEAAAABAAEAAAD8/wIAAAABAAEAAAD8/wEAAAABAAEAAAD7/wIAAAABAAEAAAD7/wEAAAABAAEAAAD6/wIAAAABAAEAAAD6/wEAAAABAAEAAAD5/wIAAAAAAAEAAAD5/wEAAAAAAAEAAAD//wMAAAACAAIAAAD+/wMAAAABAAIAAAD9/wMAAAABAAIAAAD8/wMAAAABAAIAAAD6/wMAAAABAAIAAAD5/wMAAAAAAAIAAAD//wAAAAACAAEAAAD+/wAAAAABAAEAAAD9/wAAAAABAAEAAAD8/wAAAAABAAEAAAD7/wAAAAABAAEAAAD6/wAAAAABAAEAAAD5/wAAAAAAAAEAAAD/////AAACAAEAAAD+////AAABAAEAAAD9////AAABAAEAAAD8////AAABAAEAAAD7////AAABAAEAAAD6////AAABAAEAAAD5////AAAAAAEAAAD///7/AAACAAAAAAD+//7/AAABAAAAAAD9//7/AAABAAAAAAD8//7/AAABAAAAAAD7//7/AAABAAAAAAD6//7/AAABAAAAAAD5//7/AAAAAAAAAAD7/wMAAAAAAAQAAAA=")
+tile_set = ExtResource("1_mfwd8")
+
+[node name="FloorLayer" type="TileMapLayer" parent="." unique_id=1935451262]
+z_index = -1
+tile_set = SubResource("TileSet_ap60n")
+
+[node name="HouseArea" type="Area2D" parent="." unique_id=80000391]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="HouseArea" unique_id=2070303294]
+polygon = PackedVector2Array(-110, 61, -109, -28, -1, -28, -2, 61, -63, 62, -63, 75, -81, 75, -81, 61)
+
+[node name="RoofLayer" type="TileMapLayer" parent="." unique_id=848349569]
+visible = false
+z_index = 5
+tile_map_data = PackedByteArray("AAD5/wEAAAAAAAQAAAD6/wEAAAABAAQAAAD7/wEAAAABAAQAAAD8/wEAAAABAAQAAAD9/wEAAAABAAQAAAD+/wEAAAABAAQAAAD5/wIAAAAAAAQAAAD5/wMAAAAAAAUAAAD6/wIAAAABAAQAAAD6/wMAAAABAAUAAAD7/wIAAAABAAQAAAD7/wMAAAABAAUAAAD8/wIAAAABAAQAAAD8/wMAAAABAAUAAAD9/wIAAAABAAQAAAD9/wMAAAABAAUAAAD+/wIAAAABAAQAAAD+/wMAAAABAAUAAAD//wEAAAACAAQAAAD//wIAAAACAAQAAAD//wMAAAACAAUAAAD5//7/AAAAAAEAAAD5////AAAAAAIAAAD6//7/AAABAAEAAAD6////AAABAAIAAAD7//7/AAABAAEAAAD7////AAABAAIAAAD8//7/AAABAAEAAAD8////AAABAAIAAAD9//7/AAABAAEAAAD9////AAABAAIAAAD+//7/AAABAAEAAAD+////AAABAAIAAAD///7/AAACAAEAAAD/////AAACAAIAAAD5//3/AAAAAAAAAAD6//3/AAABAAAAAAD7//3/AAABAAAAAAD8//3/AAABAAAAAAD9//3/AAABAAAAAAD+//3/AAABAAAAAAD///3/AAACAAAAAAD5/wAAAAAAAAMAAAD6/wAAAAABAAMAAAD7/wAAAAABAAMAAAD8/wAAAAABAAMAAAD9/wAAAAABAAMAAAD+/wAAAAABAAMAAAD//wAAAAACAAMAAAA=")
+tile_set = SubResource("TileSet_4yql1")
+
+[node name="TV" parent="." unique_id=1619880589 instance=ExtResource("5_ap60n")]
+position = Vector2(-73, -11)
+metadata/_edit_group_ = true
+
+[node name="bed" parent="." unique_id=2076695548 instance=ExtResource("6_4yql1")]
+position = Vector2(-22, 31)
+metadata/_edit_group_ = true
+
+[node name="Plant" type="StaticBody2D" parent="." unique_id=1154759338]
+position = Vector2(-97, -12)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Plant" unique_id=1044248953]
+texture = ExtResource("7_e6eqm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Plant" unique_id=1570309240]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_dvuk3")
+
+[node name="Plant2" type="StaticBody2D" parent="." unique_id=1494265815]
+position = Vector2(-12, -13)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Plant2" unique_id=597439240]
+texture = ExtResource("7_e6eqm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Plant2" unique_id=1275681941]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_dvuk3")
+
+[node name="Carpet" type="Sprite2D" parent="." unique_id=898893472]
+z_index = -1
+position = Vector2(-72, 25)
+texture = ExtResource("8_dg1t0")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=682844241]
+position = Vector2(-41, -19)
+metadata/_edit_group_ = true
+
+[node name="Bookshelf" type="Sprite2D" parent="StaticBody2D" unique_id=2119360148]
+texture = ExtResource("9_dg1t0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=793533792]
+shape = SubResource("RectangleShape2D_ctgqc")
+
+[connection signal="interact" from="." to="TV" method="_on_house_interact"]
+[connection signal="interact" from="." to="bed" method="_on_house_interact"]
+[connection signal="body_entered" from="HouseArea" to="." method="_on_house_area_body_entered"]
+[connection signal="body_exited" from="HouseArea" to="." method="_on_house_area_body_exited"]

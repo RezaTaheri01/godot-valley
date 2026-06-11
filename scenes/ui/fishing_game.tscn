@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://rqbm035hv21n"]
+
+[ext_resource type="Script" uid="uid://dvawj2opb7lu4" path="res://scripts/ui/fishing_game.gd" id="1_unues"]
+[ext_resource type="Texture2D" uid="uid://dgumw45kjfkbn" path="res://graphics/ui/fish_frame.png" id="1_xvvf3"]
+[ext_resource type="Texture2D" uid="uid://cpv12fur04hkk" path="res://graphics/ui/fish_progress_bg.png" id="2_0s3av"]
+[ext_resource type="Texture2D" uid="uid://big0akfwjmocq" path="res://graphics/ui/fish_progress.png" id="3_kg75w"]
+[ext_resource type="Texture2D" uid="uid://bjyisaqia5rw1" path="res://graphics/ui/bar.png" id="5_b5p8b"]
+[ext_resource type="Texture2D" uid="uid://bynnb60cf2brm" path="res://graphics/icons/silverfish.png" id="6_s7mi0"]
+
+[node name="FishingGame" type="Node2D" unique_id=1161393087]
+z_index = 50
+script = ExtResource("1_unues")
+
+[node name="Control" type="Control" parent="." unique_id=1245629035]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Control" unique_id=1729367871]
+custom_minimum_size = Vector2(20, 100)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_xvvf3")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 20
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Control" unique_id=219840803]
+custom_minimum_size = Vector2(10, 80)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+fill_mode = 3
+nine_patch_stretch = true
+stretch_margin_left = 4
+stretch_margin_top = 4
+stretch_margin_right = 4
+stretch_margin_bottom = 4
+texture_under = ExtResource("2_0s3av")
+texture_progress = ExtResource("3_kg75w")
+
+[node name="BarSprite" type="Sprite2D" parent="." unique_id=1882209889]
+texture = ExtResource("5_b5p8b")
+
+[node name="FishSprite" type="Sprite2D" parent="." unique_id=1589156578]
+texture = ExtResource("6_s7mi0")
+
+[node name="FishUpdateTimer" type="Timer" parent="." unique_id=580718721]
+autostart = true
+
+[connection signal="value_changed" from="Control/TextureProgressBar" to="." method="_on_texture_progress_bar_value_changed"]
+[connection signal="timeout" from="FishUpdateTimer" to="." method="_on_timer_timeout"]

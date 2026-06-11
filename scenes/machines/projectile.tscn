@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dymqmk6hf61e"]
+
+[ext_resource type="Texture2D" uid="uid://bcs34147dv0mx" path="res://graphics/machines/projectile.png" id="1_cxqfw"]
+[ext_resource type="Script" uid="uid://c3xutf7gphiwu" path="res://scripts/machines/projectile.gd" id="1_u4e1p"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u4e1p"]
+radius = 3.0
+
+[node name="Projectile" type="Area2D" unique_id=1608300300]
+collision_layer = 0
+collision_mask = 16
+script = ExtResource("1_u4e1p")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1194775748]
+texture = ExtResource("1_cxqfw")
+centered = false
+offset = Vector2(-4, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1371324838]
+position = Vector2(4, 4)
+shape = SubResource("CircleShape2D_u4e1p")
+
+[node name="Timer" type="Timer" parent="." unique_id=574511656]
+wait_time = 6.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

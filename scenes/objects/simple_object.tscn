@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://tnt55tpg05br"]
+
+[ext_resource type="Script" uid="uid://bpdqp0s7x87i8" path="res://scripts/objects/simple_object.gd" id="1_n4sul"]
+[ext_resource type="Texture2D" uid="uid://chjx8mvh3pdpj" path="res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/03.png" id="2_n4sul"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n4sul"]
+radius = 6.0
+height = 14.0
+
+[node name="SimpleObject" type="StaticBody2D" unique_id=1529564000 groups=["Objects"]]
+z_index = -1
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_n4sul")
+size = 7
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=567171628]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_n4sul")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2026258338]
+position = Vector2(0, -2)
+shape = SubResource("CapsuleShape2D_n4sul")

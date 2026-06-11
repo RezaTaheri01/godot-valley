@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://cgbffbdcy7b8f"]
+
+[ext_resource type="Theme" uid="uid://bv8t0obbc2n47" path="res://scenes/ui/game_theme.tres" id="1_kscek"]
+[ext_resource type="Texture2D" uid="uid://bsx0onkeirxbt" path="res://graphics/icons/corn.png" id="1_uxb0r"]
+[ext_resource type="Script" uid="uid://cfx27r3w1rpe6" path="res://scripts/ui/plant_info.gd" id="2_kscek"]
+[ext_resource type="Texture2D" uid="uid://k4r0km103lsj" path="res://graphics/ui/v_bar.png" id="3_e1ua3"]
+
+[node name="PlantInfo" type="PanelContainer" unique_id=804374826]
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_kscek")
+script = ExtResource("2_kscek")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=521565644]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="IconTexture" type="TextureRect" parent="HBoxContainer" unique_id=488424576]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("1_uxb0r")
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=383421001]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1836492476]
+layout_mode = 2
+text = "Corn"
+
+[node name="GrowthBar" type="TextureProgressBar" parent="HBoxContainer/VBoxContainer" unique_id=1299207178]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+nine_patch_stretch = true
+texture_under = ExtResource("3_e1ua3")
+texture_progress = ExtResource("3_e1ua3")
+tint_under = Color(0.09019608, 0.09019608, 0.09019608, 1)
+tint_progress = Color(0.56078434, 0.8392157, 0.18431373, 1)
+
+[node name="DeathBar" type="TextureProgressBar" parent="HBoxContainer/VBoxContainer" unique_id=1590506532]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+value = 50.0
+nine_patch_stretch = true
+texture_under = ExtResource("3_e1ua3")
+texture_progress = ExtResource("3_e1ua3")
+tint_under = Color(0.09019608, 0.09019608, 0.09019608, 1)
+tint_progress = Color(0.7764706, 0.26666668, 0.11372549, 1)

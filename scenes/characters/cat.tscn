@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://bu6p00q23wr75"]
+
+[ext_resource type="Script" uid="uid://ctsfhhbs4kyt6" path="res://scripts/characters/character.gd" id="1_e22cc"]
+[ext_resource type="Texture2D" uid="uid://ctq86sgkfof6j" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Emote/emote21.png" id="2_2qjml"]
+[ext_resource type="PackedScene" uid="uid://dsbyrwcvju07b" path="res://scenes/ui/dialog.tscn" id="4_2qjml"]
+[ext_resource type="Texture2D" uid="uid://cn4s3loq3j21r" path="res://graphics/characters/cat.png" id="5_yscb1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1bdar"]
+size = Vector2(16, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6pson"]
+atlas = ExtResource("5_yscb1")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yh3tp"]
+atlas = ExtResource("5_yscb1")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ohwx5"]
+atlas = ExtResource("5_yscb1")
+region = Rect2(0, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_437sl"]
+atlas = ExtResource("5_yscb1")
+region = Rect2(48, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1j4ge"]
+atlas = ExtResource("5_yscb1")
+region = Rect2(0, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hm0uo"]
+atlas = ExtResource("5_yscb1")
+region = Rect2(48, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6mn2q"]
+atlas = ExtResource("5_yscb1")
+region = Rect2(0, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5qi7"]
+atlas = ExtResource("5_yscb1")
+region = Rect2(48, 144, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ma1fs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6pson")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yh3tp")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ohwx5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_437sl")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1j4ge")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hm0uo")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6mn2q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5qi7")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
+}]
+
+[node name="Cat" type="CharacterBody2D" unique_id=177865440 node_paths=PackedStringArray("animated_sprite") groups=["ShopCharacters"]]
+y_sort_enabled = true
+collision_layer = 44
+collision_mask = 0
+script = ExtResource("1_e22cc")
+dialog = Array[String](["Meow!"])
+texture = ExtResource("5_yscb1")
+animated_sprite = NodePath("AnimatedSprite2D")
+
+[node name="InteractSign" type="Sprite2D" parent="." unique_id=1492226175]
+z_index = 50
+position = Vector2(0, -16)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2_2qjml")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=151126228]
+hframes = 4
+vframes = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2144221144]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_1bdar")
+
+[node name="Dialog" parent="." unique_id=1795916384 instance=ExtResource("4_2qjml")]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=829953333]
+sprite_frames = SubResource("SpriteFrames_ma1fs")
+animation = &"idle_up"
+frame_progress = 0.5261092

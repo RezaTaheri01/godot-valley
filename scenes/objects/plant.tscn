@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://bv1vvvyi8rgs0"]
+
+[ext_resource type="Script" uid="uid://b2lwnunl7gvuw" path="res://scripts/objects/plant.gd" id="1_fvfks"]
+[ext_resource type="Texture2D" uid="uid://b41e01wg87oo5" path="res://graphics/plants/wheat.png" id="2_fvfks"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fvfks"]
+radius = 2.5
+height = 6.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7bmar"]
+
+[node name="Plant" type="StaticBody2D" unique_id=1540031936 groups=["Plants"]]
+collision_layer = 68
+collision_mask = 0
+script = ExtResource("1_fvfks")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1523201392]
+position = Vector2(-1, -10)
+texture = ExtResource("2_fvfks")
+hframes = 4
+region_rect = Rect2(0, 2, 64, 30)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=797922335]
+position = Vector2(-0.5, 1)
+shape = SubResource("CapsuleShape2D_fvfks")
+
+[node name="CollisionArea" type="Area2D" parent="." unique_id=1000657113]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea" unique_id=160545773]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_7bmar")
+
+[connection signal="body_entered" from="CollisionArea" to="." method="_on_collision_area_body_entered"]

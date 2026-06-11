@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://c7836v5j23y6l"]
+
+[ext_resource type="Theme" uid="uid://bv8t0obbc2n47" path="res://scenes/ui/game_theme.tres" id="1_go8fd"]
+[ext_resource type="Script" uid="uid://0jtcatm4l8h5" path="res://scripts/ui/shop_button.gd" id="2_dxkve"]
+[ext_resource type="Texture2D" uid="uid://bldxvi5dvro6k" path="res://graphics/icons/apple.png" id="2_ehfxd"]
+
+[node name="ShopButton" type="Button" unique_id=582161707]
+clip_children = 1
+custom_minimum_size = Vector2(200, 250)
+offset_right = 200.0
+offset_bottom = 250.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_go8fd")
+script = ExtResource("2_dxkve")
+
+[node name="BG" type="Panel" parent="." unique_id=1521588283]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1678506917]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer" unique_id=1809800819]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.74509805, 1, 1, 1)
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ColorRect" unique_id=987901363]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_ehfxd")
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=518497308]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer" unique_id=610654348]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 32
+text = "APPLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="VBoxContainer/VBoxContainer" unique_id=272285489]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer/Control" unique_id=1392169904]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_constants/separation = 20
+
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
+[connection signal="pressed" from="." to="." method="_on_pressed"]

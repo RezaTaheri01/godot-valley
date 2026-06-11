@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://cntexmap73t0k"]
+
+[ext_resource type="PackedScene" uid="uid://cgbffbdcy7b8f" path="res://scenes/ui/plant_info.tscn" id="1_b2h05"]
+[ext_resource type="Script" uid="uid://k8r8or1u2l6y" path="res://scripts/ui/plant_info_control.gd" id="1_gwqxr"]
+[ext_resource type="Texture2D" uid="uid://b87gfl326liki" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Keyboard/KeyN.png" id="3_sl0nk"]
+[ext_resource type="Texture2D" uid="uid://pvdbd5ebc2xt" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Gamepad/ButtonPlusRight.png" id="4_01cku"]
+
+[node name="PlantInfoContainer" type="Control" unique_id=627218757]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 20.0
+offset_right = -1280.0
+offset_bottom = -700.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gwqxr")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1851965530]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 200.0
+offset_bottom = 18.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+
+[node name="VScrollBar" type="VScrollBar" parent="MarginContainer" unique_id=1448461005]
+z_index = 10
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VScrollBar" unique_id=230267119]
+layout_mode = 1
+offset_left = 15.0
+offset_top = 30.0
+offset_right = 117.0
+offset_bottom = 1139.0
+
+[node name="PlantInfo" parent="MarginContainer/VScrollBar/VBoxContainer" unique_id=804374826 instance=ExtResource("1_b2h05")]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=1487930350]
+layout_mode = 0
+offset_left = 40.0
+offset_top = -1.0
+offset_right = 104.0
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Key" type="TextureRect" parent="HBoxContainer2" unique_id=617764877]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("3_sl0nk")
+stretch_mode = 5
+
+[node name="Key2" type="TextureRect" parent="HBoxContainer2" unique_id=816345494]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("4_01cku")
+stretch_mode = 5

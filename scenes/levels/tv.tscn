@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://bk2s3d813v044"]
+
+[ext_resource type="Script" uid="uid://cqgeyk373keoe" path="res://scripts/tv.gd" id="1_bif1e"]
+[ext_resource type="Texture2D" uid="uid://d4nnmlscu1se6" path="res://graphics/machines/tv.png" id="1_i6lrx"]
+[ext_resource type="Texture2D" uid="uid://ctq86sgkfof6j" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Emote/emote21.png" id="2_ujlcr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bif1e"]
+atlas = ExtResource("1_i6lrx")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujlcr"]
+atlas = ExtResource("1_i6lrx")
+region = Rect2(48, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jjtmt"]
+atlas = ExtResource("1_i6lrx")
+region = Rect2(64, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t8dpb"]
+atlas = ExtResource("1_i6lrx")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7daw1"]
+atlas = ExtResource("1_i6lrx")
+region = Rect2(32, 0, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pk4yt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bif1e")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ujlcr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jjtmt")
+}],
+"loop": true,
+"name": &"rain",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t8dpb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7daw1")
+}],
+"loop": true,
+"name": &"sun",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qawod"]
+size = Vector2(16, 15.5)
+
+[node name="TV" type="StaticBody2D" unique_id=172276261]
+collision_layer = 36
+collision_mask = 2
+script = ExtResource("1_bif1e")
+
+[node name="InteractSign" type="Sprite2D" parent="." unique_id=1022904923]
+position = Vector2(0, -19)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_ujlcr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1657934689]
+sprite_frames = SubResource("SpriteFrames_pk4yt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=515540610]
+position = Vector2(0, -5.75)
+shape = SubResource("RectangleShape2D_qawod")
+
+[node name="Timer" type="Timer" parent="." unique_id=1110737493]
+wait_time = 3.0
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

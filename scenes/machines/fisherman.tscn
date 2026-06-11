@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://crq4s5ubvkoe3"]
+
+[ext_resource type="PackedScene" uid="uid://c4akwq56h2we6" path="res://scenes/machines/machine.tscn" id="1_0oifc"]
+[ext_resource type="Script" uid="uid://04yuvqqsmeu7" path="res://scripts/machines/fisherman.gd" id="2_70g8y"]
+[ext_resource type="SpriteFrames" uid="uid://prqhluye08u2" path="res://premade/fisher.tres" id="2_yb4qc"]
+[ext_resource type="Texture2D" uid="uid://k4r0km103lsj" path="res://graphics/ui/v_bar.png" id="4_70g8y"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c76mb"]
+radius = 4.0
+height = 12.0
+
+[node name="Fisherman" unique_id=798620987 instance=ExtResource("1_0oifc")]
+script = ExtResource("2_70g8y")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="0" unique_id=653813183]
+sprite_frames = ExtResource("2_yb4qc")
+animation = &"down"
+centered = false
+offset = Vector2(-16, -18)
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=625319907]
+position = Vector2(8, 4)
+shape = SubResource("CapsuleShape2D_c76mb")
+
+[node name="Timer" type="Timer" parent="." index="2" unique_id=284546089]
+wait_time = 30.0
+one_shot = true
+
+[node name="Control" type="Control" parent="." index="3" unique_id=322933204]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Control" index="0" unique_id=1310719180]
+custom_minimum_size = Vector2(10, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = -12.0
+offset_right = 13.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+nine_patch_stretch = true
+texture_under = ExtResource("4_70g8y")
+texture_progress = ExtResource("4_70g8y")
+tint_under = Color(0.18039216, 0.18039216, 0.18039216, 1)
+tint_progress = Color(0.24705882, 1, 0.43137255, 1)
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
