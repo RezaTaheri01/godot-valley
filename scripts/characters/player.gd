@@ -117,6 +117,14 @@ func _physics_process(_delta: float) -> void:
 func move():
 	direction = Input.get_vector("left", "right", "up", "down")
 	velocity = direction * SPEED
+	
+	if direction:
+		if not $Sounds/StepTimer.time_left:
+			$Sounds/StepTimer.start()
+	else:
+		$Sounds/Step.stop()
+		
+	
 	move_and_slide()
 	
 	
@@ -284,3 +292,7 @@ func _on_interact_range_area_2d_body_exited(body: Node2D) -> void:
 
 	
 	
+
+
+func _on_step_timer_timeout() -> void:
+	$Sounds/Step.play()

@@ -21,11 +21,11 @@ func setup(grid_coord: Vector2i, parent: Node2D, plant_res: PlantResource,
 	plant_harvest.connect(plant_harvest_func)
 	
 	
-func grow(watered: bool):
+func grow(watered: bool, damageAmount: int = 1):
 	if watered:
 		res.grow($Sprite2D)
 	else:
-		if res.decay(self):
+		if res.decay(self, damageAmount):
 			plant_death.emit(coord)
 			plant_info.queue_free()
 			return

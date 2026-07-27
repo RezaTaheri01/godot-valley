@@ -1,13 +1,14 @@
 extends Node
 
-const PLAYER_SKINS = {
-	Enum.Style.BASIC: preload("res://graphics/characters/main/main_basic.png"),
-	Enum.Style.BASEBALL: preload("res://graphics/characters/main/main_blue.png"),
-	Enum.Style.COWBOY: preload("res://graphics/characters/main/main_cowboy.png"),
-	Enum.Style.ENGLISH: preload("res://graphics/characters/main/main_grey.png"),
-	Enum.Style.STRAW: preload("res://graphics/characters/main/main_straw.png"),
-	Enum.Style.BEANIE: preload("res://graphics/characters/main/main_red.png")}
 const TILE_SIZE = 16
+var FORECAST_RAIN: bool
+
+const HOUSE_COST = {
+	1: {Enum.Item.WOOD: 30, Enum.Item.APPLE: 20},
+	2: {Enum.Item.WOOD: 40, Enum.Item.APPLE: 30}}
+
+
+# ======== Plants ========
 const PLANT_DATA = {
 	Enum.Seed.TOMATO: {
 		'texture': "res://graphics/plants/tomato.png",
@@ -41,63 +42,17 @@ const PLANT_DATA = {
 		'grow_speed': 1.0,
 		'death_max': 3,
 		'reward': Enum.Item.WHEAT}}
-const MACHINE_UPGRADE_COST = {
-	Enum.Machine.DELETE:{},
-	Enum.Machine.SPRINKLER: {
-		'name': 'Sprinkler',
-		'cost' :{Enum.Item.TOMATO: 30, Enum.Item.WHEAT: 20},
-		'icon': preload("res://graphics/icons/sprinkler.png"),
-		'color': Color.SEA_GREEN},
-	Enum.Machine.FISHER: {
-		'name': 'Fisher',
-		'cost' :{Enum.Item.WOOD: 25, Enum.Item.FISH: 15},
-		'icon': preload("res://graphics/icons/fisher.png"),
-		'color': Color.SLATE_GRAY},
-	Enum.Machine.SCARECROW: {
-		'name': 'Scarecrow',
-		'cost' : {Enum.Item.PUMPKIN: 15, Enum.Item.CORN: 15},
-		'icon': preload("res://graphics/icons/scarecrow.png"),
-		'color': Color.BURLYWOOD}}
-const HOUSE_COST = {
-	1: {Enum.Item.WOOD: 30, Enum.Item.APPLE: 20},
-	2: {Enum.Item.WOOD: 40, Enum.Item.APPLE: 30}}
-const STYLE_UPGRADES = {
-	Enum.Style.BASIC: {
-		'icon': null,
-	},
-	Enum.Style.COWBOY: {
-		'name': 'Cowboy',
-		'cost':{Enum.Item.WOOD: 8, Enum.Item.CORN: 6},
-		'icon': preload("res://graphics/icons/cowboy.png"),
-		'color': Color.SANDY_BROWN},
-	Enum.Style.ENGLISH: {
-		'name': 'Oldie',
-		'cost':{Enum.Item.CORN: 8, Enum.Item.WHEAT: 6},
-		'icon': preload("res://graphics/icons/english.png"),
-		'color': Color.LIGHT_GRAY},
-	Enum.Style.BASEBALL: {
-		'name': 'Baseball',
-		'cost':{Enum.Item.TOMATO: 8, Enum.Item.APPLE: 6},
-		'icon': preload("res://graphics/icons/blue.png"),
-		'color': Color.SKY_BLUE},
-	Enum.Style.BEANIE: {
-		'name': 'Beanie',
-		'cost':{Enum.Item.PUMPKIN: 8, Enum.Item.WHEAT: 6},
-		'icon': preload("res://graphics/icons/beanie.png"),
-		'color': Color.INDIAN_RED},
-	Enum.Style.STRAW: {
-		'name': 'Straw',
-		'cost':{Enum.Item.FISH: 8, Enum.Item.WOOD: 6},
-		'icon': preload("res://graphics/icons/straw.png"),
-		'color': Color.BURLYWOOD}}
-const TOOL_STATE_ANIMATIONS = {
-	Enum.Tool.HOE: 'Hoe',
-	Enum.Tool.AXE: 'Axe',
-	Enum.Tool.WATER: 'Water',
-	Enum.Tool.SWORD: 'Sword',
-	Enum.Tool.FISH: 'Fish',
-	Enum.Tool.SEED: 'Seed',
+
+const SEED_TEXTURES = {
+	Enum.Seed.TOMATO: preload("res://graphics/icons/tomato.png"),
+	Enum.Seed.CORN: preload("res://graphics/icons/corn.png"),
+	Enum.Seed.PUMPKIN: preload("res://graphics/icons/pumpkin.png"),
+	Enum.Seed.WHEAT: preload("res://graphics/icons/wheat.png")
 	}
+# ======== END Plants ========
+
+
+# ======== Fish ========
 const FISH_DATA = {
 	Enum.Fish.GRAY: {
 		'icon_texture': "res://graphics/icons/grayfish.png",
@@ -127,6 +82,10 @@ const FISH_DATA = {
 		'color': Color.GOLDENROD
 	}
 	}
+# ======== END Fish ========
+
+
+# ======== Machines ========
 const MACHINE_SCENE = {
 	Enum.Machine.SPRINKLER : {
 		"scene": preload("res://scenes/machines/sprinkler.tscn"),
@@ -141,13 +100,40 @@ const MACHINE_SCENE = {
 		"scene":preload("res://scenes/machines/scare_crow.tscn"),
 		}
 	}
+
 const MACHINE_PREVIEW_TEXTURES = {
 	Enum.Machine.SPRINKLER: {'texture':preload("res://graphics/icons/sprinkler.png"), 'offset': Vector2i(2,0)},
 	Enum.Machine.FISHER: {'texture':preload("res://graphics/icons/fisher.png"), 'offset': Vector2i(2,-8)},
 	Enum.Machine.SCARECROW: {'texture':preload("res://graphics/icons/scarecrow.png"), 'offset': Vector2i(1,-10)},
 	Enum.Machine.DELETE: {'texture':preload("res://graphics/icons/delete.png"), 'offset': Vector2i(-8,-8)}}	
+
+const MACHINE_TEXTURES = {
+	Enum.Machine.DELETE: preload("res://graphics/icons/delete.png"),
+	Enum.Machine.SPRINKLER: preload("res://graphics/icons/sprinkler.png"),
+	Enum.Machine.FISHER: preload("res://graphics/icons/fisher.png"),
+	Enum.Machine.SCARECROW: preload("res://graphics/icons/scarecrow.png"),}	
+
+const MACHINE_UPGRADE_COST = {
+	Enum.Machine.DELETE:{},
+	Enum.Machine.SPRINKLER: {
+		'name': 'Sprinkler',
+		'cost' :{Enum.Item.TOMATO: 30, Enum.Item.WHEAT: 20},
+		'icon': preload("res://graphics/icons/sprinkler.png"),
+		'color': Color.SEA_GREEN},
+	Enum.Machine.FISHER: {
+		'name': 'Fisher',
+		'cost' :{Enum.Item.WOOD: 25, Enum.Item.FISH: 15},
+		'icon': preload("res://graphics/icons/fisher.png"),
+		'color': Color.SLATE_GRAY},
+	Enum.Machine.SCARECROW: {
+		'name': 'Scarecrow',
+		'cost' : {Enum.Item.PUMPKIN: 15, Enum.Item.CORN: 15},
+		'icon': preload("res://graphics/icons/scarecrow.png"),
+		'color': Color.BURLYWOOD}}
+# ======== END Machines ========
 	
 	
+# ======== Tools ========
 const TOOL_TEXTURES = {
 	Enum.Tool.AXE: preload("res://graphics/icons/axe.png"),
 	Enum.Tool.HOE: preload("res://graphics/icons/hoe.png"),
@@ -156,14 +142,37 @@ const TOOL_TEXTURES = {
 	Enum.Tool.FISH: preload("res://graphics/icons/fish.png"),
 	Enum.Tool.SEED: preload("res://graphics/icons/wheat.png")
 	}
-	
-const SEED_TEXTURES = {
-	Enum.Seed.TOMATO: preload("res://graphics/icons/tomato.png"),
-	Enum.Seed.CORN: preload("res://graphics/icons/corn.png"),
-	Enum.Seed.PUMPKIN: preload("res://graphics/icons/pumpkin.png"),
-	Enum.Seed.WHEAT: preload("res://graphics/icons/wheat.png")
-	}
 
+const TOOL_STATE_ANIMATIONS = {
+	Enum.Tool.HOE: 'Hoe',
+	Enum.Tool.AXE: 'Axe',
+	Enum.Tool.WATER: 'Water',
+	Enum.Tool.SWORD: 'Sword',
+	Enum.Tool.FISH: 'Fish',
+	Enum.Tool.SEED: 'Seed',
+	}
+# ======== END Tools ========
+	
+
+# ======== Trees ========
+const APPLE_TREE_HEALTH = 4
+# ======== END Trees ========
+
+
+# ======== Blob ========
+const BLOB_ENEMY_HEALTH = 3
+const BLOB_SPEED = 25.0
+const BLOB_DAMAGE = 1  # Damage to Plants
+# ======== END Blob ========
+
+
+# ======== Player ========
+const PLAYER_SPEED = 70.0
+var TARGET_HIGHLIGHTER: bool = false
+# ======== END Player ========
+
+
+# ======== Player Style ========
 const STYLE_TEXTURES ={
 	Enum.Style.STRAW: preload("res://graphics/icons/straw.png"),
 	Enum.Style.BASIC: null,
@@ -173,21 +182,47 @@ const STYLE_TEXTURES ={
 	Enum.Style.BEANIE: preload("res://graphics/icons/beanie.png"),
 	Enum.Style.CAP: null,}
 	
-const MACHINE_TEXTURES = {
-	Enum.Machine.DELETE: preload("res://graphics/icons/delete.png"),
-	Enum.Machine.SPRINKLER: preload("res://graphics/icons/sprinkler.png"),
-	Enum.Machine.FISHER: preload("res://graphics/icons/fisher.png"),
-	Enum.Machine.SCARECROW: preload("res://graphics/icons/scarecrow.png"),
-}
-	
-var TARGET_HIGHLIGHTER: bool = false
+const PLAYER_SKINS = {
+	Enum.Style.BASIC: preload("res://graphics/characters/main/main_basic.png"),
+	Enum.Style.BASEBALL: preload("res://graphics/characters/main/main_blue.png"),
+	Enum.Style.COWBOY: preload("res://graphics/characters/main/main_cowboy.png"),
+	Enum.Style.ENGLISH: preload("res://graphics/characters/main/main_grey.png"),
+	Enum.Style.STRAW: preload("res://graphics/characters/main/main_straw.png"),
+	Enum.Style.BEANIE: preload("res://graphics/characters/main/main_red.png")}
 
-const APPLE_TREE_HEALTH = 4
-const BLOB_ENEMY_HEALTH = 3
-const BLOB_SPEED = 25.0
-const PLAYER_SPEED = 70.0
+const STYLE_UPGRADES = {
+	Enum.Style.BASIC: {
+		'icon': null,
+	},
+	Enum.Style.COWBOY: {
+		'name': 'Cowboy',
+		'cost':{Enum.Item.WOOD: 8, Enum.Item.CORN: 6},
+		'icon': preload("res://graphics/icons/cowboy.png"),
+		'color': Color.SANDY_BROWN},
+	Enum.Style.ENGLISH: {
+		'name': 'Oldie',
+		'cost':{Enum.Item.CORN: 8, Enum.Item.WHEAT: 6},
+		'icon': preload("res://graphics/icons/english.png"),
+		'color': Color.LIGHT_GRAY},
+	Enum.Style.BASEBALL: {
+		'name': 'Baseball',
+		'cost':{Enum.Item.TOMATO: 8, Enum.Item.APPLE: 6},
+		'icon': preload("res://graphics/icons/blue.png"),
+		'color': Color.SKY_BLUE},
+	Enum.Style.BEANIE: {
+		'name': 'Beanie',
+		'cost':{Enum.Item.PUMPKIN: 8, Enum.Item.WHEAT: 6},
+		'icon': preload("res://graphics/icons/beanie.png"),
+		'color': Color.INDIAN_RED},
+	Enum.Style.STRAW: {
+		'name': 'Straw',
+		'cost':{Enum.Item.FISH: 8, Enum.Item.WOOD: 6},
+		'icon': preload("res://graphics/icons/straw.png"),
+		'color': Color.BURLYWOOD}}
+# ======== END Player Style ========
 
-# shop
+
+# ======== Shop ========
 const ICON_PATHS = {
 	Enum.Item.WOOD: "res://graphics/icons/wood.png",
 	Enum.Item.FISH: "res://graphics/icons/goldfish.png",
@@ -197,8 +232,6 @@ const ICON_PATHS = {
 	Enum.Item.PUMPKIN: "res://graphics/icons/pumpkin.png",
 	Enum.Item.TOMATO: "res://graphics/icons/tomato.png"}
 
-var FORECAST_RAIN: bool
-
 var unlocked_styles: Array[Enum.Style] = [Enum.Style.STRAW, Enum.Style.BASIC,  Enum.Style.ENGLISH]
 var unlocked_machines: Array[Enum.Machine] = [Enum.Machine.DELETE]
 
@@ -207,6 +240,11 @@ var shop_connection = {
 	Enum.Shop.MAIN: {'tracker': unlocked_machines,
 					 'all': MACHINE_UPGRADE_COST.keys()}
 	}
+# ======== END Shop ========
+
+
+# ======== Hint HUD ========
+var ControllerConnected = false
 
 # item textures
 const TEXTURES = {
@@ -264,10 +302,8 @@ var MODE_TEXTURE = {
 	Enum.State.FISHING : preload("res://graphics/characters/farming_mode.png"),
 	Enum.State.SHOP : preload("res://graphics/characters/farming_mode.png"),
 	Enum.State.BUILDING : preload("res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Items/Tool/Hammer.png"),
-	Enum.State.HOUSE : preload("res://graphics/characters/farming_mode.png")
-	
+	Enum.State.HOUSE : preload("res://graphics/characters/farming_mode.png")	
 }
-
 
 var KEYBOARD_TO_ICONS = {
 	Enum.KEYBOARD.CHANGE_MODE: MODE_TEXTURE,
@@ -278,8 +314,6 @@ var KEYBOARD_TO_ICONS = {
 	Enum.KEYBOARD.ACTION: {0: preload("res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Emote/emote21.png")},
 	Enum.KEYBOARD.CHANGE_DAY: {0: preload("res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Skill Icon/Meteo/Moon.png")},
 	Enum.KEYBOARD.CHANGE_HIGHLIGHT: {0: preload("res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Theme/Theme Wood/radio_unchecked.png"),
-									 1: preload("res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Theme/Theme Wood/radio_checked.png")},
-	
+									 1: preload("res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Theme/Theme Wood/radio_checked.png")},	
 } 
-
-var ControllerConnected = false
+# ======== END Hint HUD ========

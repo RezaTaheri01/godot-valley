@@ -27,7 +27,6 @@ buses/default_bus_layout="uid://ci8u0m7y1ts8a"
 
 Enum="*res://scripts/global/enums.gd"
 Data="*res://scripts/global/data.gd"
-Music="*uid://dnrxtjaqw1usl"
 
 [display]
 
