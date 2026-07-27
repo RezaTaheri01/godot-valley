@@ -29,8 +29,8 @@ func grow(sprite: Sprite2D):
 	sprite.frame = int(age)
 	
 
-func decay(plant: StaticBody2D):
-	death_count += 1
+func decay(plant: StaticBody2D, damage: int = 1):
+	death_count += damage
 	if death_count >= death_max:
 		plant.queue_free()
 		return true

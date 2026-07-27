@@ -11,6 +11,7 @@ signal delete_machine(coord: Vector2i)
 
 
 # Refer to a tileset
+var last_dir: Vector2
 const target_highlight_green: Vector2i = Vector2i(12, 1)
 const target_highlight_red: Vector2i = Vector2i(1, 1)
 
@@ -25,17 +26,21 @@ var blob_scene = preload("res://scenes/characters/blob_enemy.tscn")
 @onready var day_transition_material = $Overlay/CanvasLayer/DayTransitionLayer.material
 @export var daytimer_color: Gradient
 @export var rain_color: Color
+@export var volume_curve: Curve
 var raining: bool = false:
 	set(value):
 		raining = value
 		$Layers/RainFloorsParticles.emitting = value
 		$Overlay/RainParticles2D.emitting = value
+		$Sounds/Rain.playing = value
 		
 signal update_hint_ui_keys
 		
 func _process(_delta):
 	var daytime_point = 1 - ($Timers/DayTimer.time_left / $Timers/DayTimer.wait_time)
 	var color = daytimer_color.sample(daytime_point)
+	var volume = volume_curve.sample(daytime_point)
+	$Sounds/BG.volume_db = volume
 	
 	if raining:
 		color = color.lerp(rain_color, 1 - daytime_point)
@@ -156,13 +161,14 @@ func _on_player_tool_use(tool: Enum.Tool, pos: Vector2, dir: Vector2) -> void:
 		Enum.Tool.AXE:
 			for object in get_tree().get_nodes_in_group("Axe_able"):
 				var to_object = (object.position - pos)
-	
+				
 				if to_object.length() < 22:
 					var to_object_dir = to_object.normalized()
 					
 					# dot > 0 means in front, closer to 1 means more aligned
 					if dir.dot(to_object_dir) > 0.65:
 						object.hit(tool, dir)
+						
 		Enum.Tool.SWORD:
 			for object in get_tree().get_nodes_in_group("Sword_able"):
 				var to_object = (object.position - pos)
@@ -262,8 +268,11 @@ func update_target_highlight():
 	var dir = player.animation_direction
 
 	if dir == Vector2.ZERO:
-		$Layers/TargetLayer.clear()
-		return
+		if last_dir:
+			dir = last_dir
+		else:
+			$Layers/TargetLayer.clear()
+			return
 
 	var grid_coord: Vector2i = get_target_grid(player.position, dir)
 
@@ -319,29 +328,40 @@ func is_tool_valid(tool: Enum.Tool, grid_coord: Vector2i) -> bool:
 
 func is_object_near_cell(grid_coord: Vector2i) -> bool:
 	for object in get_tree().get_nodes_in_group("Objects"):
-		#if not object.is_in_group("Tree"):
-			#continue
-
-		# Tree top-left tile
-		var object_top_left := Vector2i(
+		var object_pos := Vector2i(
 			floor(object.position.x / Data.TILE_SIZE),
 			floor(object.position.y / Data.TILE_SIZE)
 		)
-
-		# Exact 2x2 footprint (4 tiles)
-		if grid_coord.x >= object_top_left.x \
-		and grid_coord.x <= object_top_left.x + 1 \
-		and grid_coord.y >= object_top_left.y \
-		and grid_coord.y <= object_top_left.y + 1:
-			return true
-
+		
+		# Check if it's a Tree (3x3 bottom center footprint)
+		if object.is_in_group("Tree"):
+			# 3x3 footprint with pivot at bottom center
+			# Spans rows object_pos.y-2 to object_pos.y
+			# and columns object_pos.x-1 to object_pos.x+1
+			if grid_coord.x >= object_pos.x - 1 \
+			and grid_coord.x <= object_pos.x + 1 \
+			and grid_coord.y >= object_pos.y - 2 \
+			and grid_coord.y <= object_pos.y:
+				return true
+		else:
+			# All other objects: 2x2 top-left footprint
+			if grid_coord.x >= object_pos.x \
+			and grid_coord.x <= object_pos.x + 1 \
+			and grid_coord.y >= object_pos.y \
+			and grid_coord.y <= object_pos.y + 1:
+				return true
+	
 	return false
-
+	
 
 # =========================================================
 # GRID CALCULATION
 # =========================================================
 func get_target_grid(pos: Vector2, dir: Vector2) -> Vector2i:
+	if dir != Vector2.ZERO:
+		last_dir = dir
+	else:
+		dir = last_dir
 	var base_cell = Vector2i(floor(pos.x / Data.TILE_SIZE), floor(pos.y / Data.TILE_SIZE))
 	return base_cell + Vector2i(dir)
 

@@ -4,8 +4,9 @@
 [ext_resource type="Script" uid="uid://dhfbntrljvdo7" path="res://scripts/characters/blob_enemy.gd" id="1_yb4yq"]
 [ext_resource type="PackedScene" uid="uid://b1a4cl0kv3lpw" path="res://scenes/vfx/flash_sprite_2d.tscn" id="2_n3vki"]
 [ext_resource type="Shader" uid="uid://b6nm5dtkeitqy" path="res://shaders/flash.tres" id="3_tg4bn"]
+[ext_resource type="AudioStream" uid="uid://ca7wu5nswwv0y" path="res://audio/slime.ogg" id="5_tg4bn"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_n3vki"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kei2d"]
 resource_local_to_scene = true
 shader = ExtResource("3_tg4bn")
 shader_parameter/Color = Color(1, 1, 1, 1)
@@ -74,6 +75,21 @@ tracks/1/keys = {
 "method": &"delete_enemy"
 }]
 }
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../AudioStreamPlayer2D")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.21111473,
+"start_offset": 0.0,
+"stream": ExtResource("5_tg4bn")
+}],
+"times": PackedFloat32Array(0.26666668)
+}
+tracks/2/use_blend = true
 
 [sub_resource type="Animation" id="Animation_icpc4"]
 resource_name = "death_left"
@@ -546,7 +562,6 @@ transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(0, -157.14061)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_0rx8m"]
-graph_offset = Vector2(0, -106.52321)
 nodes/output/position = Vector2(800, 16)
 nodes/OneShot/node = SubResource("AnimationNodeOneShot_yewv4")
 nodes/OneShot/position = Vector2(608, -64)
@@ -566,7 +581,7 @@ collision_mask = 15
 script = ExtResource("1_yb4yq")
 
 [node name="FlashSprite2D" parent="." unique_id=116580978 instance=ExtResource("2_n3vki")]
-material = SubResource("ShaderMaterial_n3vki")
+material = SubResource("ShaderMaterial_kei2d")
 texture = ExtResource("1_281xh")
 hframes = 14
 vframes = 4
@@ -599,6 +614,9 @@ collision_mask = 65
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=511676731]
 shape = SubResource("CircleShape2D_n3vki")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1283263465]
+volume_db = -20.0
 
 [connection signal="animation_finished" from="Animation/AnimationTree" to="." method="_on_animation_tree_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

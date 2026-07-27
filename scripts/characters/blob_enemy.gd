@@ -28,6 +28,7 @@ var animation_direction: Vector2 = Vector2.DOWN
 var blob_health: int = Data.BLOB_ENEMY_HEALTH
 var is_dead: bool = false                 # Locks logic after death
 
+var blob_damage: int = Data.BLOB_DAMAGE
 # ============================================================
 # NODE REFERENCES
 # ============================================================
@@ -226,5 +227,5 @@ func update_blend_positions() -> void:
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.has_method("grow"):
-		body.grow(false)
+		body.grow(false, blob_damage)
 		die()
