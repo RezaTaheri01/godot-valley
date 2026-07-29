@@ -1,4 +1,4 @@
-class_name Machine extends StaticBody2D
+class_name Machines extends StaticBody2D
 
 var coord: Vector2i
 

@@ -95,7 +95,7 @@ signal day_change
 signal close_shop
 
 ## UI
-signal update_control_ui(key_enum: Enum.KEYBOARD, currentItem: Enum)
+signal update_control_ui(key_enum: Enum.Keyboard, currentItem: Enum)
 
 
 # ============================================================
@@ -165,13 +165,13 @@ func _on_state_changed() -> void:
 	# Building mode requires both the previous and new state.
 	if current_state == Enum.State.BUILDING:
 		update_control_ui.emit(
-			Enum.KEYBOARD.CHANGE_MODE,
+			Enum.Keyboard.CHANGE_MODE,
 			current_state,
 			Enum.State.BUILDING
 		)
 	else:
 		update_control_ui.emit(
-			Enum.KEYBOARD.CHANGE_MODE,
+			Enum.Keyboard.CHANGE_MODE,
 			current_state
 		)
 
@@ -258,14 +258,14 @@ func get_basic_input():
 		if debug:
 			print("Current Seed:" + Enum.Seed.keys()[current_seed])
 		$ToolUI.reveal(null, current_seed)
-		update_control_ui.emit(Enum.KEYBOARD.CHANGE_SEED, current_seed)
+		update_control_ui.emit(Enum.Keyboard.CHANGE_SEED, current_seed)
 		
 	# Switch tools
 	if Input.is_action_just_pressed("tool_forward") or Input.is_action_just_pressed("tool_backward"):
 		var dir = Input.get_axis("tool_backward", "tool_forward") # -1, 1
 		current_tool = posmod((current_tool + int(dir)), tools_count) as Enum.Tool
 		$ToolUI.reveal(current_tool, null)
-		update_control_ui.emit(Enum.KEYBOARD.CHANGE_TOOL, current_tool)
+		update_control_ui.emit(Enum.Keyboard.CHANGE_TOOL, current_tool)
 
 	if Input.is_action_just_pressed("action"):
 		if can_interact and last_interactable:
@@ -277,7 +277,7 @@ func get_basic_input():
 		
 	if Input.is_action_just_pressed("highlighter"):
 		Data.target_highlighter = not Data.target_highlighter 
-		update_control_ui.emit(Enum.KEYBOARD.CHANGE_HIGHLIGHT, 1 if Data.target_highlighter else 0)
+		update_control_ui.emit(Enum.Keyboard.CHANGE_HIGHLIGHT, 1 if Data.target_highlighter else 0)
 
 	if Input.is_action_just_pressed("day_change"):
 		day_change.emit()
@@ -297,8 +297,8 @@ func get_basic_input():
 		current_state = Enum.State.BUILDING
 		change_machine.emit(current_machine)
 		Data.target_highlighter = false
-		update_control_ui.emit(Enum.KEYBOARD.CHANGE_HIGHLIGHT, 0)
-		update_control_ui.emit(Enum.KEYBOARD.CHANGE_MACHINE, current_machine, Enum.State.BUILDING)
+		update_control_ui.emit(Enum.Keyboard.CHANGE_HIGHLIGHT, 0)
+		update_control_ui.emit(Enum.Keyboard.CHANGE_MACHINE, current_machine, Enum.State.BUILDING)
 		
 		
 func get_fishing_input():
@@ -309,7 +309,7 @@ func get_fishing_input():
 func get_building_input():
 	if Input.is_action_just_pressed("build"):
 		current_state = Enum.State.DEFAULT
-		update_control_ui.emit(Enum.KEYBOARD.CHANGE_TOOL, current_tool)
+		update_control_ui.emit(Enum.Keyboard.CHANGE_TOOL, current_tool)
 		
 	
 	# Switch Machines
@@ -322,7 +322,7 @@ func get_building_input():
 		if debug:
 			print("Machine" + str(current_machine))
 			
-		update_control_ui.emit(Enum.KEYBOARD.CHANGE_MACHINE, current_machine, Enum.State.BUILDING)
+		update_control_ui.emit(Enum.Keyboard.CHANGE_MACHINE, current_machine, Enum.State.BUILDING)
 		
 			
 	if Input.is_action_just_pressed("action"):
@@ -476,7 +476,7 @@ func _generate_light_texture(size: int, color: Color) -> Texture2D:
 #region Style
 func update_style():
 	$Sprite2D.texture = Data.PLAYER_SKINS[current_style]
-	update_control_ui.emit(Enum.KEYBOARD.CHANGE_STYLE, current_style)
+	update_control_ui.emit(Enum.Keyboard.CHANGE_STYLE, current_style)
 #endregion
 
 

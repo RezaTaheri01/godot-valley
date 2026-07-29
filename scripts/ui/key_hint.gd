@@ -1,9 +1,9 @@
 extends Control
 
-var keyboard_key: Enum.KEYBOARD
+var keyboard_key: Enum.Keyboard
 var last_icon_texture 
 
-func setup(texture, icon, key: Enum.KEYBOARD):
+func setup(texture, icon, key: Enum.Keyboard):
 	last_icon_texture = icon
 	keyboard_key = key
 	$HBoxContainer/Key.texture = texture

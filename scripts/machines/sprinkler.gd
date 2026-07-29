@@ -1,4 +1,4 @@
-extends Machine
+extends Machines
 
 signal water_near_soils(sprinkler_coord: Vector2i)
 

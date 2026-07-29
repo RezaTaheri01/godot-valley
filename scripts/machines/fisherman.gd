@@ -1,4 +1,4 @@
-extends Machine
+extends Machines
 
 var anim_name: String = "up"
 

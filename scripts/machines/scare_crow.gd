@@ -1,4 +1,4 @@
-extends Machine
+extends Machines
 
 signal shoot_projectile(start_pos: Vector2, dir: Vector2)
 
