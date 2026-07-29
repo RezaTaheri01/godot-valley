@@ -25,7 +25,7 @@ func hit(tool: Enum.Tool, _attacker_position: Vector2):
 		get_apple()
 		tree_health -= 1
 		if tree_health == 0:
-			Data.ITEMS_AMOUNT[Enum.Item.WOOD] += 1
+			Data.items_amount[Enum.Item.WOOD] += 1
 			self.flash_sprite_2d_upper.hide()
 			self.flash_sprite_2d_bottom.hide()
 			
@@ -39,7 +39,7 @@ func hit(tool: Enum.Tool, _attacker_position: Vector2):
 func get_apple():
 	if $Apples.get_children():
 		$Apples.get_children().pick_random().queue_free()
-		Data.ITEMS_AMOUNT[Enum.Item.APPLE] += 1
+		Data.items_amount[Enum.Item.APPLE] += 1
 
 
 func create_apple():

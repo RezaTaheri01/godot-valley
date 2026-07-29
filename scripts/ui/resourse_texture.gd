@@ -6,8 +6,8 @@ var curr_item: Enum.Item
 func setup(item: Enum.Item):
 	curr_item = item
 	texture = Data.TEXTURES[item]
-	$Label.text = str(Data.ITEMS_AMOUNT[item])
+	$Label.text = str(Data.items_amount[item])
 
 
 func update():
-	$Label.text = str(Data.ITEMS_AMOUNT[curr_item])
+	$Label.text = str(Data.items_amount[curr_item])

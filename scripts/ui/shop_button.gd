@@ -60,14 +60,14 @@ func _on_pressed() -> void:
 	
 	for item in upgrade_cost.keys():
 		var cost = upgrade_cost[item]
-		if Data.ITEMS_AMOUNT[item] < cost:
+		if Data.items_amount[item] < cost:
 			# Not enough item
 			print("Not enough item to buy")
 			return
 		
 	for item in upgrade_cost.keys():
 		var cost = upgrade_cost[item]
-		Data.ITEMS_AMOUNT[item] -= cost
+		Data.items_amount[item] -= cost
 		
 	Data.shop_connection[shop_type]["tracker"].append(item_enum)
 	press.emit(shop_type)

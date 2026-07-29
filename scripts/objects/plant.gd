@@ -35,7 +35,7 @@ func grow(watered: bool, damageAmount: int = 1):
 
 func _on_collision_area_body_entered(_body: Node2D) -> void:
 	if res.get_complete():
-		Data.ITEMS_AMOUNT[Data.SEED_TO_ITEM[res.curr_seed_enum]] += 2
+		Data.items_amount[Data.SEED_TO_ITEM[res.curr_seed_enum]] += 2
 		print(res.plant_name + " collected")
 		plant_harvest.emit(coord)
 		plant_info.queue_free()

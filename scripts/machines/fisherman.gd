@@ -49,7 +49,7 @@ func _process(_delta: float) -> void:
 
 
 func _on_timer_timeout() -> void:
-	Data.ITEMS_AMOUNT[Enum.Item.FISH] += 1
+	Data.items_amount[Enum.Item.FISH] += 1
 	start_fishing()
 	
 	

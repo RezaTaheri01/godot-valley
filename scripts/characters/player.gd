@@ -1,133 +1,256 @@
-# TODO: Move while using tools 
 extends CharacterBody2D
+
+# ============================================================
+# Debug
+# ============================================================
 
 var debug: bool = true
 
-const SPEED: float = Data.PLAYER_SPEED
-var direction: Vector2
-var can_move: bool = true
-@onready var move_state_machine = $Animation/AnimationTree.get("parameters/StateMachine/playback")
 
+# ============================================================
+# Movement
+# ============================================================
+
+const SPEED: float = Data.PLAYER_SPEED
+
+var direction: Vector2
+var animation_direction: Vector2 = Vector2.DOWN
+
+var can_move: bool = true
+var can_interact: bool = false
+var last_interactable
+
+
+# ============================================================
+# Animation
+# ============================================================
+
+@onready var move_state_machine = $Animation/AnimationTree.get("parameters/StateMachine/playback")
 @onready var tool_state_machine = $Animation/AnimationTree.get("parameters/ToolStateMachine/playback")
+
+
+# ============================================================
+# Player State
+# ============================================================
+
+var current_state: Enum.State = Enum.State.DEFAULT
+var update_state: Enum.State = Enum.State.HOUSE
+
+
+# ============================================================
+# Tool Selection
+# ============================================================
+
 var current_tool: Enum.Tool = Enum.Tool.AXE
 var tools_count: int = Enum.Tool.size()
+
+
+# ============================================================
+# Seed Selection
+# ============================================================
 
 var current_seed: Enum.Seed = Enum.Seed.TOMATO
 var seeds_count: int = Enum.Seed.size()
 
-var current_state: Enum.State = Enum.State.DEFAULT
+
+# ============================================================
+# Style Selection
+# ============================================================
 
 var current_style: Enum.Style = Enum.Style.STRAW
-var style_count: int = Data.unlocked_styles.size()
 var style_index: int = 0
+var style_count: int = Data.unlocked_styles.size()
+
+
+# ============================================================
+# Machine Selection
+# ============================================================
 
 var current_machine: Enum.Machine = Enum.Machine.DELETE
-var machine_count = Data.unlocked_machines.size()
 var machine_index: int = 0
+var machine_count: int = Data.unlocked_machines.size()
+
+
+# ============================================================
+# Signals
+# ============================================================
+
+## Building
 signal build(machine: Enum.Machine)
 signal change_machine(machine: Enum.Machine)
 
-var animation_direction: Vector2 = Vector2(0, 1)
+## Tool Actions
 signal tool_use(tool: Enum.Tool, pos: Vector2, dir: Vector2)
-signal do_action(anim_tree: AnimationTree, property: StringName, tool: Enum.Tool, pos: Vector2, dir: Vector2)
+signal do_action(
+	anim_tree: AnimationTree,
+	property: StringName,
+	tool: Enum.Tool,
+	pos: Vector2,
+	dir: Vector2
+)
 
+## Game Events
 signal diagnose
 signal day_change
+signal close_shop
 
-var can_interact: bool = false
-var last_interactable
-
+## UI
 signal update_control_ui(key_enum: Enum.KEYBOARD, currentItem: Enum)
 
-signal close_shop 
 
-var update_state: Enum.State = Enum.State.HOUSE;
+# ============================================================
+# Player Light
+# ============================================================
+
+const LIGHT_TEXTURE_SIZE := 256
+const LIGHT_COLOR := Color(1.0, 1.0, 0.9)
+const LIGHT_ENERGY := 0.25
+const LIGHT_SCALE := 0.5
 
 
-func _ready():
-	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING  # No sliding/pushing
-	var player_light: PointLight2D = PointLight2D.new()
-	$".".add_child(player_light)
-	
-	# Create smooth faded circle texture
-	var size = 256
-	var image = Image.create(size, size, false, Image.FORMAT_RGBA8)
-	image.fill(Color(0, 0, 0, 0))  # Fill with transparent
-	
-	var center = size / 2.0
-	var max_radius = size / 2.0
-	
-	for x in size:
-		for y in size:
-			var dx = x - center
-			var dy = y - center
-			var distance = sqrt(dx * dx + dy * dy)
-			
-			if distance <= max_radius:
-				# Calculate alpha: 1.0 at center, 0.0 at edge
-				var alpha = 1.0 - (distance / max_radius)
-				# Square it for smoother fade
-				alpha = alpha * alpha
-				
-				# Set pixel color with alpha
-				var color = Color(1.0, 1.0, 0.9, alpha)
-				image.set_pixel(x, y, color)
-	
-	# Create texture and apply
-	var texture = ImageTexture.create_from_image(image)
-	player_light.texture = texture
-	player_light.energy = 0.25
-	player_light.texture_scale = 0.5
+# ============================================================
+# Player Audio
+# ============================================================
 
+@onready var step_timer: Timer = $Sounds/StepTimer
+@onready var step_sound: AudioStreamPlayer = $Sounds/Step
+@onready var axe_sound: AudioStreamPlayer2D = $Sounds/Axe
+@onready var fish_sound: AudioStreamPlayer2D = $Sounds/Fish
+@onready var hoe_sound: AudioStreamPlayer2D = $Sounds/Hoe
+@onready var water_sound: AudioStreamPlayer2D = $Sounds/Water
+
+
+func _ready() -> void:
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+	_create_player_light()
+	
+	# Wait one frame to ensure all nodes have finished their _ready() initialization.
+	await get_tree().process_frame
+	
+	load_player()
+	update_style()
+	
+
+
+#region Physics Process
 
 func _physics_process(_delta: float) -> void:
+	# Update the UI only when the player state changes.
 	if update_state != current_state:
-		if current_state == Enum.State.BUILDING:
-			update_control_ui.emit(Enum.KEYBOARD.CHANGE_MODE, current_state, Enum.State.BUILDING)		
-		else:
-			update_control_ui.emit(Enum.KEYBOARD.CHANGE_MODE, current_state)		
-			
-		update_state = current_state
-		
+		_on_state_changed()
+
+	# Execute the logic for the current state.
 	match current_state:
 		Enum.State.DEFAULT:
-			if can_move:
-				get_basic_input()
-				move()
-				animate()
-		
+			_handle_default_state()
+
 		Enum.State.FISHING:
-			get_fishing_input()
-		
+			_handle_fishing_state()
+
 		Enum.State.BUILDING:
-			get_fishing_input()
-			get_building_input()
-			move()
-			animate()
-			
+			_handle_building_state()
+
 		Enum.State.HOUSE:
-			get_house_input()
-			move()
-			animate()
-			
+			_handle_house_state()
+
 		Enum.State.SHOP:
-			get_shop_input()
+			_handle_shop_state()
+
+#endregion
+
+
+#region State Management
+
+func _on_state_changed() -> void:
+	# Building mode requires both the previous and new state.
+	if current_state == Enum.State.BUILDING:
+		update_control_ui.emit(
+			Enum.KEYBOARD.CHANGE_MODE,
+			current_state,
+			Enum.State.BUILDING
+		)
+	else:
+		update_control_ui.emit(
+			Enum.KEYBOARD.CHANGE_MODE,
+			current_state
+		)
+
+	update_state = current_state
+
+#endregion
+
+
+#region State Handlers
+
+# Normal gameplay.
+func _handle_default_state() -> void:
+	if !can_move:
+		return
+
+	get_basic_input()
+	move()
+	animate()
+
+
+# Fishing interaction.
+func _handle_fishing_state() -> void:
+	get_fishing_input()
+
+
+# Building mode.
+func _handle_building_state() -> void:
+	get_fishing_input()
+	get_building_input()
+
+	move()
+	animate()
+
+
+# Inside the player's house.
+func _handle_house_state() -> void:
+	get_house_input()
+
+	move()
+	animate()
+
+
+# Shop UI interaction.
+func _handle_shop_state() -> void:
+	get_shop_input()
+
+#endregion
 				
 	
-func move():
+#region Movement
+
+func move() -> void:
+	# Read movement input.
 	direction = Input.get_vector("left", "right", "up", "down")
+
+	# Apply movement velocity.
 	velocity = direction * SPEED
-	
-	if direction:
-		if not $Sounds/StepTimer.time_left:
-			$Sounds/StepTimer.start()
-	else:
-		$Sounds/Step.stop()
-		
-	
+
+	# Handle footstep audio.
+	if direction == Vector2.ZERO:
+		step_sound.stop()
+		move_and_slide()
+		return
+
+	# Start the footstep timer if it isn't already running.
+	if step_timer.is_stopped():
+		step_timer.start()
+
+	# Move the player.
 	move_and_slide()
+
+	
+func _on_step_timer_timeout() -> void:
+	$Sounds/Step.play()
+
+#endregion
 	
 	
+#region Get Input
 func get_basic_input():
 	# Switch seeds
 	if Input.is_action_just_pressed("seed_forward"):
@@ -153,8 +276,8 @@ func get_basic_input():
 			#$Animation/AnimationTree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		
 	if Input.is_action_just_pressed("highlighter"):
-		Data.TARGET_HIGHLIGHTER = not Data.TARGET_HIGHLIGHTER 
-		update_control_ui.emit(Enum.KEYBOARD.CHANGE_HIGHLIGHT, 1 if Data.TARGET_HIGHLIGHTER else 0)
+		Data.target_highlighter = not Data.target_highlighter 
+		update_control_ui.emit(Enum.KEYBOARD.CHANGE_HIGHLIGHT, 1 if Data.target_highlighter else 0)
 
 	if Input.is_action_just_pressed("day_change"):
 		day_change.emit()
@@ -164,21 +287,20 @@ func get_basic_input():
 		
 	if Input.is_action_just_pressed("style_toggle"):
 		style_count = Data.unlocked_styles.size()
-		style_index = posmod((style_index + 1), style_count - 1)
+		style_index = posmod((style_index + 1), style_count)
 		current_style = Data.unlocked_styles[style_index] as Enum.Style
-		print(current_style)
-		$Sprite2D.texture = Data.PLAYER_SKINS[current_style]
-		update_control_ui.emit(Enum.KEYBOARD.CHANGE_STYLE, current_style)
+		if debug:
+			print(current_style)
+		save_player()
 		
 	if Input.is_action_just_pressed("build"):
 		current_state = Enum.State.BUILDING
 		change_machine.emit(current_machine)
-		Data.TARGET_HIGHLIGHTER = false
+		Data.target_highlighter = false
 		update_control_ui.emit(Enum.KEYBOARD.CHANGE_HIGHLIGHT, 0)
 		update_control_ui.emit(Enum.KEYBOARD.CHANGE_MACHINE, current_machine, Enum.State.BUILDING)
 		
 		
-
 func get_fishing_input():
 	if Input.is_action_just_pressed("action"):
 		$FishingGame.apply_bar_boost()
@@ -212,8 +334,8 @@ func get_house_input():
 		diagnose.emit()
 		
 	if Input.is_action_just_pressed("style_toggle"):
-		current_style = posmod((current_style + 1), style_count - 1) as Enum.Style
-		$Sprite2D.texture = Data.PLAYER_SKINS[current_style]
+		current_style = posmod((current_style + 1), style_count) as Enum.Style
+		save_player()
 		
 	if Input.is_action_just_pressed("action"):
 		if can_interact and last_interactable:
@@ -223,8 +345,32 @@ func get_house_input():
 func get_shop_input():
 	if Input.is_action_just_pressed("ui_cancel"):
 		close_shop.emit()
+#endregion
 
 
+#region Tool Actions
+func tool_use_emit() -> void:
+	# Notify listeners that the current tool was used.
+	tool_use.emit(current_tool, position, animation_direction)
+
+	# Play the appropriate sound effect.
+	match current_tool:
+		Enum.Tool.AXE, Enum.Tool.SWORD:
+			axe_sound.play()
+
+		Enum.Tool.FISH:
+			fish_sound.play()
+
+		Enum.Tool.HOE:
+			hoe_sound.play()
+
+		Enum.Tool.WATER:
+			water_sound.play()
+
+#endregion
+
+
+#region Animation
 func animate():
 	if direction:
 		move_state_machine.travel("walk")
@@ -240,27 +386,16 @@ func animate():
 		move_state_machine.travel("idle")
 	
 		
-func tool_use_emit():
-	tool_use.emit(current_tool, position, animation_direction)
-	if current_tool == Enum.Tool.AXE or current_tool == Enum.Tool.SWORD:
-		$Sounds/Axe.play()
-	elif current_tool == Enum.Tool.FISH:
-		$Sounds/Fish.play()
-	elif current_tool == Enum.Tool.HOE:
-		$Sounds/Hoe.play()	
-	elif current_tool == Enum.Tool.WATER:
-		$Sounds/Water.play()	
-
-
 func _on_animation_tree_animation_started(_anim_name: StringName) -> void:
 	can_move = false
 
 
 func _on_animation_tree_animation_finished(_anim_name: StringName) -> void:
 	can_move = true
+#endregion
 
 
-# Fishing Part
+#region Fishing
 func start_fishing():
 	$FishingGame.reveal()
 	$Animation/AnimationTree.set("parameters/FishBlend/blend_amount", 1)
@@ -269,12 +404,13 @@ func start_fishing():
 
 func _on_fishing_game_fish_game_finish(is_success: bool) -> void:
 	if is_success:
-		Data.ITEMS_AMOUNT[Enum.Item.FISH] += 1
+		Data.items_amount[Enum.Item.FISH] += 1
 	$Animation/AnimationTree.set("parameters/FishBlend/blend_amount", 0)
 	current_state = Enum.State.DEFAULT
+#endregion
 
 
-
+#region Interact
 # Interact: this method only work if there is only 1 interactable in area 2D
 func _on_interact_range_area_2d_body_entered(body: Node2D) -> void:
 	if body.has_method("interact"):
@@ -293,6 +429,101 @@ func _on_interact_range_area_2d_body_exited(body: Node2D) -> void:
 	
 	
 
+	
+	
+	#region Player Light
+func _create_player_light() -> void:
+	var player_light := PointLight2D.new()
+	player_light.texture = _generate_light_texture(
+		LIGHT_TEXTURE_SIZE,
+		LIGHT_COLOR
+	)
+	player_light.energy = LIGHT_ENERGY
+	player_light.texture_scale = LIGHT_SCALE
 
-func _on_step_timer_timeout() -> void:
-	$Sounds/Step.play()
+	add_child(player_light)
+
+
+func _generate_light_texture(size: int, color: Color) -> Texture2D:
+	var image := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	image.fill(Color.TRANSPARENT)
+
+	var center := size * 0.5
+	var radius := center
+
+	for x in range(size):
+		for y in range(size):
+			var distance := Vector2(x - center, y - center).length()
+
+			if distance > radius:
+				continue
+
+			# Smooth radial falloff
+			var alpha := 1.0 - (distance / radius)
+			alpha *= alpha
+
+			image.set_pixel(
+				x,
+				y,
+				Color(color.r, color.g, color.b, alpha)
+			)
+
+	return ImageTexture.create_from_image(image)
+#endregion
+#endregion
+
+
+#region Style
+func update_style():
+	$Sprite2D.texture = Data.PLAYER_SKINS[current_style]
+	update_control_ui.emit(Enum.KEYBOARD.CHANGE_STYLE, current_style)
+#endregion
+
+
+#region Player Save/Load
+func save_player():
+	var save_data := {
+		"style": current_style,
+		"unlocked_styles": Data.unlocked_styles
+	}
+	
+	var file = FileAccess.open("user://player_save.json", FileAccess.WRITE)
+	file.store_string(JSON.stringify(save_data))
+	update_style()
+	
+func load_player() -> void:
+	if !FileAccess.file_exists("user://player_save.json"):
+		return
+
+	var file := FileAccess.open("user://player_save.json", FileAccess.READ)
+	var data = JSON.parse_string(file.get_as_text())
+
+	if typeof(data) != TYPE_DICTIONARY:
+		return
+
+	_load_unlocked_styles(data)
+	_load_current_style(data)
+
+	
+func _load_unlocked_styles(data: Dictionary) -> void:
+	if !data.has("unlocked_styles"):
+		return
+
+	Data.unlocked_styles.clear()
+
+	for style in data.unlocked_styles:
+		Data.unlocked_styles.append(style as Enum.Style)
+		
+	style_count = Data.unlocked_styles.size()
+		
+func _load_current_style(data: Dictionary) -> void:
+	if !data.has("style"):
+		return
+
+	style_index = Data.unlocked_styles.find(data.style)
+
+	if style_index == -1:
+		style_index = 0
+
+	current_style = Data.unlocked_styles[style_index]
+#endregion

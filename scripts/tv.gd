@@ -12,7 +12,7 @@ func _ready() -> void:
 
 func interact(_player: CharacterBody2D) -> void:
 	if can_interact:
-		$AnimatedSprite2D.play("rain" if Data.FORECAST_RAIN else "sun")
+		$AnimatedSprite2D.play("rain" if Data.forecast_rain else "sun")
 		$Timer.start()
 	
 

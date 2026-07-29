@@ -46,7 +46,7 @@ func _process(_delta):
 		color = color.lerp(rain_color, 1 - daytime_point)
 	$Overlay/CanvasModulate.color = color
 	
-	if Data.TARGET_HIGHLIGHTER:
+	if Data.target_highlighter:
 		update_target_highlight()
 	else:
 		$Layers/TargetLayer.clear()
@@ -90,9 +90,9 @@ func level_reset():
 			
 		object.create_apple()
 
-	raining = Data.FORECAST_RAIN
-	Data.FORECAST_RAIN = [true, false].pick_random()
-	print("Tommorw will rain" if Data.FORECAST_RAIN else "Tommorow is sunny")
+	raining = Data.forecast_rain
+	Data.forecast_rain = [true, false].pick_random()
+	print("Tommorw will rain" if Data.forecast_rain else "Tommorow is sunny")
 	
 	if raining:
 		waterSoils()
@@ -141,10 +141,10 @@ func _on_player_tool_use(tool: Enum.Tool, pos: Vector2, dir: Vector2) -> void:
 			$Objects/Player.start_fishing()
 			
 		Enum.Tool.SEED:			
-			if Data.ITEMS_AMOUNT[Data.SEED_TO_ITEM[%Player.current_seed]] <= 0:
+			if Data.items_amount[Data.SEED_TO_ITEM[%Player.current_seed]] <= 0:
 				return
 			else:
-				Data.ITEMS_AMOUNT[Data.SEED_TO_ITEM[%Player.current_seed]] -= 1
+				Data.items_amount[Data.SEED_TO_ITEM[%Player.current_seed]] -= 1
 					
 			var plant_res = PlantResource.new()
 			plant_res.setup(%Player.current_seed)
@@ -186,7 +186,7 @@ func _on_player_diagnose() -> void:
 
 
 func _ready() -> void:
-	Data.FORECAST_RAIN = [true, false].pick_random()
+	Data.forecast_rain = [true, false].pick_random()
 	if raining:
 		waterSoils()
 		
@@ -204,7 +204,7 @@ func _ready() -> void:
 	
 	if Input.get_connected_joypads().size() > 0:
 		print("True")
-		Data.ControllerConnected = true
+		Data.controller_connected = true
 
 # Projectile
 func create_projectile(start_pos: Vector2, dir: Vector2):
@@ -407,12 +407,12 @@ func _on_player_close_shop() -> void:
 func _on_joy_connection_changed(device_id: int, connected: bool):
 	update_hint_ui_keys.emit()
 	if connected:
-		Data.ControllerConnected = true
+		Data.controller_connected = true
 		print("Controller ", device_id, " connected!")
 		var controller_name = Input.get_joy_name(device_id)
 		print("Controller name: ", controller_name)
 		var controller_guid = Input.get_joy_guid(device_id)
 		print("GUID: ", controller_guid)
 	else:
-		Data.ControllerConnected = false
+		Data.controller_connected = false
 		print("Controller ", device_id, " disconnected!")
