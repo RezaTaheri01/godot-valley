@@ -130,6 +130,17 @@ const MACHINE_UPGRADE_COST = {
 		'cost' : {Enum.Item.PUMPKIN: 15, Enum.Item.CORN: 15},
 		'icon': preload("res://graphics/icons/scarecrow.png"),
 		'color': Color.BURLYWOOD}}
+
+
+# Upgradable in future
+# Scare Crow
+var scare_crow_level = 0
+const PROJECTILE_SPEED = [200.0, 225.0, 250.0]
+const SCARE_CROW_DETECTION_RANGE = [150.0, 175.0, 200.0]
+
+# Fisherman
+var fisherman_level = 0
+const FISHING_TIMER_TIME = [30.0, 20.0, 15.0]
 #endregion
 	
 	

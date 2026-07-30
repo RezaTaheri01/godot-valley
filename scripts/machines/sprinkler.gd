@@ -2,15 +2,46 @@ extends Machines
 
 signal water_near_soils(sprinkler_coord: Vector2i)
 
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D):
-	self.connect("water_near_soils", level.water_near_soils)
-	
-	return super.setup(grid_coord, level, parent)
+# Prevent the sprinkler from starting another watering cycle
+# while the current animation is still playing.
+var _busy := false
 
+
+# ============================================================
+# SETUP
+# ============================================================
+
+func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D) -> void:
+	# Notify the level whenever this sprinkler waters nearby soil.
+	water_near_soils.connect(level.water_near_soils)
+
+	super.setup(grid_coord, level, parent)
+
+
+# ============================================================
+# TIMER
+# ============================================================
 
 func _on_timer_timeout() -> void:
-	$AnimatedSprite2D.play("action")
+	# Ignore the timer if the previous watering cycle
+	# hasn't finished yet.
+	if _busy:
+		return
+
+	_busy = true
+
+	# Play the watering animation.
+	sprite.play("action")
+
+	# Tell the level to water the surrounding soil tiles.
 	water_near_soils.emit(coord)
-	await $AnimatedSprite2D.animation_finished
-	$AnimatedSprite2D.play("default")
+
+	# Wait until the animation has finished.
+	await sprite.animation_finished
+
+	# Return to the idle animation.
+	sprite.play("default")
+
+	_busy = false

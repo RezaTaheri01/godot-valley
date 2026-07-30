@@ -208,9 +208,10 @@ func _ready() -> void:
 
 # Projectile
 func create_projectile(start_pos: Vector2, dir: Vector2):
+	var projectile_speed = Data.PROJECTILE_SPEED[Data.scare_crow_level]
 	var projectile = projectile_scene.instantiate()
 	$Objects.add_child(projectile)
-	projectile.setup(start_pos, dir)
+	projectile.setup(start_pos, dir, projectile_speed)
 
 
 func _on_player_build(curr_machine: int) -> void:
