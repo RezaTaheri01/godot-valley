@@ -1,47 +1,121 @@
 extends Node
 
+var difficulty: Enum.Difficulty = Enum.Difficulty.EASY
 const TILE_SIZE = 16
 var forecast_rain: bool
 
 const HOUSE_COST = {
-	1: {Enum.Item.WOOD: 30, Enum.Item.APPLE: 20},
-	2: {Enum.Item.WOOD: 40, Enum.Item.APPLE: 30}}
+	Enum.Difficulty.EASY: {1: {Enum.Item.WOOD: 25, Enum.Item.APPLE: 15}, 2: {Enum.Item.WOOD: 30, Enum.Item.APPLE: 25}},
+	Enum.Difficulty.NORMAL: {1: {Enum.Item.WOOD: 30, Enum.Item.APPLE: 20}, 2: {Enum.Item.WOOD: 40, Enum.Item.APPLE: 30}},
+	Enum.Difficulty.HARD: {1: {Enum.Item.WOOD: 35, Enum.Item.APPLE: 25}, 2: {Enum.Item.WOOD: 45, Enum.Item.APPLE: 35}},
+}
 
 
 #region Plants
 const PLANT_DATA = {
-	Enum.Seed.TOMATO: {
-		'texture': "res://graphics/plants/tomato.png",
-		'icon_texture': "res://graphics/icons/tomato.png",
-		'name':'Tomato',
-		'h_frames': 3,
-		'grow_speed': 0.75,
-		'death_max': 3,
-		'reward': Enum.Item.TOMATO},
-	Enum.Seed.CORN: {
-		'texture': "res://graphics/plants/corn.png",
-		'icon_texture': "res://graphics/icons/corn.png",
-		'name':'Corn',
-		'h_frames': 3,
-		'grow_speed': 1.0,
-		'death_max': 2,
-		'reward': Enum.Item.CORN},
-	Enum.Seed.PUMPKIN: {
-		'texture': "res://graphics/plants/pumpkin.png",
-		'icon_texture': "res://graphics/icons/pumpkin.png",
-		'name':'Pumpkin',
-		'h_frames': 3,
-		'grow_speed': 0.25,
-		'death_max': 3,
-		'reward': Enum.Item.PUMPKIN},
-	Enum.Seed.WHEAT: {
-		'texture': "res://graphics/plants/wheat.png",
-		'icon_texture': "res://graphics/icons/wheat.png",
-		'name':'Wheat',
-		'h_frames': 3,
-		'grow_speed': 1.0,
-		'death_max': 3,
-		'reward': Enum.Item.WHEAT}}
+	Enum.Difficulty.EASY: {
+		Enum.Seed.TOMATO: {
+			'texture': "res://graphics/plants/tomato.png",
+			'icon_texture': "res://graphics/icons/tomato.png",
+			'name':'Tomato',
+			'h_frames': 3,
+			'grow_speed': 0.75,
+			'death_max': 3,
+			'reward': Enum.Item.TOMATO},
+		Enum.Seed.CORN: {
+			'texture': "res://graphics/plants/corn.png",
+			'icon_texture': "res://graphics/icons/corn.png",
+			'name':'Corn',
+			'h_frames': 3,
+			'grow_speed': 1.0,
+			'death_max': 2,
+			'reward': Enum.Item.CORN},
+		Enum.Seed.PUMPKIN: {
+			'texture': "res://graphics/plants/pumpkin.png",
+			'icon_texture': "res://graphics/icons/pumpkin.png",
+			'name':'Pumpkin',
+			'h_frames': 3,
+			'grow_speed': 0.25,
+			'death_max': 3,
+			'reward': Enum.Item.PUMPKIN},
+		Enum.Seed.WHEAT: {
+			'texture': "res://graphics/plants/wheat.png",
+			'icon_texture': "res://graphics/icons/wheat.png",
+			'name':'Wheat',
+			'h_frames': 3,
+			'grow_speed': 1.0,
+			'death_max': 3,
+			'reward': Enum.Item.WHEAT}
+	},	
+	Enum.Difficulty.NORMAL: {
+		Enum.Seed.TOMATO: {
+			'texture': "res://graphics/plants/tomato.png",
+			'icon_texture': "res://graphics/icons/tomato.png",
+			'name':'Tomato',
+			'h_frames': 3,
+			'grow_speed': 0.65,
+			'death_max': 3,
+			'reward': Enum.Item.TOMATO},
+		Enum.Seed.CORN: {
+			'texture': "res://graphics/plants/corn.png",
+			'icon_texture': "res://graphics/icons/corn.png",
+			'name':'Corn',
+			'h_frames': 3,
+			'grow_speed': 0.9,
+			'death_max': 2,
+			'reward': Enum.Item.CORN},
+		Enum.Seed.PUMPKIN: {
+			'texture': "res://graphics/plants/pumpkin.png",
+			'icon_texture': "res://graphics/icons/pumpkin.png",
+			'name':'Pumpkin',
+			'h_frames': 3,
+			'grow_speed': 0.22,
+			'death_max': 3,
+			'reward': Enum.Item.PUMPKIN},
+		Enum.Seed.WHEAT: {
+			'texture': "res://graphics/plants/wheat.png",
+			'icon_texture': "res://graphics/icons/wheat.png",
+			'name':'Wheat',
+			'h_frames': 3,
+			'grow_speed': 0.9,
+			'death_max': 3,
+			'reward': Enum.Item.WHEAT}
+	},
+	Enum.Difficulty.HARD: {
+		Enum.Seed.TOMATO: {
+			'texture': "res://graphics/plants/tomato.png",
+			'icon_texture': "res://graphics/icons/tomato.png",
+			'name':'Tomato',
+			'h_frames': 3,
+			'grow_speed': 0.6,
+			'death_max': 3,
+			'reward': Enum.Item.TOMATO},
+		Enum.Seed.CORN: {
+			'texture': "res://graphics/plants/corn.png",
+			'icon_texture': "res://graphics/icons/corn.png",
+			'name':'Corn',
+			'h_frames': 3,
+			'grow_speed': 0.8,
+			'death_max': 2,
+			'reward': Enum.Item.CORN},
+		Enum.Seed.PUMPKIN: {
+			'texture': "res://graphics/plants/pumpkin.png",
+			'icon_texture': "res://graphics/icons/pumpkin.png",
+			'name':'Pumpkin',
+			'h_frames': 3,
+			'grow_speed': 0.2,
+			'death_max': 3,
+			'reward': Enum.Item.PUMPKIN},
+		Enum.Seed.WHEAT: {
+			'texture': "res://graphics/plants/wheat.png",
+			'icon_texture': "res://graphics/icons/wheat.png",
+			'name':'Wheat',
+			'h_frames': 3,
+			'grow_speed': 0.8,
+			'death_max': 3,
+			'reward': Enum.Item.WHEAT}
+	},
+}
 
 const SEED_TEXTURES = {
 	Enum.Seed.TOMATO: preload("res://graphics/icons/tomato.png"),
@@ -54,34 +128,85 @@ const SEED_TEXTURES = {
 
 #region Fish
 const FISH_DATA = {
-	Enum.Fish.GRAY: {
-		'icon_texture': "res://graphics/icons/grayfish.png",
-		'name': "Gray Fish",
-		'catch_speed': 20,
-		'lose_speed': 10,
-		'start_progress': 30,
-		'frequency': "Common",
-		'color': Color.PALE_GREEN
+	Enum.Difficulty.EASY: {
+		Enum.Fish.GRAY: {
+			'icon_texture': "res://graphics/icons/grayfish.png",
+			'name': "Gray Fish",
+			'catch_speed': 20,
+			'lose_speed': 10,
+			'start_progress': 30,
+			'frequency': "Common",
+			'color': Color.PALE_GREEN},
+		Enum.Fish.SILVER: {
+			'icon_texture': "res://graphics/icons/silverfish.png",
+			'name': "Silver Fish",
+			'catch_speed': 15,
+			'lose_speed': 15,
+			'start_progress': 30,
+			'frequency': "Rare",
+			'color': Color.MEDIUM_PURPLE},
+		Enum.Fish.GOLD: {
+			'icon_texture': "res://graphics/icons/goldfish.png",
+			'name': "Gold Fish",
+			'catch_speed': 10,
+			'lose_speed': 20,
+			'start_progress': 30,
+			'frequency': "Legendary",
+			'color': Color.GOLDENROD}
 	},
-	Enum.Fish.SILVER: {
-		'icon_texture': "res://graphics/icons/silverfish.png",
-		'name': "Silver Fish",
-		'catch_speed': 15,
-		'lose_speed': 15,
-		'start_progress': 30,
-		'frequency': "Rare",
-		'color': Color.MEDIUM_PURPLE
+	Enum.Difficulty.NORMAL: {
+		Enum.Fish.GRAY: {
+			'icon_texture': "res://graphics/icons/grayfish.png",
+			'name': "Gray Fish",
+			'catch_speed': 20,
+			'lose_speed': 10,
+			'start_progress': 30,
+			'frequency': "Common",
+			'color': Color.PALE_GREEN},
+		Enum.Fish.SILVER: {
+			'icon_texture': "res://graphics/icons/silverfish.png",
+			'name': "Silver Fish",
+			'catch_speed': 15,
+			'lose_speed': 15,
+			'start_progress': 30,
+			'frequency': "Rare",
+			'color': Color.MEDIUM_PURPLE},
+		Enum.Fish.GOLD: {
+			'icon_texture': "res://graphics/icons/goldfish.png",
+			'name': "Gold Fish",
+			'catch_speed': 10,
+			'lose_speed': 20,
+			'start_progress': 30,
+			'frequency': "Legendary",
+			'color': Color.GOLDENROD}
 	},
-	Enum.Fish.GOLD: {
-		'icon_texture': "res://graphics/icons/goldfish.png",
-		'name': "Gold Fish",
-		'catch_speed': 10,
-		'lose_speed': 20,
-		'start_progress': 30,
-		'frequency': "Legendary",
-		'color': Color.GOLDENROD
-	}
-	}
+	Enum.Difficulty.HARD: {
+		Enum.Fish.GRAY: {
+			'icon_texture': "res://graphics/icons/grayfish.png",
+			'name': "Gray Fish",
+			'catch_speed': 20,
+			'lose_speed': 10,
+			'start_progress': 30,
+			'frequency': "Common",
+			'color': Color.PALE_GREEN},
+		Enum.Fish.SILVER: {
+			'icon_texture': "res://graphics/icons/silverfish.png",
+			'name': "Silver Fish",
+			'catch_speed': 15,
+			'lose_speed': 15,
+			'start_progress': 30,
+			'frequency': "Rare",
+			'color': Color.MEDIUM_PURPLE},
+		Enum.Fish.GOLD: {
+			'icon_texture': "res://graphics/icons/goldfish.png",
+			'name': "Gold Fish",
+			'catch_speed': 10,
+			'lose_speed': 20,
+			'start_progress': 30,
+			'frequency': "Legendary",
+			'color': Color.GOLDENROD}
+	},
+}
 #endregion
 
 
@@ -114,33 +239,83 @@ const MACHINE_TEXTURES = {
 	Enum.Machine.SCARECROW: preload("res://graphics/icons/scarecrow.png"),}	
 
 const MACHINE_UPGRADE_COST = {
-	Enum.Machine.DELETE:{},
-	Enum.Machine.SPRINKLER: {
-		'name': 'Sprinkler',
-		'cost' :{Enum.Item.TOMATO: 30, Enum.Item.WHEAT: 20},
-		'icon': preload("res://graphics/icons/sprinkler.png"),
-		'color': Color.SEA_GREEN},
-	Enum.Machine.FISHER: {
-		'name': 'Fisher',
-		'cost' :{Enum.Item.WOOD: 25, Enum.Item.FISH: 15},
-		'icon': preload("res://graphics/icons/fisher.png"),
-		'color': Color.SLATE_GRAY},
-	Enum.Machine.SCARECROW: {
-		'name': 'Scarecrow',
-		'cost' : {Enum.Item.PUMPKIN: 15, Enum.Item.CORN: 15},
-		'icon': preload("res://graphics/icons/scarecrow.png"),
-		'color': Color.BURLYWOOD}}
-
+	Enum.Difficulty.EASY: {
+		Enum.Machine.DELETE:{},
+		Enum.Machine.SPRINKLER: {
+			'name': 'Sprinkler',
+			'cost' :{Enum.Item.TOMATO: 30, Enum.Item.WHEAT: 20},
+			'icon': preload("res://graphics/icons/sprinkler.png"),
+			'color': Color.SEA_GREEN},
+		Enum.Machine.FISHER: {
+			'name': 'Fisher',
+			'cost' :{Enum.Item.WOOD: 25, Enum.Item.FISH: 15},
+			'icon': preload("res://graphics/icons/fisher.png"),
+			'color': Color.SLATE_GRAY},
+		Enum.Machine.SCARECROW: {
+			'name': 'Scarecrow',
+			'cost' : {Enum.Item.PUMPKIN: 15, Enum.Item.CORN: 15},
+			'icon': preload("res://graphics/icons/scarecrow.png"),
+			'color': Color.BURLYWOOD}
+	},
+	Enum.Difficulty.NORMAL: {
+		Enum.Machine.DELETE:{},
+		Enum.Machine.SPRINKLER: {
+			'name': 'Sprinkler',
+			'cost' :{Enum.Item.TOMATO: 35, Enum.Item.WHEAT: 25},
+			'icon': preload("res://graphics/icons/sprinkler.png"),
+			'color': Color.SEA_GREEN},
+		Enum.Machine.FISHER: {
+			'name': 'Fisher',
+			'cost' :{Enum.Item.WOOD: 30, Enum.Item.FISH: 20},
+			'icon': preload("res://graphics/icons/fisher.png"),
+			'color': Color.SLATE_GRAY},
+		Enum.Machine.SCARECROW: {
+			'name': 'Scarecrow',
+			'cost' : {Enum.Item.PUMPKIN: 20, Enum.Item.CORN: 20},
+			'icon': preload("res://graphics/icons/scarecrow.png"),
+			'color': Color.BURLYWOOD}
+	},
+	Enum.Difficulty.HARD: {
+		Enum.Machine.DELETE:{},
+		Enum.Machine.SPRINKLER: {
+			'name': 'Sprinkler',
+			'cost' :{Enum.Item.TOMATO: 40, Enum.Item.WHEAT: 30},
+			'icon': preload("res://graphics/icons/sprinkler.png"),
+			'color': Color.SEA_GREEN},
+		Enum.Machine.FISHER: {
+			'name': 'Fisher',
+			'cost' :{Enum.Item.WOOD: 35, Enum.Item.FISH: 20},
+			'icon': preload("res://graphics/icons/fisher.png"),
+			'color': Color.SLATE_GRAY},
+		Enum.Machine.SCARECROW: {
+			'name': 'Scarecrow',
+			'cost' : {Enum.Item.PUMPKIN: 20, Enum.Item.CORN: 25},
+			'icon': preload("res://graphics/icons/scarecrow.png"),
+			'color': Color.BURLYWOOD}
+	},
+}
 
 # Upgradable in future
 # Scare Crow
 var scare_crow_level = 0
-const PROJECTILE_SPEED = [200.0, 225.0, 250.0]
-const SCARE_CROW_DETECTION_RANGE = [150.0, 175.0, 200.0]
+const PROJECTILE_SPEED = {
+	Enum.Difficulty.EASY : [200.0, 225.0, 250.0],
+	Enum.Difficulty.NORMAL : [195.0, 220.0, 245.0],
+	Enum.Difficulty.HARD : [190.0, 215.0, 240.0],
+}
+const SCARE_CROW_DETECTION_RANGE = {
+	Enum.Difficulty.EASY : [175.0, 200.0, 225.0],
+	Enum.Difficulty.NORMAL : [150.0, 175.0, 200.0],
+	Enum.Difficulty.HARD : [125.0, 150.0, 175.0],
+}
 
 # Fisherman
 var fisherman_level = 0
-const FISHING_TIMER_TIME = [30.0, 20.0, 15.0]
+const FISHING_TIMER_TIME = {
+	Enum.Difficulty.EASY : [20.0, 17.5, 15.0],
+	Enum.Difficulty.NORMAL : [30.0, 25.0, 20.0],
+	Enum.Difficulty.HARD : [45.0, 35.0, 30.0],
+}
 #endregion
 	
 	
@@ -163,22 +338,47 @@ const TOOL_STATE_ANIMATIONS = {
 	Enum.Tool.SEED: 'Seed',
 	}
 	
-	
-var tool_damage_amount = {
-	Enum.Tool.SWORD: 1,
+var sword_level = 0
+const TOOL_DAMAGE_AMOUNT = {
+	Enum.Difficulty.EASY: {
+		Enum.Tool.SWORD: [2.0, 3.0, 4.0]
+		},
+	Enum.Difficulty.NORMAL: {
+		Enum.Tool.SWORD: [1.5, 2.5, 3.5]
+		},
+	Enum.Difficulty.HARD: {
+		Enum.Tool.SWORD: [1.0, 1.5, 2.0]
+		},
 }
 #endregion
 	
 
 #region Trees
-const APPLE_TREE_HEALTH = 4
+const APPLE_TREE_HEALTH = {
+	Enum.Difficulty.EASY: 4,
+	Enum.Difficulty.NORMAL: 6,
+	Enum.Difficulty.HARD: 8,
+}
 #endregion
 
 
 #region Blob
-const BLOB_ENEMY_HEALTH = 3
-const BLOB_SPEED = 25.0
-const BLOB_DAMAGE = 1  # Damage to Plants
+const BLOB_ENEMY_HEALTH = {
+	Enum.Difficulty.EASY: 3,
+	Enum.Difficulty.NORMAL: 4,
+	Enum.Difficulty.HARD: 5,
+}
+const BLOB_SPEED = {
+	Enum.Difficulty.EASY: 26,
+	Enum.Difficulty.NORMAL: 28,
+	Enum.Difficulty.HARD: 30,
+}
+# Damage to Plants
+const BLOB_DAMAGE = {
+	Enum.Difficulty.EASY: 1,
+	Enum.Difficulty.NORMAL: 2,
+	Enum.Difficulty.HARD: 3,
+} 
 
 # ======== KNOCKBACK ========
 const BLOB_KNOCKBACK_FORCE: float = 100.0
@@ -188,7 +388,11 @@ const BLOB_KNOCKBACK_TIME: float = 0.5
 
 
 #region Player
-const PLAYER_SPEED = 70.0
+const PLAYER_SPEED = {
+	Enum.Difficulty.EASY: 75.0,
+	Enum.Difficulty.NORMAL: 70.0,
+	Enum.Difficulty.HARD: 65.0,
+}
 var target_highlighter: bool = false
 #endregion
 
@@ -212,34 +416,94 @@ const PLAYER_SKINS = {
 	Enum.Style.BEANIE: preload("res://graphics/characters/main/main_red.png")}
 
 const STYLE_UPGRADES = {
-	Enum.Style.BASIC: {
-		'icon': null,
+	Enum.Difficulty.EASY: {
+		Enum.Style.BASIC: {
+			'icon': null,},
+		Enum.Style.COWBOY: {
+			'name': 'Cowboy',
+			'cost':{Enum.Item.WOOD: 8, Enum.Item.CORN: 6},
+			'icon': preload("res://graphics/icons/cowboy.png"),
+			'color': Color.SANDY_BROWN},
+		Enum.Style.ENGLISH: {
+			'name': 'Oldie',
+			'cost':{Enum.Item.CORN: 8, Enum.Item.WHEAT: 6},
+			'icon': preload("res://graphics/icons/english.png"),
+			'color': Color.LIGHT_GRAY},
+		Enum.Style.BASEBALL: {
+			'name': 'Baseball',
+			'cost':{Enum.Item.TOMATO: 8, Enum.Item.APPLE: 6},
+			'icon': preload("res://graphics/icons/blue.png"),
+			'color': Color.SKY_BLUE},
+		Enum.Style.BEANIE: {
+			'name': 'Beanie',
+			'cost':{Enum.Item.PUMPKIN: 8, Enum.Item.WHEAT: 6},
+			'icon': preload("res://graphics/icons/beanie.png"),
+			'color': Color.INDIAN_RED},
+		Enum.Style.STRAW: {
+			'name': 'Straw',
+			'cost':{Enum.Item.FISH: 8, Enum.Item.WOOD: 6},
+			'icon': preload("res://graphics/icons/straw.png"),
+			'color': Color.BURLYWOOD}
 	},
-	Enum.Style.COWBOY: {
-		'name': 'Cowboy',
-		'cost':{Enum.Item.WOOD: 8, Enum.Item.CORN: 6},
-		'icon': preload("res://graphics/icons/cowboy.png"),
-		'color': Color.SANDY_BROWN},
-	Enum.Style.ENGLISH: {
-		'name': 'Oldie',
-		'cost':{Enum.Item.CORN: 8, Enum.Item.WHEAT: 6},
-		'icon': preload("res://graphics/icons/english.png"),
-		'color': Color.LIGHT_GRAY},
-	Enum.Style.BASEBALL: {
-		'name': 'Baseball',
-		'cost':{Enum.Item.TOMATO: 8, Enum.Item.APPLE: 6},
-		'icon': preload("res://graphics/icons/blue.png"),
-		'color': Color.SKY_BLUE},
-	Enum.Style.BEANIE: {
-		'name': 'Beanie',
-		'cost':{Enum.Item.PUMPKIN: 8, Enum.Item.WHEAT: 6},
-		'icon': preload("res://graphics/icons/beanie.png"),
-		'color': Color.INDIAN_RED},
-	Enum.Style.STRAW: {
-		'name': 'Straw',
-		'cost':{Enum.Item.FISH: 8, Enum.Item.WOOD: 6},
-		'icon': preload("res://graphics/icons/straw.png"),
-		'color': Color.BURLYWOOD}}
+	Enum.Difficulty.NORMAL: {
+		Enum.Style.BASIC: {
+			'icon': null,},
+		Enum.Style.COWBOY: {
+			'name': 'Cowboy',
+			'cost':{Enum.Item.WOOD: 9, Enum.Item.CORN: 7},
+			'icon': preload("res://graphics/icons/cowboy.png"),
+			'color': Color.SANDY_BROWN},
+		Enum.Style.ENGLISH: {
+			'name': 'Oldie',
+			'cost':{Enum.Item.CORN: 9, Enum.Item.WHEAT: 7},
+			'icon': preload("res://graphics/icons/english.png"),
+			'color': Color.LIGHT_GRAY},
+		Enum.Style.BASEBALL: {
+			'name': 'Baseball',
+			'cost':{Enum.Item.TOMATO: 9, Enum.Item.APPLE: 7},
+			'icon': preload("res://graphics/icons/blue.png"),
+			'color': Color.SKY_BLUE},
+		Enum.Style.BEANIE: {
+			'name': 'Beanie',
+			'cost':{Enum.Item.PUMPKIN: 9, Enum.Item.WHEAT: 7},
+			'icon': preload("res://graphics/icons/beanie.png"),
+			'color': Color.INDIAN_RED},
+		Enum.Style.STRAW: {
+			'name': 'Straw',
+			'cost':{Enum.Item.FISH: 9, Enum.Item.WOOD: 7},
+			'icon': preload("res://graphics/icons/straw.png"),
+			'color': Color.BURLYWOOD}
+	},
+	Enum.Difficulty.HARD: {
+		Enum.Style.BASIC: {
+			'icon': null,},
+		Enum.Style.COWBOY: {
+			'name': 'Cowboy',
+			'cost':{Enum.Item.WOOD: 10, Enum.Item.CORN: 9},
+			'icon': preload("res://graphics/icons/cowboy.png"),
+			'color': Color.SANDY_BROWN},
+		Enum.Style.ENGLISH: {
+			'name': 'Oldie',
+			'cost':{Enum.Item.CORN: 10, Enum.Item.WHEAT: 9},
+			'icon': preload("res://graphics/icons/english.png"),
+			'color': Color.LIGHT_GRAY},
+		Enum.Style.BASEBALL: {
+			'name': 'Baseball',
+			'cost':{Enum.Item.TOMATO: 10, Enum.Item.APPLE: 9},
+			'icon': preload("res://graphics/icons/blue.png"),
+			'color': Color.SKY_BLUE},
+		Enum.Style.BEANIE: {
+			'name': 'Beanie',
+			'cost':{Enum.Item.PUMPKIN: 10, Enum.Item.WHEAT: 9},
+			'icon': preload("res://graphics/icons/beanie.png"),
+			'color': Color.INDIAN_RED},
+		Enum.Style.STRAW: {
+			'name': 'Straw',
+			'cost':{Enum.Item.FISH: 10, Enum.Item.WOOD: 9},
+			'icon': preload("res://graphics/icons/straw.png"),
+			'color': Color.BURLYWOOD}
+	},
+}
 #endregion
 
 
@@ -257,9 +521,9 @@ var unlocked_styles: Array[Enum.Style] = [Enum.Style.STRAW, Enum.Style.BASIC]
 var unlocked_machines: Array[Enum.Machine] = [Enum.Machine.DELETE]
 
 var shop_connection = {
-	Enum.Shop.HAT: {'tracker': unlocked_styles, 'all': STYLE_UPGRADES.keys()},
+	Enum.Shop.HAT: {'tracker': unlocked_styles, 'all': STYLE_UPGRADES[difficulty].keys()},
 	Enum.Shop.MAIN: {'tracker': unlocked_machines,
-					 'all': MACHINE_UPGRADE_COST.keys()}
+					 'all': MACHINE_UPGRADE_COST[difficulty].keys()}
 	}
 #endregion
 
@@ -279,13 +543,34 @@ const TEXTURES = {
 
 
 var items_amount = {
-	Enum.Item.WOOD: 50,
-	Enum.Item.APPLE: 50,
-	Enum.Item.FISH: 50,
-	Enum.Item.CORN: 50,
-	Enum.Item.WHEAT: 50,
-	Enum.Item.PUMPKIN: 50,
-	Enum.Item.TOMATO: 50}
+	Enum.Difficulty.EASY: {
+		Enum.Item.WOOD: 50,
+		Enum.Item.APPLE: 50,
+		Enum.Item.FISH: 50,
+		Enum.Item.CORN: 50,
+		Enum.Item.WHEAT: 50,
+		Enum.Item.PUMPKIN: 50,
+		Enum.Item.TOMATO: 50
+	},
+	Enum.Difficulty.NORMAL: {
+		Enum.Item.WOOD: 40,
+		Enum.Item.APPLE: 40,
+		Enum.Item.FISH: 40,
+		Enum.Item.CORN: 40,
+		Enum.Item.WHEAT: 40,
+		Enum.Item.PUMPKIN: 40,
+		Enum.Item.TOMATO: 40
+	},
+	Enum.Difficulty.HARD: {
+		Enum.Item.WOOD: 30,
+		Enum.Item.APPLE: 30,
+		Enum.Item.FISH: 30,
+		Enum.Item.CORN: 30,
+		Enum.Item.WHEAT: 30,
+		Enum.Item.PUMPKIN: 30,
+		Enum.Item.TOMATO: 30
+	},
+}
 
 
 const SEED_TO_ITEM = {

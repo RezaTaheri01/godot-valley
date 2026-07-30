@@ -16,8 +16,6 @@ var anim_name: String = "up"
 # ============================================================
 
 func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D) -> bool:
-	timer.wait_time = Data.fishing_timer_time[Data.fisherman_level]
-	
 	# Directions to search for adjacent water.
 	var directions := {
 		Vector2i.UP: "up",
@@ -66,7 +64,7 @@ func _process(_delta: float) -> void:
 
 func _on_timer_timeout() -> void:
 	# Give the player one fish and begin the next fishing cycle.
-	Data.items_amount[Enum.Item.FISH] += 1
+	Data.items_amount[Data.difficulty][Enum.Item.FISH] += 1
 	start_fishing()
 
 
@@ -82,7 +80,7 @@ func start_fishing() -> void:
 	# Switch to the idle animation while waiting.
 	sprite.play(anim_name + "_idle")
 
-	timer.wait_time = Data.fishing_timer_time[Data.fisherman_level]
+	timer.wait_time = Data.FISHING_TIMER_TIME[Data.difficulty][Data.fisherman_level]
 	
 	# Begin the fishing timer.
 	timer.start()

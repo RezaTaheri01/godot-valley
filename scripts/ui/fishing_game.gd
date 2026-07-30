@@ -127,7 +127,7 @@ func reveal() -> void:
 	fish_enum = Enum.Fish.values().pick_random()
 	
 	# Load fish-specific data
-	var fish_data: Dictionary = Data.FISH_DATA[fish_enum]
+	var fish_data: Dictionary = Data.FISH_DATA[Data.difficulty][fish_enum]
 	
 	# Apply fish properties
 	$FishSprite.texture = load(fish_data["icon_texture"])

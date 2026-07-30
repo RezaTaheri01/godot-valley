@@ -141,10 +141,10 @@ func _on_player_tool_use(tool: Enum.Tool, pos: Vector2, dir: Vector2) -> void:
 			$Objects/Player.start_fishing()
 			
 		Enum.Tool.SEED:			
-			if Data.items_amount[Data.SEED_TO_ITEM[%Player.current_seed]] <= 0:
+			if Data.items_amount[Data.difficulty][Data.SEED_TO_ITEM[%Player.current_seed]] <= 0:
 				return
 			else:
-				Data.items_amount[Data.SEED_TO_ITEM[%Player.current_seed]] -= 1
+				Data.items_amount[Data.difficulty][Data.SEED_TO_ITEM[%Player.current_seed]] -= 1
 					
 			var plant_res = PlantResource.new()
 			plant_res.setup(%Player.current_seed)
@@ -208,7 +208,7 @@ func _ready() -> void:
 
 # Projectile
 func create_projectile(start_pos: Vector2, dir: Vector2):
-	var projectile_speed = Data.PROJECTILE_SPEED[Data.scare_crow_level]
+	var projectile_speed = Data.PROJECTILE_SPEED[Data.difficulty][Data.scare_crow_level]
 	var projectile = projectile_scene.instantiate()
 	$Objects.add_child(projectile)
 	projectile.setup(start_pos, dir, projectile_speed)

@@ -16,7 +16,7 @@ func setup(new_item_enum: int, parent_node: Node, new_shop_type: Enum.Shop) -> v
 	
 	parent_node.add_child(self)
 	
-	var source = Data.STYLE_UPGRADES if shop_type == Enum.Shop.HAT else Data.MACHINE_UPGRADE_COST
+	var source = Data.STYLE_UPGRADES[Data.difficulty] if shop_type == Enum.Shop.HAT else Data.MACHINE_UPGRADE_COST[Data.difficulty]
 	var data = source[item_enum]
 		
 	
@@ -54,20 +54,20 @@ func _on_focus_exited() -> void:
 func _on_pressed() -> void:
 	var upgrade_cost 
 	if shop_type == Enum.Shop.MAIN:
-		upgrade_cost = Data.MACHINE_UPGRADE_COST[item_enum]["cost"]
+		upgrade_cost = Data.MACHINE_UPGRADE_COST[Data.difficulty][item_enum]["cost"]
 	else:
-		upgrade_cost = Data.STYLE_UPGRADES[item_enum]["cost"]
+		upgrade_cost = Data.STYLE_UPGRADES[Data.difficulty][item_enum]["cost"]
 	
 	for item in upgrade_cost.keys():
 		var cost = upgrade_cost[item]
-		if Data.items_amount[item] < cost:
+		if Data.items_amount[Data.difficulty][item] < cost:
 			# Not enough item
 			print("Not enough item to buy")
 			return
 		
 	for item in upgrade_cost.keys():
 		var cost = upgrade_cost[item]
-		Data.items_amount[item] -= cost
+		Data.items_amount[Data.difficulty][item] -= cost
 		
 	Data.shop_connection[shop_type]["tracker"].append(item_enum)
 	press.emit(shop_type)

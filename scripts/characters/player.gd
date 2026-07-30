@@ -11,7 +11,7 @@ var debug: bool = true
 # Movement
 # ============================================================
 
-const SPEED: float = Data.PLAYER_SPEED
+var speed: float = Data.PLAYER_SPEED[Data.difficulty]
 
 var direction: Vector2
 var animation_direction: Vector2 = Vector2.DOWN
@@ -228,7 +228,7 @@ func move() -> void:
 	direction = Input.get_vector("left", "right", "up", "down")
 
 	# Apply movement velocity.
-	velocity = direction * SPEED
+	velocity = direction * speed
 
 	# Handle footstep audio.
 	if direction == Vector2.ZERO:
@@ -404,7 +404,7 @@ func start_fishing():
 
 func _on_fishing_game_fish_game_finish(is_success: bool) -> void:
 	if is_success:
-		Data.items_amount[Enum.Item.FISH] += 1
+		Data.items_amount[Data.difficulty][Enum.Item.FISH] += 1
 	$Animation/AnimationTree.set("parameters/FishBlend/blend_amount", 0)
 	current_state = Enum.State.DEFAULT
 #endregion

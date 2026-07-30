@@ -5,7 +5,7 @@ extends CharacterBody2D
 # ============================================================
 
 # Movement
-const SPEED: float = Data.BLOB_SPEED
+var speed: float = Data.BLOB_SPEED[Data.difficulty]
 
 # Knockback
 const KNOCKBACK_FORCE: float = Data.BLOB_KNOCKBACK_FORCE
@@ -29,10 +29,10 @@ var animation_direction: Vector2 = Vector2.DOWN
 # ============================================================
 
 # Current health.
-var blob_health: int = Data.BLOB_ENEMY_HEALTH
+var blob_health: int = Data.BLOB_ENEMY_HEALTH[Data.difficulty]
 
 # Damage dealt to the player.
-var blob_damage: int = Data.BLOB_DAMAGE
+var blob_damage: int = Data.BLOB_DAMAGE[Data.difficulty]
 
 # Prevents updates after death.
 var is_dead: bool = false
@@ -144,7 +144,7 @@ func _physics_process(delta: float) -> void:
 
 	# Move toward the target plant.
 	direction = (target_plant.position - position).normalized()
-	velocity = direction * SPEED
+	velocity = direction * speed
 
 	animate()
 	move_and_slide()
@@ -185,7 +185,7 @@ func _attempt_unstuck() -> void:
 		random_direction = random_direction.normalized()
 
 	direction = random_direction
-	velocity = direction * SPEED
+	velocity = direction * speed
 	move_and_slide()
 
 	# Reset the stuck counter after attempting to escape.
@@ -216,7 +216,7 @@ func hit(tool: Enum.Tool, knock_dir: Vector2) -> void:
 	flash_sprite_2d.flash(0.25, 0.25)
 
 	# Reduce health.
-	blob_health -= Data.tool_damage_amount[tool]
+	blob_health -= Data.TOOL_DAMAGE_AMOUNT[Data.difficulty][tool][Data.sword_level]
 
 	# Push the blob away from the attacker.
 	apply_knockback(knock_dir)
@@ -272,7 +272,7 @@ func handle_knockback(delta: float) -> void:
 # ============================================================
 
 func move(_delta: float) -> void:
-	velocity = direction * SPEED
+	velocity = direction * speed
 	move_and_slide()
 
 

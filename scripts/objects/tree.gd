@@ -4,7 +4,7 @@ extends StaticBody2D
 @onready var flash_sprite_2d_bottom: Sprite2D = $FlashSprite2DBottom
 
 const apple_texture = preload("res://graphics/plants/apple.png")
-var tree_health := Data.APPLE_TREE_HEALTH
+var tree_health = Data.APPLE_TREE_HEALTH[Data.difficulty]
 var apple_range = [2, 4]
 
 var color_tween: Tween
@@ -25,7 +25,7 @@ func hit(tool: Enum.Tool, _attacker_position: Vector2):
 		get_apple()
 		tree_health -= 1
 		if tree_health == 0:
-			Data.items_amount[Enum.Item.WOOD] += 1
+			Data.items_amount[Data.difficulty][Enum.Item.WOOD] += 1
 			self.flash_sprite_2d_upper.hide()
 			self.flash_sprite_2d_bottom.hide()
 			
@@ -39,7 +39,7 @@ func hit(tool: Enum.Tool, _attacker_position: Vector2):
 func get_apple():
 	if $Apples.get_children():
 		$Apples.get_children().pick_random().queue_free()
-		Data.items_amount[Enum.Item.APPLE] += 1
+		Data.items_amount[Data.difficulty][Enum.Item.APPLE] += 1
 
 
 func create_apple():
@@ -59,7 +59,7 @@ func create_apple():
 		num = apple_markers.size()
 		
 	# Trees heals over days
-	tree_health = min(Data.APPLE_TREE_HEALTH, tree_health + 1)
+	tree_health = min(Data.APPLE_TREE_HEALTH[Data.difficulty], tree_health + 1)
 	
 	# Apple counts should be equal or less than tree health
 	num = min(tree_health, num)
