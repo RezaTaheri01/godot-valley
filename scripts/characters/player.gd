@@ -484,18 +484,23 @@ func update_style():
 func save_player():
 	var save_data := {
 		"style": current_style,
-		"unlocked_styles": Data.unlocked_styles
+		"unlocked_styles": Data.unlocked_styles,
+		"unlocked_machines": Data.unlocked_machines,
+		"inventory": Data.items_amount,
+		"sword_level": Data.sword_level,
+		"scare_crow_level": Data.scare_crow_level,
+		"fisherman_level": Data.fisherman_level
 	}
 	
-	var file = FileAccess.open("user://player_save.json", FileAccess.WRITE)
+	var file = FileAccess.open(Data.PLAYER_SAVE_PATH, FileAccess.WRITE)
 	file.store_string(JSON.stringify(save_data))
 	update_style()
 	
 func load_player() -> void:
-	if !FileAccess.file_exists("user://player_save.json"):
+	if !FileAccess.file_exists(Data.PLAYER_SAVE_PATH):
 		return
 
-	var file := FileAccess.open("user://player_save.json", FileAccess.READ)
+	var file := FileAccess.open(Data.PLAYER_SAVE_PATH, FileAccess.READ)
 	var data = JSON.parse_string(file.get_as_text())
 
 	if typeof(data) != TYPE_DICTIONARY:
@@ -503,7 +508,9 @@ func load_player() -> void:
 
 	_load_unlocked_styles(data)
 	_load_current_style(data)
-
+	_load_unlocked_machines(data)
+	_load_inventory(data)
+	_load_upgrades(data)
 	
 func _load_unlocked_styles(data: Dictionary) -> void:
 	if !data.has("unlocked_styles"):
@@ -526,4 +533,44 @@ func _load_current_style(data: Dictionary) -> void:
 		style_index = 0
 
 	current_style = Data.unlocked_styles[style_index]
+
+func _load_unlocked_machines(data: Dictionary) -> void:
+	if !data.has("unlocked_machines"):
+		return
+
+	Data.unlocked_machines.clear()
+
+	for machine in data.unlocked_machines:
+		Data.unlocked_machines.append(machine as Enum.Machine)
+		
+	machine_count = Data.unlocked_machines.size()
+
+func _load_inventory(data: Dictionary) -> void:
+	if not data.has("inventory"):
+		return
+
+	var saved_inventory: Dictionary = data["inventory"]
+
+	for difficulty in saved_inventory:
+		var difficulty_id := int(difficulty)
+
+		if not Data.items_amount.has(difficulty_id):
+			continue
+
+		for item in saved_inventory[difficulty]:
+			var item_id := int(item)
+
+			Data.items_amount[difficulty_id][item_id] = (
+				int(saved_inventory[difficulty][item])
+			)
+	
+func _load_upgrades(data: Dictionary):
+	if data.has("sword_level"):
+		Data.sword_level = data.sword_level
+		
+	if data.has("scare_crow_level"):
+		Data.scare_crow_level = data.scare_crow_level
+		
+	if data.has("fisherman_level"):
+		Data.fisherman_level = data.fisherman_level
 #endregion
