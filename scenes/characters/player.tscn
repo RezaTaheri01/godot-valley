@@ -1540,7 +1540,7 @@ nodes/FishIdleBlendSpace2D/position = Vector2(768, 80)
 node_connections = [&"output", 0, &"FishBlend", &"OneShot", 0, &"StateMachine", &"OneShot", 1, &"ToolStateMachine", &"FishBlend", 0, &"OneShot", &"FishBlend", 1, &"FishIdleBlendSpace2D"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dyp2m"]
-radius = 18.027756
+radius = 16.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1767140929 groups=["Player"]]
 collision_layer = 2
@@ -1555,7 +1555,6 @@ limit_smoothed = true
 texture = ExtResource("2_eojnx")
 hframes = 33
 vframes = 4
-frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032790205]
 shape = SubResource("CapsuleShape2D_atpat")

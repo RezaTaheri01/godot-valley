@@ -341,24 +341,71 @@ const TOOL_STATE_ANIMATIONS = {
 var sword_level = 0
 const TOOL_DAMAGE_AMOUNT = {
 	Enum.Difficulty.EASY: {
-		Enum.Tool.SWORD: [2.0, 3.0, 4.0]
+		Enum.Tool.SWORD: [2.0, 3.0, 4.0],
+		Enum.Tool.AXE: [1.0, 2.0, 3.0]
 		},
 	Enum.Difficulty.NORMAL: {
-		Enum.Tool.SWORD: [1.5, 2.5, 3.5]
+		Enum.Tool.SWORD: [1.5, 2.5, 3.5],
+		Enum.Tool.AXE: [1.0, 2.0, 3.0]
 		},
 	Enum.Difficulty.HARD: {
-		Enum.Tool.SWORD: [1.0, 1.5, 2.0]
+		Enum.Tool.SWORD: [1.0, 1.5, 2.0],
+		Enum.Tool.AXE: [1.0, 2.0, 3.0]
 		},
+}
+
+const WoodAmount = {
+	Enum.Difficulty.EASY: 3,
+	Enum.Difficulty.NORMAL: 2,
+	Enum.Difficulty.HARD: 1,
 }
 #endregion
 	
 
 #region Trees
 const APPLE_TREE_HEALTH = {
-	Enum.Difficulty.EASY: 4,
+	Enum.Difficulty.EASY: 5,
 	Enum.Difficulty.NORMAL: 6,
 	Enum.Difficulty.HARD: 8,
 }
+
+const APPLE_RANGE = {
+	Enum.Difficulty.EASY: [3, 5],
+	Enum.Difficulty.NORMAL: [2, 5],
+	Enum.Difficulty.HARD: [1, 3],
+}
+
+const APPLE_TREE_SPRITES = [0, 1, 1, 3]
+#endregion
+
+
+#region Decorations
+
+const DECO_TEXTURES := {
+	0: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/01.png"),
+	1: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/02.png"),
+	2: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/03.png"),
+	3: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/04.png"),
+	4: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/05.png"),
+	5: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/06.png"),
+	6: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/07.png"),
+	7: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/08.png"),
+	8: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/09.png"),
+	9: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/10.png"),
+	10: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/11.png"),
+	11: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/12.png"),
+	12: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/13.png"),
+	13: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/14.png"),
+	14: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/15.png"),
+	15: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/16.png"),
+	16: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/17.png"),
+	17: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/18.png"),
+}
+
+
+# Decoration variants that should have collision.
+const COLLISION_SIZES := [2, 5, 8, 11, 14, 17]
+
 #endregion
 
 

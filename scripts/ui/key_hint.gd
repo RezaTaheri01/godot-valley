@@ -1,5 +1,8 @@
 extends Control
 
+# Displays a keyboard key and its associated item icon, and updates either
+# the item icon or key texture when the player's controls change.
+
 var keyboard_key: Enum.Keyboard
 var last_icon_texture 
 

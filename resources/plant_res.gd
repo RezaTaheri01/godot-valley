@@ -1,5 +1,7 @@
 class_name PlantResource extends Resource
 
+# Stores plant configuration and runtime state, and provides setup, growth, completion, and decay logic.
+
 @export var texture: Texture2D
 @export var icon_texture: Texture2D
 @export var h_frames: int = 3
