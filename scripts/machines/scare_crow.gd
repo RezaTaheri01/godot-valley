@@ -1,44 +1,58 @@
-extends Machine
+extends Machines
 
-signal shoot_projectile(start_pos: Vector2, dir: Vector2)
-
-@export var detection_range: float = 125.0
-@export var enable_debug_logs: bool = false
+signal shoot_projectile(start_pos: Vector2, direction: Vector2)
 
 
-# Override machine setup function
-func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D):
-	self.connect("shoot_projectile", level.create_projectile)
-	
-	return super.setup(grid_coord, level, parent)
+# ============================================================
+# SETUP
+# ============================================================
 
+func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D) -> void:
+	# Notify the level whenever this turret fires a projectile.
+	shoot_projectile.connect(level.create_projectile)
+
+	super.setup(grid_coord, level, parent)
+
+
+# ============================================================
+# TIMER
+# ============================================================
 
 func _on_timer_timeout() -> void:
-	var blobs: Array[Node] = get_tree().get_nodes_in_group("Sword_able")
-	if blobs.is_empty():
+	# Maximum distance at which the turret can detect enemies.	
+	var detection_range = Data.SCARE_CROW_DETECTION_RANGE[Data.difficulty][Data.scare_crow_level]
+	
+	# Find the closest enemy within range.
+	var target := get_nearest_enemy(detection_range)
+
+	# Don't shoot if no valid target was found.
+	if target == null:
 		return
-		
-	var nearest_blob := get_nearest_enemy_in_range(blobs)
-	if nearest_blob:
-		var direction := (nearest_blob.global_position - global_position).normalized()
-		shoot_projectile.emit(global_position, direction)
-		
-		if enable_debug_logs:
-			print("Shot at: ", nearest_blob.name, " Distance: ", global_position.distance_to(nearest_blob.global_position))
+
+	# Fire a projectile toward the target.
+	var direction := (target.global_position - global_position).normalized()
+	shoot_projectile.emit(global_position, direction)
 
 
-func get_nearest_enemy_in_range(blobs: Array[Node]) -> CharacterBody2D:
-	var nearest_blob: CharacterBody2D = null
-	var nearest_distance_squared: float = detection_range * detection_range
-	
-	for blob in blobs:
-		if not blob is CharacterBody2D:
+# ============================================================
+# TARGETING
+# ============================================================
+
+func get_nearest_enemy(detection_range: float) -> CharacterBody2D:
+
+	var nearest: CharacterBody2D = null
+	var nearest_distance_sq := detection_range * detection_range
+
+	# Search all enemies and keep the closest one
+	# that is inside the detection range.
+	for enemy in get_tree().get_nodes_in_group("Sword_able"):
+		if enemy is not CharacterBody2D:
 			continue
-			
-		var distance_squared := global_position.distance_squared_to(blob.global_position)
-		
-		if distance_squared < nearest_distance_squared:
-			nearest_distance_squared = distance_squared
-			nearest_blob = blob
-	
-	return nearest_blob
+
+		var distance_sq := global_position.distance_squared_to(enemy.global_position)
+
+		if distance_sq < nearest_distance_sq:
+			nearest_distance_sq = distance_sq
+			nearest = enemy
+
+	return nearest

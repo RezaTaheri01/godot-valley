@@ -2484,6 +2484,7 @@ position = Vector2(-328, -89)
 y_sort_enabled = true
 
 [node name="Decorations" type="Node2D" parent="Objects" unique_id=1154521367]
+y_sort_enabled = true
 
 [node name="SimpleObject" parent="Objects/Decorations" unique_id=1529564000 instance=ExtResource("10_rmjfq")]
 position = Vector2(78, 29)

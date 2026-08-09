@@ -1,5 +1,7 @@
 class_name PlantResource extends Resource
 
+# Stores plant configuration and runtime state, and provides setup, growth, completion, and decay logic.
+
 @export var texture: Texture2D
 @export var icon_texture: Texture2D
 @export var h_frames: int = 3
@@ -15,12 +17,12 @@ var curr_seed_enum: Enum.Seed
 
 func setup(seed_enum: Enum.Seed):
 	curr_seed_enum = seed_enum
-	texture = load(Data.PLANT_DATA[seed_enum]["texture"])
-	icon_texture = load(Data.PLANT_DATA[seed_enum]["icon_texture"])
-	h_frames = Data.PLANT_DATA[seed_enum]["h_frames"] 
-	grow_speed = Data.PLANT_DATA[seed_enum]["grow_speed"] 
-	death_max = Data.PLANT_DATA[seed_enum]["death_max"] 
-	plant_name = Data.PLANT_DATA[seed_enum]["name"]
+	texture = load(Data.PLANT_DATA[Data.difficulty][seed_enum]["texture"])
+	icon_texture = load(Data.PLANT_DATA[Data.difficulty][seed_enum]["icon_texture"])
+	h_frames = Data.PLANT_DATA[Data.difficulty][seed_enum]["h_frames"] 
+	grow_speed = Data.PLANT_DATA[Data.difficulty][seed_enum]["grow_speed"] 
+	death_max = Data.PLANT_DATA[Data.difficulty][seed_enum]["death_max"] 
+	plant_name = Data.PLANT_DATA[Data.difficulty][seed_enum]["name"]
 	
 
 func grow(sprite: Sprite2D):

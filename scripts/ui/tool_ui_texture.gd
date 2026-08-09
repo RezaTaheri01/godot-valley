@@ -1,5 +1,7 @@
 extends Control
 
+# Represents a tool selection UI element and handles its icon setup and selection highlight animation.
+
 var tool_enum: Enum.Tool
 @onready var texture_rect: TextureRect = $TextureRect
  

@@ -1,5 +1,7 @@
 extends Control
 
+# Manages the shop UI by displaying available items and handling shop refreshes.
+
 var shop_button_scene = preload("res://scenes/ui/shop_button.tscn")
 signal close
 

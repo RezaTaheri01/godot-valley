@@ -1,9 +1,12 @@
 extends Control
 
-var keyboard_key: Enum.KEYBOARD
+# Displays a keyboard key and its associated item icon, and updates either
+# the item icon or key texture when the player's controls change.
+
+var keyboard_key: Enum.Keyboard
 var last_icon_texture 
 
-func setup(texture, icon, key: Enum.KEYBOARD):
+func setup(texture, icon, key: Enum.Keyboard):
 	last_icon_texture = icon
 	keyboard_key = key
 	$HBoxContainer/Key.texture = texture

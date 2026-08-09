@@ -1,146 +1,229 @@
 extends CharacterBody2D
 
 # ============================================================
-# CONFIGURATION
+# CONSTANTS
 # ============================================================
 
-const SPEED: float = Data.BLOB_SPEED      # Movement speed
+# Movement
+var speed: float = Data.BLOB_SPEED[Data.difficulty]
 
-# Knockback configuration
-const KNOCKBACK_FORCE: float = 100.0
-const KNOCKBACK_DECAY: float = 500.0
-const KNOCKBACK_TIME: float = 0.5
+# Knockback
+const KNOCKBACK_FORCE: float = Data.BLOB_KNOCKBACK_FORCE
+const KNOCKBACK_DECAY: float = Data.BLOB_KNOCKBACK_DECAY
+const KNOCKBACK_TIME: float = Data.BLOB_KNOCKBACK_TIME
 
-var knockback_velocity: Vector2 = Vector2.ZERO
-var knockback_timer: float = 0
-var is_knocked: bool = false
-
-var stuck_counter: int = 0
-var last_pos: Vector2 = Vector2.ZERO
 
 # ============================================================
-# STATE VARIABLES
+# MOVEMENT
 # ============================================================
 
-var direction: Vector2 = Vector2.ZERO     # Current movement direction
+# Current movement direction.
+var direction: Vector2 = Vector2.ZERO
+
+# Direction used for idle/animation.
 var animation_direction: Vector2 = Vector2.DOWN
 
-var blob_health: int = Data.BLOB_ENEMY_HEALTH
-var is_dead: bool = false                 # Locks logic after death
 
-var blob_damage: int = Data.BLOB_DAMAGE
+# ============================================================
+# COMBAT
+# ============================================================
+
+# Current health.
+var blob_health: int = Data.BLOB_ENEMY_HEALTH[Data.difficulty]
+
+# Damage dealt to the player.
+var blob_damage: int = Data.BLOB_DAMAGE[Data.difficulty]
+
+# Prevents updates after death.
+var is_dead: bool = false
+
+
+# ============================================================
+# KNOCKBACK
+# ============================================================
+
+# Current knockback velocity.
+var knockback_velocity: Vector2 = Vector2.ZERO
+
+# Remaining knockback duration.
+var knockback_timer: float = 0.0
+
+# Whether the enemy is currently being knocked back.
+var is_knocked: bool = false
+
+
+# ============================================================
+# AI / PATHFINDING
+# ============================================================
+
+# Counts how many frames the enemy has been stuck.
+var stuck_counter: int = 0
+
+# Previous position used to detect if the enemy is stuck.
+var last_pos: Vector2 = Vector2.ZERO
+
+# Current plant being targeted.
+var target_plant: StaticBody2D
+
+
 # ============================================================
 # NODE REFERENCES
 # ============================================================
 
 @onready var flash_sprite_2d: Sprite2D = $FlashSprite2D
+
 @onready var animation_tree: AnimationTree = $Animation/AnimationTree
+
 @onready var move_state_machine = animation_tree.get("parameters/StateMachine/playback")
 
-var target_plant: StaticBody2D
 
 
-func setup(start_pos, parent, targetPlant):
+# ============================================================
+# INITIALIZATION
+# ============================================================
+
+## Initializes the blob enemy.
+##
+## @param start_pos    World position where the blob should spawn.
+## @param parent       Parent node to add the blob to.
+## @param target_plant Plant that the blob will attack.
+func setup(
+	start_pos: Vector2,
+	parent: Node,
+	target_plant_in: StaticBody2D
+) -> void:
 	position = start_pos
 	parent.add_child(self)
-	target_plant = targetPlant
+	self.target_plant = target_plant_in
+	
 
 # ============================================================
 # READY
 # ============================================================
 
-func _ready():
+func _ready() -> void:
+	# Register this blob as an enemy so other systems can find it.
 	add_to_group("Enemy")
+
+	# Enable the AnimationTree.
 	animation_tree.active = true
-	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING  # No sliding/pushing
+
+	# Use floating motion to prevent sliding against walls or pushing bodies.
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 
 
 # ============================================================
-# MAIN LOOP
+# PHYSICS
 # ============================================================
 
 func _physics_process(delta: float) -> void:
+	# Stop all logic once the blob has died.
 	if is_dead:
 		return
-	
+
+	# Handle knockback separately from normal movement.
 	if is_knocked:
 		handle_knockback(delta)
-		# Reset stuck tracking when knocked
+
+		# Reset stuck detection while being knocked back.
 		stuck_counter = 0
 		last_pos = position
 		return
-	
-	if target_plant and is_instance_valid(target_plant): 
-		# Store position before movement
-		var old_pos = position
-		
-		# Calculate direction to plant
-		direction = (target_plant.position - position).normalized()
-		velocity = direction * SPEED
-		
-		# Animate and move
-		animate()
-		move_and_slide()
-		
-		## Check if we reached the plant
-		#if position.distance_to(target_plant.position) < 10:
-			#target_plant.grow(false)
-			#die()
-			#return
-		
-		# ========================================
-		# STUCK CHECK - Simplified Version
-		# ========================================
-		# If barely moved after moving, we might be stuck
-		if position.distance_to(old_pos) < 0.4:
-			stuck_counter += 1
-			
-			# Stuck for 10+ frames? Try random direction
-			if stuck_counter > 10:
-				# Try a random direction to get unstuck
-				var random_dir = Vector2(randf_range(-1, 1), randf_range(-1, 1))
-				if random_dir.length() > 0:
-					random_dir = random_dir.normalized()
-				else:
-					random_dir = Vector2.RIGHT
-				
-				direction = random_dir
-				velocity = direction * SPEED
-				move_and_slide()  # Move again with new direction
-				
-				# Reset counter after attempting
-				stuck_counter = 0
-				
-				# Optional: Add debug print
-				#print("Blob was stuck, attempted random direction: ", direction)
-		else:
-			# We moved successfully, reset counter
-			stuck_counter = 0
-		
-		# Update last position for next frame's check
-		last_pos = position
-		
-	else:
+
+	# If the target no longer exists, remove this blob.
+	if !target_plant or !is_instance_valid(target_plant):
 		die()
-		
+		return
+
+	# ========================================================
+	# MOVE TOWARDS TARGET
+	# ========================================================
+
+	# Save the current position to detect if movement fails.
+	var old_position := position
+
+	# Move toward the target plant.
+	direction = (target_plant.position - position).normalized()
+	velocity = direction * speed
+
+	animate()
+	move_and_slide()
+
+	# ========================================================
+	# STUCK DETECTION
+	# ========================================================
+
+	# If the blob barely moved this frame, it may be blocked.
+	if position.distance_to(old_position) < 0.4:
+		stuck_counter += 1
+
+		# Try to escape after being stuck for several frames.
+		if stuck_counter > 10:
+			_attempt_unstuck()
+	else:
+		# Reset the counter once movement resumes.
+		stuck_counter = 0
+
+	# Save the current position for the next frame.
+	last_pos = position
+	
+	
+# ============================================================
+# HELPERS
+# ============================================================
+
+## Attempts to free the blob when it has been stuck.
+func _attempt_unstuck() -> void:
+	var random_direction := Vector2(
+		randf_range(-1.0, 1.0),
+		randf_range(-1.0, 1.0)
+	)
+
+	if random_direction.length_squared() == 0:
+		random_direction = Vector2.RIGHT
+	else:
+		random_direction = random_direction.normalized()
+
+	direction = random_direction
+	velocity = direction * speed
+	move_and_slide()
+
+	# Reset the stuck counter after attempting to escape.
+	stuck_counter = 0
+
+	# Uncomment for debugging.
+	# print("Blob was stuck. New direction:", direction)
+	
 		
 # ============================================================
 # DAMAGE SYSTEM
 # ============================================================
-
+#region Damage System
+## Applies damage to the blob from the specified tool.
+##
+## @param tool      Tool used to hit the blob.
+## @param knock_dir Direction of the knockback.
 func hit(tool: Enum.Tool, knock_dir: Vector2) -> void:
+	# Ignore hits after death.
 	if is_dead:
 		return
-	
-	if tool == Enum.Tool.SWORD:
-		flash_sprite_2d.flash(0.25, 0.25)
-		
-		blob_health -= 1
-		
-		apply_knockback(knock_dir)
-		
-		if blob_health <= 0:
-			die()
+
+	# Only swords can damage the blob.
+	if tool != Enum.Tool.SWORD:
+		return
+
+	# Flash to indicate damage.
+	flash_sprite_2d.flash(0.25, 0.25)
+
+	# Reduce health.
+	blob_health -= Data.TOOL_DAMAGE_AMOUNT[Data.difficulty][tool][Data.sword_level]
+
+	# Push the blob away from the attacker.
+	apply_knockback(knock_dir)
+
+	# Die when health reaches zero.
+	if blob_health <= 0:
+		die()
 
 
 func die() -> void:
@@ -181,14 +264,17 @@ func handle_knockback(delta: float) -> void:
 	if knockback_timer <= 0.0:
 		is_knocked = false
 		knockback_velocity = Vector2.ZERO
+#endregion
+
 
 # ============================================================
 # MOVEMENT
 # ============================================================
 
 func move(_delta: float) -> void:
-	velocity = direction * SPEED
+	velocity = direction * speed
 	move_and_slide()
+
 
 # ============================================================
 # ANIMATION CONTROL
