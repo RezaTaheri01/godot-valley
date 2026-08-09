@@ -71,3 +71,19 @@ A farming simulation game built by following Kristian Koch's Godot Valley course
 ## Acknowledgments
 
 Course by [Kristian Koch](https://www.udemy.com/user/christian-koch-59/)
+
+## TODOS
+
+- [ ] Save/Load System
+- [ ] Player Health System
+- [ ] Day/Night Cycle Enhancement
+- [ ] 3 Map Sizes with Difficulty Tiers
+- [ ] Resource & Economy Balance
+- [ ] Enemy Area System
+- [ ] Tool Upgrade System (Axe/Sword)
+- [ ] Machine Limitation System
+- [ ] Main Menu
+- [ ] In-Game Menu
+- [ ] HUD Improvements
+- [ ] Performance Optimization
+- [ ] Visual Feedback & Particles
