@@ -26,7 +26,7 @@ func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D) -> bool:
 
 	# Find the first water tile surrounding this machine.
 	for direction in directions:
-		var tile_data = level.waterGrassLayer.get_cell_tile_data(grid_coord + direction)
+		var tile_data = level.water_grass_layer.get_cell_tile_data(grid_coord + direction)
 
 		if tile_data and tile_data.get_custom_data("water"):
 			anim_name = directions[direction]

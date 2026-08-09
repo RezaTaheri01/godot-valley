@@ -15,7 +15,7 @@ var _busy := false
 
 func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D) -> void:
 	# Notify the level whenever this sprinkler waters nearby soil.
-	water_near_soils.connect(level.water_near_soils)
+	water_near_soils.connect(level._water_near_soils)
 
 	super.setup(grid_coord, level, parent)
 

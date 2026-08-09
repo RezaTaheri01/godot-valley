@@ -90,11 +90,11 @@ var target_plant: StaticBody2D
 func setup(
 	start_pos: Vector2,
 	parent: Node,
-	target_plant: StaticBody2D
+	target_plant_in: StaticBody2D
 ) -> void:
 	position = start_pos
 	parent.add_child(self)
-	self.target_plant = target_plant
+	self.target_plant = target_plant_in
 	
 
 # ============================================================
