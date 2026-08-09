@@ -35,3 +35,6 @@ func _ready() -> void:
 func _update_decoration() -> void:
 	$Sprite2D.texture = Data.DECO_TEXTURES[size]
 	$CollisionShape2D.disabled = size not in Data.COLLISION_SIZES
+	if not $CollisionShape2D.disabled:
+		self.y_sort_enabled = not $CollisionShape2D.disabled
+		self.z_index = 0

@@ -405,7 +405,7 @@ const DECO_TEXTURES := {
 
 
 # Decoration variants that should have collision.
-const COLLISION_SIZES := [2, 5, 8, 11, 14, 17]
+const COLLISION_SIZES := [2, 5, 8, 11, 12, 15, 16, 17]
 
 #endregion
 
