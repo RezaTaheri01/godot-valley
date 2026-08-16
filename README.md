@@ -81,7 +81,7 @@ Course by [Kristian Koch](https://www.udemy.com/user/christian-koch-59/)
 - [ ] Resource & Economy Balance
 - [ ] Enemy Area System
 - [ ] Tool Upgrade System (Axe/Sword)
-- [ ] Machine Limitation System
+- [x] Machine Limitation System [#3](https://github.com/RezaTaheri01/godot-valley/pull/3)
 - [ ] Main Menu
 - [ ] In-Game Menu
 - [ ] HUD Improvements
