@@ -15,7 +15,7 @@ var anim_name: String = "up"
 # SETUP
 # ============================================================
 
-func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D) -> bool:
+func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D, curr_machine: int) -> bool:
 	# Directions to search for adjacent water.
 	var directions := {
 		Vector2i.UP: "up",
@@ -30,7 +30,7 @@ func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D) -> bool:
 
 		if tile_data and tile_data.get_custom_data("water"):
 			anim_name = directions[direction]
-			super.setup(grid_coord, level, parent)
+			super.setup(grid_coord, level, parent, curr_machine)
 			return true
 
 	# Cannot be placed if no adjacent water exists.

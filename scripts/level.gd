@@ -85,6 +85,11 @@ var last_dir: Vector2
 
 var machine_coord: Vector2
 var machine_cells: Array[Vector2i]
+var machine_counter = {
+	Enum.Machine.SCARECROW: 0,
+	Enum.Machine.SPRINKLER: 0,
+	Enum.Machine.FISHER: 0,
+}
 
 
 # ============================================================
@@ -236,6 +241,12 @@ func _update_target_highlight() -> void:
 
 # Updates the machine preview while the player is in building mode.
 func _update_machine_preview() -> void:
+	machine_preview.modulate = (
+		Data.REACH_LIMIT_COLOR
+		if _reach_machine_limit(player.current_machine)
+		else Data.NO_LIMIT_COLOR
+	)
+	
 	machine_preview.visible = player.current_state == Enum.State.BUILDING
 
 	if player.animation_direction == Vector2.ZERO:
@@ -628,6 +639,9 @@ func get_target_grid(pos: Vector2, dir: Vector2) -> Vector2i:
 # Builds the selected machine or deletes the machine at the
 # current target position.
 func _on_player_build(curr_machine: int) -> void:
+	if _reach_machine_limit(curr_machine):
+		return
+	
 	if house.is_point_inside_house(machine_coord):
 		return
 
@@ -638,6 +652,7 @@ func _on_player_build(curr_machine: int) -> void:
 	if not _can_build_machine(machine_coord):
 		return
 
+	machine_counter[curr_machine] += 1
 	_build_machine(curr_machine)
 	
 	
@@ -670,6 +685,22 @@ func _is_cell_occupied(grid_coord: Vector2i) -> bool:
 		or grid_coord in machine_cells
 	)
 	
+	
+func _reach_machine_limit(curr_machine: int) -> bool:
+	if curr_machine == Enum.Machine.DELETE:
+		# No Limit For Delete
+		return false
+		
+
+	var machine_max = Data.get_level_value(
+		Data.MACHINE_LIMIT[Data.difficulty][curr_machine],
+		Data.player_level
+	)
+
+	var machine_count = machine_counter[curr_machine]
+	
+	return not machine_count < machine_max
+		
 # ============================================================
 # MACHINE CREATION
 # ============================================================
@@ -679,11 +710,13 @@ func _build_machine(curr_machine: int) -> void:
 	var machine = Data.MACHINE_SCENE[curr_machine]["scene"].instantiate()
 
 	delete_machine.connect(machine.delete)
+	machine.machine_deleted.connect(update_machine_count_after_delete)
 
 	machine.setup(
 		machine_coord,
 		self,
-		machines_container
+		machines_container,
+		curr_machine
 	)
 
 	machine_cells.append(machine_coord)
@@ -700,6 +733,11 @@ func _delete_machine() -> void:
 
 	delete_machine.emit(machine_coord)
 	machine_cells.erase(machine_coord)
+	
+
+func update_machine_count_after_delete(curr_machine: int):
+	machine_counter[curr_machine] = max(0, machine_counter[curr_machine] - 1)
+	
 #endregion
 	
 	
