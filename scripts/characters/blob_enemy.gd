@@ -216,7 +216,10 @@ func hit(tool: Enum.Tool, knock_dir: Vector2) -> void:
 	flash_sprite_2d.flash(0.25, 0.25)
 
 	# Reduce health.
-	blob_health -= Data.TOOL_DAMAGE_AMOUNT[Data.difficulty][tool][Data.sword_level]
+	blob_health -= Data.get_level_value(
+		Data.TOOL_DAMAGE_AMOUNT[Data.difficulty][tool],
+		Data.player_level
+	)
 
 	# Push the blob away from the attacker.
 	apply_knockback(knock_dir)

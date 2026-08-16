@@ -80,7 +80,10 @@ func start_fishing() -> void:
 	# Switch to the idle animation while waiting.
 	sprite.play(anim_name + "_idle")
 
-	timer.wait_time = Data.FISHING_TIMER_TIME[Data.difficulty][Data.fisherman_level]
+	timer.wait_time = Data.get_level_value(
+		Data.FISHING_TIMER_TIME[Data.difficulty],
+		Data.player_level
+	)
 	
 	# Begin the fishing timer.
 	timer.start()

@@ -20,7 +20,10 @@ func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D, curr_machine: in
 
 func _on_timer_timeout() -> void:
 	# Maximum distance at which the turret can detect enemies.	
-	var detection_range = Data.SCARE_CROW_DETECTION_RANGE[Data.difficulty][Data.scare_crow_level]
+	var detection_range = Data.get_level_value(
+		 Data.SCARE_CROW_DETECTION_RANGE[Data.difficulty],
+		 Data.player_level
+	)
 	
 	# Find the closest enemy within range.
 	var target := get_nearest_enemy(detection_range)

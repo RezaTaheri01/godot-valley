@@ -324,7 +324,6 @@ const NO_LIMIT_COLOR = Color("ffffff97")
 
 # Upgradable in future
 # Scare Crow
-var scare_crow_level = 0
 const PROJECTILE_SPEED = {
 	Enum.Difficulty.EASY : [200.0, 225.0, 250.0],
 	Enum.Difficulty.NORMAL : [195.0, 220.0, 245.0],
@@ -337,7 +336,6 @@ const SCARE_CROW_DETECTION_RANGE = {
 }
 
 # Fisherman
-var fisherman_level = 0
 const FISHING_TIMER_TIME = {
 	Enum.Difficulty.EASY : [20.0, 17.5, 15.0],
 	Enum.Difficulty.NORMAL : [30.0, 25.0, 20.0],
@@ -365,7 +363,6 @@ const TOOL_STATE_ANIMATIONS = {
 	Enum.Tool.SEED: 'Seed',
 	}
 	
-var sword_level = 0
 const TOOL_DAMAGE_AMOUNT = {
 	Enum.Difficulty.EASY: {
 		Enum.Tool.SWORD: [2.0, 3.0, 4.0],

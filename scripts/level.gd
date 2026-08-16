@@ -748,8 +748,9 @@ func update_machine_count_after_delete(curr_machine: int):
 # Creates and initializes a projectile using the current
 # difficulty and scarecrow level.
 func create_projectile(start_pos: Vector2, dir: Vector2) -> void:
-	var projectile_speed: float = (
-		Data.PROJECTILE_SPEED[Data.difficulty][Data.scare_crow_level]
+	var projectile_speed: float = Data.get_level_value(
+		 Data.PROJECTILE_SPEED[Data.difficulty],
+		 Data.player_level
 	)
 
 	var projectile = PROJECTILE_SCENE.instantiate()
