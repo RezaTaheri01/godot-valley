@@ -652,7 +652,6 @@ func _on_player_build(curr_machine: int) -> void:
 	if not _can_build_machine(machine_coord):
 		return
 
-	machine_counter[curr_machine] += 1
 	_build_machine(curr_machine)
 	
 	
@@ -712,14 +711,16 @@ func _build_machine(curr_machine: int) -> void:
 	delete_machine.connect(machine.delete)
 	machine.machine_deleted.connect(update_machine_count_after_delete)
 
-	machine.setup(
+	var result = machine.setup(
 		machine_coord,
 		self,
 		machines_container,
 		curr_machine
 	)
-
-	machine_cells.append(machine_coord)
+	
+	if result:
+		machine_counter[curr_machine] += 1
+		machine_cells.append(machine_coord)
 	
 	
 # ============================================================
