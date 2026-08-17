@@ -302,6 +302,8 @@ func _start_day_transition() -> void:
 
 # Resets all systems that change when a new day begins.
 func _reset_for_new_day() -> void:
+	# Save Player at each day
+	player.save_player()
 	_update_plants()
 	_reset_soil()
 	_update_trees()

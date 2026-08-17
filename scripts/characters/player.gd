@@ -291,7 +291,7 @@ func get_basic_input():
 		current_style = Data.unlocked_styles[style_index] as Enum.Style
 		if debug:
 			print(current_style)
-		save_player()
+		update_style()
 		
 	if Input.is_action_just_pressed("build"):
 		current_state = Enum.State.BUILDING
@@ -335,7 +335,7 @@ func get_house_input():
 		
 	if Input.is_action_just_pressed("style_toggle"):
 		current_style = posmod((current_style + 1), style_count) as Enum.Style
-		save_player()
+		update_style()
 		
 	if Input.is_action_just_pressed("action"):
 		if can_interact and last_interactable:
@@ -481,18 +481,31 @@ func update_style():
 
 
 #region Player Save/Load
-func save_player():
+func save_player(save_path = null):
 	var save_data := {
-		"style": current_style,
+		"current_style": current_style,
+		"current_machine": current_machine,
+		"current_seed": current_seed,
+		"current_tool": current_tool,
+		# ============================
+		# ============================				
 		"unlocked_styles": Data.unlocked_styles,
 		"unlocked_machines": Data.unlocked_machines,
+		# ============================
+		# ============================
 		"inventory": Data.items_amount,
-		"player_level": Data.player_level
+		"player_level": Data.player_level,
+		"player_position": [position.x, position.y],
+		"target_highlighter": Data.target_highlighter,
 	}
 	
-	var file = FileAccess.open(Data.PLAYER_SAVE_PATH, FileAccess.WRITE)
+	var file
+	if save_path:
+		file = FileAccess.open(save_path, FileAccess.WRITE)
+	else:
+		file = FileAccess.open(Data.PLAYER_SAVE_PATH, FileAccess.WRITE)
+		
 	file.store_string(JSON.stringify(save_data))
-	update_style()
 	
 func load_player() -> void:
 	if !FileAccess.file_exists(Data.PLAYER_SAVE_PATH):
@@ -507,8 +520,13 @@ func load_player() -> void:
 	_load_unlocked_styles(data)
 	_load_current_style(data)
 	_load_unlocked_machines(data)
+	_load_current_machine(data)
+	_load_current_seed(data)
+	_load_current_tool(data)
 	_load_inventory(data)
 	_load_upgrades(data)
+	_load_player_position(data)
+	_load_highlight(data)
 	
 func _load_unlocked_styles(data: Dictionary) -> void:
 	if !data.has("unlocked_styles"):
@@ -522,10 +540,10 @@ func _load_unlocked_styles(data: Dictionary) -> void:
 	style_count = Data.unlocked_styles.size()
 		
 func _load_current_style(data: Dictionary) -> void:
-	if !data.has("style"):
+	if !data.has("current_style"):
 		return
 
-	style_index = Data.unlocked_styles.find(data.style)
+	style_index = Data.unlocked_styles.find(data.current_style)
 
 	if style_index == -1:
 		style_index = 0
@@ -543,6 +561,31 @@ func _load_unlocked_machines(data: Dictionary) -> void:
 		
 	machine_count = Data.unlocked_machines.size()
 
+func _load_current_machine(data: Dictionary) -> void:
+	if !data.has("current_machine"):
+		return
+
+	machine_index = Data.unlocked_machines.find(data.current_machine)
+
+	if machine_index == -1:
+		machine_index = 0
+
+	current_machine = Data.unlocked_machines[machine_index]
+	
+func _load_current_seed(data: Dictionary) -> void:
+	if !data.has("current_seed"):
+		return
+
+	current_seed = data.current_seed
+	update_control_ui.emit(Enum.Keyboard.CHANGE_SEED, current_seed)
+	
+func _load_current_tool(data: Dictionary) -> void:
+	if !data.has("current_tool"):
+		return
+
+	current_tool = data.current_tool
+	update_control_ui.emit(Enum.Keyboard.CHANGE_TOOL, current_tool)
+	
 func _load_inventory(data: Dictionary) -> void:
 	if not data.has("inventory"):
 		return
@@ -562,7 +605,31 @@ func _load_inventory(data: Dictionary) -> void:
 				int(saved_inventory[difficulty][item])
 			)
 	
-func _load_upgrades(data: Dictionary):
+func _load_upgrades(data: Dictionary) -> void:
 	if data.has("player_level"):
 		Data.player_level = data.player_level
+
+func _load_player_position(data: Dictionary) -> void:
+	if not data.has("player_position"):
+		return
+
+	var saved_position = data.player_position
+	position = Vector2(
+		float(saved_position[0]),
+		float(saved_position[1])
+	)
+	
+func _load_highlight(data: Dictionary) -> void:
+	if not data.has("target_highlighter"):
+		return
+		
+	Data.target_highlighter = data.target_highlighter
+	update_control_ui.emit(Enum.Keyboard.CHANGE_HIGHLIGHT, 1 if Data.target_highlighter else 0)
+
+# Backup save every 5 minutes
+func _on_auto_save_timer_timeout() -> void:
+	if debug:
+		print("Backup save saved.")
+	save_player(Data.PLAYER_SAVE_PATH_BACKUP)
+	
 #endregion

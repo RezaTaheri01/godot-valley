@@ -5,6 +5,7 @@ var difficulty: Enum.Difficulty = Enum.Difficulty.EASY
 const TILE_SIZE = 16
 var forecast_rain: bool
 const PLAYER_SAVE_PATH := "user://player_save.json"
+const PLAYER_SAVE_PATH_BACKUP := "user://player_save_backup.json"
 
 const HOUSE_COST = {
 	Enum.Difficulty.EASY: {1: {Enum.Item.WOOD: 25, Enum.Item.APPLE: 15}, 2: {Enum.Item.WOOD: 30, Enum.Item.APPLE: 25}},
