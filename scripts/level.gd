@@ -543,7 +543,7 @@ func _hit_nearby_objects(
 
 # Toggles the plant information panel.
 func _on_player_diagnose() -> void:
-	plant_info_control.visible = not plant_info_control.visible
+	plant_info_control.hide_show_ui()
 #endregion
 
 
