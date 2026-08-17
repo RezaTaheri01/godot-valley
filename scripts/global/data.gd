@@ -1,5 +1,6 @@
 extends Node
 
+var player_level = 0
 var difficulty: Enum.Difficulty = Enum.Difficulty.EASY
 const TILE_SIZE = 16
 var forecast_rain: bool
@@ -11,6 +12,8 @@ const HOUSE_COST = {
 	Enum.Difficulty.HARD: {1: {Enum.Item.WOOD: 35, Enum.Item.APPLE: 25}, 2: {Enum.Item.WOOD: 45, Enum.Item.APPLE: 35}},
 }
 
+func get_level_value(values: Array, level: int):
+	return values[min(level, values.size() - 1)]
 
 #region Plants
 const PLANT_DATA = {
@@ -296,9 +299,31 @@ const MACHINE_UPGRADE_COST = {
 	},
 }
 
+
+const MACHINE_LIMIT = {
+	Enum.Difficulty.EASY : {
+			Enum.Machine.SCARECROW : [4, 5, 6],
+			Enum.Machine.SPRINKLER : [3, 4, 5],
+			Enum.Machine.FISHER : [3, 4, 5],
+		},
+	Enum.Difficulty.NORMAL :{
+			Enum.Machine.SCARECROW : [3, 4, 5],
+			Enum.Machine.SPRINKLER : [2, 3, 4],
+			Enum.Machine.FISHER : [2, 3, 4],
+		},
+	Enum.Difficulty.HARD : {
+			Enum.Machine.SCARECROW : [2, 3, 4],
+			Enum.Machine.SPRINKLER : [1, 2, 3],
+			Enum.Machine.FISHER : [1, 2, 3],
+		},
+}
+
+const REACH_LIMIT_COLOR = Color("ff245597")
+const NO_LIMIT_COLOR = Color("ffffff97")
+
+
 # Upgradable in future
 # Scare Crow
-var scare_crow_level = 0
 const PROJECTILE_SPEED = {
 	Enum.Difficulty.EASY : [200.0, 225.0, 250.0],
 	Enum.Difficulty.NORMAL : [195.0, 220.0, 245.0],
@@ -311,7 +336,6 @@ const SCARE_CROW_DETECTION_RANGE = {
 }
 
 # Fisherman
-var fisherman_level = 0
 const FISHING_TIMER_TIME = {
 	Enum.Difficulty.EASY : [20.0, 17.5, 15.0],
 	Enum.Difficulty.NORMAL : [30.0, 25.0, 20.0],
@@ -339,7 +363,6 @@ const TOOL_STATE_ANIMATIONS = {
 	Enum.Tool.SEED: 'Seed',
 	}
 	
-var sword_level = 0
 const TOOL_DAMAGE_AMOUNT = {
 	Enum.Difficulty.EASY: {
 		Enum.Tool.SWORD: [2.0, 3.0, 4.0],

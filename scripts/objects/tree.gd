@@ -57,7 +57,11 @@ func hit(tool: Enum.Tool, _attacker_position: Vector2) -> void:
 	flash_sprite_2d_upper.flash()
 	flash_sprite_2d_bottom.flash()
 
-	var damage_amount: float = Data.TOOL_DAMAGE_AMOUNT[Data.difficulty][tool][Data.sword_level]
+	var damage_amount: float = Data.get_level_value(
+		 Data.TOOL_DAMAGE_AMOUNT[Data.difficulty][tool],
+		 Data.player_level
+	)
+
 
 	# Each axe hit can collect apples that fall from the tree.
 	get_apple(damage_amount)

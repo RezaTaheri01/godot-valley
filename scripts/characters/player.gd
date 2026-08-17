@@ -487,9 +487,7 @@ func save_player():
 		"unlocked_styles": Data.unlocked_styles,
 		"unlocked_machines": Data.unlocked_machines,
 		"inventory": Data.items_amount,
-		"sword_level": Data.sword_level,
-		"scare_crow_level": Data.scare_crow_level,
-		"fisherman_level": Data.fisherman_level
+		"player_level": Data.player_level
 	}
 	
 	var file = FileAccess.open(Data.PLAYER_SAVE_PATH, FileAccess.WRITE)
@@ -565,12 +563,6 @@ func _load_inventory(data: Dictionary) -> void:
 			)
 	
 func _load_upgrades(data: Dictionary):
-	if data.has("sword_level"):
-		Data.sword_level = data.sword_level
-		
-	if data.has("scare_crow_level"):
-		Data.scare_crow_level = data.scare_crow_level
-		
-	if data.has("fisherman_level"):
-		Data.fisherman_level = data.fisherman_level
+	if data.has("player_level"):
+		Data.player_level = data.player_level
 #endregion
