@@ -27,6 +27,7 @@ signal update_hint_ui_keys
 @onready var machines_container: Node2D = $Objects/Machines
 @onready var enemies_container: Node2D = $Objects/Enemies
 @onready var house = $Objects/House
+@onready var trees: Node = $Objects/Trees
 
 # UI
 @onready var machine_preview: Sprite2D = $Overlay/PreviewMachineSprite2D
@@ -98,6 +99,18 @@ var machine_counter = {
 
 var planted_cells: Array[Vector2i]
 
+# ============================================================
+# Soil Cells
+# ============================================================
+
+var soil_cells: Array[Array] = []
+
+# ============================================================
+# Tree STATE(Axeble)
+# ============================================================
+
+var tree_alive_state: Array = []
+var tree_frame_state: Array = []
 
 # ============================================================
 # DAY / WEATHER
@@ -133,6 +146,8 @@ func _ready() -> void:
 	_initialize_day_night()
 	_connect_shop_characters()
 	_initialize_controller()
+	
+	load_level()
 
 
 # ============================================================
@@ -304,6 +319,8 @@ func _start_day_transition() -> void:
 func _reset_for_new_day() -> void:
 	# Save Player at each day
 	player.save_player()
+	save_level()
+	
 	_update_plants()
 	_reset_soil()
 	_update_trees()
@@ -432,6 +449,8 @@ func _use_hoe(grid_coord: Vector2i) -> void:
 		0,
 		1
 	)
+	
+	soil_cells.append([grid_coord[0], grid_coord[1]])
 
 	if raining:
 		_water_soil(grid_coord)
@@ -743,6 +762,75 @@ func update_machine_count_after_delete(curr_machine: int):
 #endregion
 	
 	
+#region Level Save/Load
+func save_level(save_path = null):
+	_check_tree_state()
+	
+	var save_data := {
+		"soil_cells": soil_cells,
+		"tree_alive_state": tree_alive_state,
+		"tree_frame_state": tree_frame_state,	
+	}
+	
+	var file
+	if save_path:
+		file = FileAccess.open(save_path, FileAccess.WRITE)
+	else:
+		file = FileAccess.open(Data.LEVEL_SAVE_PATH, FileAccess.WRITE)
+		
+	file.store_string(JSON.stringify(save_data))
+	
+	
+func _check_tree_state():
+	var tree_nodes := trees.get_children()
+	tree_alive_state.resize(tree_nodes.size())
+	tree_frame_state.resize(tree_nodes.size())
+	
+	for i in tree_nodes.size():
+		tree_alive_state[i] = tree_nodes[i].tree_health > 0
+		tree_frame_state[i] = tree_nodes[i].tree_frame
+	
+	
+func load_level() -> void:
+	if !FileAccess.file_exists(Data.LEVEL_SAVE_PATH):
+		return
+
+	var file := FileAccess.open(Data.LEVEL_SAVE_PATH, FileAccess.READ)
+	var data = JSON.parse_string(file.get_as_text())
+
+	if typeof(data) != TYPE_DICTIONARY:
+		return
+		
+	_load_soil_cells(data)
+	_load_tree_state(data)
+	
+			
+func _load_soil_cells(data: Dictionary):
+	if !data.has("soil_cells"):
+		return
+		
+	var soil_cells_temp = data.soil_cells
+	
+	for soil_cell in soil_cells_temp:
+		_use_hoe(Vector2i(soil_cell[0], soil_cell[1]))
+
+
+func _load_tree_state(data: Dictionary):
+	if !data.has("tree_alive_state") or !data.has("tree_frame_state"):
+		return
+	
+	var tree_nodes := trees.get_children()
+	tree_alive_state = data.tree_alive_state
+	tree_frame_state = data.tree_frame_state
+	
+	for i in tree_nodes.size():
+		if not tree_alive_state[i]:
+			tree_nodes[i].destroy_tree()
+		tree_nodes[i].set_frame(tree_frame_state[i])
+	
+#endregion
+
+
 # ============================================================
 # PROJECTILES
 # ============================================================
