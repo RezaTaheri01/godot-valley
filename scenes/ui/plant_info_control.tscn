@@ -18,30 +18,31 @@ grow_vertical = 2
 script = ExtResource("1_gwqxr")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1851965530]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 200.0
-offset_bottom = 18.0
+offset_top = 25.0
+offset_right = 140.0
+offset_bottom = 295.0
 grow_vertical = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 
-[node name="VScrollBar" type="VScrollBar" parent="MarginContainer" unique_id=1448461005]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1477195999]
 z_index = 10
 layout_mode = 2
+horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VScrollBar" unique_id=230267119]
-layout_mode = 1
-offset_left = 15.0
-offset_top = 30.0
-offset_right = 117.0
-offset_bottom = 1139.0
-
-[node name="PlantInfo" parent="MarginContainer/VScrollBar/VBoxContainer" unique_id=804374826 instance=ExtResource("1_b2h05")]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=230267119]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlantInfo" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=804374826 instance=ExtResource("1_b2h05")]
+visible = false
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+mouse_filter = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=1487930350]
 layout_mode = 0

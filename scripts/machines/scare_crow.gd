@@ -7,12 +7,13 @@ signal shoot_projectile(start_pos: Vector2, direction: Vector2)
 # SETUP
 # ============================================================
 
-func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D, curr_machine: int) -> void:
+func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D, curr_machine: int) -> bool:
 	# Notify the level whenever this turret fires a projectile.
 	shoot_projectile.connect(level.create_projectile)
 
 	super.setup(grid_coord, level, parent, curr_machine)
 
+	return true
 
 # ============================================================
 # TIMER
