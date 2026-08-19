@@ -84,13 +84,15 @@ var last_dir: Vector2
 # MACHINE STATE
 # ============================================================
 
-var machine_coord: Vector2
-var machine_cells: Array[Vector2i]
+var machine_coord: Vector2i
+# Key: Coord Value: Machine Type
+var machine_cells: Dictionary = {}
 var machine_counter = {
 	Enum.Machine.SCARECROW: 0,
 	Enum.Machine.SPRINKLER: 0,
 	Enum.Machine.FISHER: 0,
 }
+var machine_cells_json
 
 
 # ============================================================
@@ -403,7 +405,7 @@ func _on_player_tool_use(tool: Enum.Tool, pos: Vector2, dir: Vector2) -> void:
 	var grid_coord := get_target_grid(pos, dir)
 
 	# Machines occupy their cells and cannot be interacted with.
-	if grid_coord in machine_cells:
+	if machine_cells.has(grid_coord):
 		return
 
 	match tool:
@@ -702,7 +704,7 @@ func _can_build_machine(grid_coord: Vector2i) -> bool:
 func _is_cell_occupied(grid_coord: Vector2i) -> bool:
 	return (
 		is_object_near_cell(grid_coord)
-		or grid_coord in machine_cells
+		or machine_cells.has(grid_coord)
 	)
 	
 	
@@ -740,8 +742,9 @@ func _build_machine(curr_machine: int) -> void:
 	)
 	
 	if result:
+		machine_cells[machine_coord] = curr_machine
 		machine_counter[curr_machine] += 1
-		machine_cells.append(machine_coord)
+		save_level()
 	
 	
 # ============================================================
@@ -750,11 +753,13 @@ func _build_machine(curr_machine: int) -> void:
 
 # Requests deletion of the machine at the current target cell.
 func _delete_machine() -> void:
-	if machine_coord not in machine_cells:
+	if not machine_cells.has(machine_coord):
 		return
 
 	delete_machine.emit(machine_coord)
 	machine_cells.erase(machine_coord)
+	
+	save_level()
 	
 
 func update_machine_count_after_delete(curr_machine: int):
@@ -766,11 +771,13 @@ func update_machine_count_after_delete(curr_machine: int):
 #region Level Save/Load
 func save_level(save_path = null):
 	_check_tree_state()
+	machine_cells_json = _convert_machine_cells()
 	
 	var save_data := {
 		"soil_cells": soil_cells,
 		"tree_alive_state": tree_alive_state,
 		"tree_frame_state": tree_frame_state,	
+		"machine_cells_json": machine_cells_json,
 	}
 	
 	var file
@@ -792,6 +799,15 @@ func _check_tree_state():
 		tree_frame_state[i] = tree_nodes[i].tree_frame
 	
 	
+func _convert_machine_cells() -> Dictionary:
+	var json_machines := {}
+
+	for coord in machine_cells:
+		json_machines["%d,%d" % [coord.x, coord.y]] = machine_cells[coord]
+
+	return json_machines
+	
+	
 func load_level() -> void:
 	if !FileAccess.file_exists(Data.LEVEL_SAVE_PATH):
 		return
@@ -804,6 +820,7 @@ func load_level() -> void:
 		
 	_load_soil_cells(data)
 	_load_tree_state(data)
+	_load_machine_cells(data)
 	
 			
 func _load_soil_cells(data: Dictionary):
@@ -829,6 +846,31 @@ func _load_tree_state(data: Dictionary):
 			tree_nodes[i].destroy_tree()
 		tree_nodes[i].set_frame(tree_frame_state[i])
 	
+				
+func _load_machine_cells(data: Dictionary) -> void:
+	if not data.has("machine_cells_json"):
+		return
+
+	machine_cells.clear()
+
+	var json_machines: Dictionary = data["machine_cells_json"]
+
+	for key in json_machines:
+		var parts = key.split(",")
+
+		if parts.size() != 2:
+			continue
+
+		var coord := Vector2i(
+			int(parts[0]),
+			int(parts[1])
+		)
+
+		var machine_type: int = int(json_machines[key])
+
+		machine_coord = coord
+		_build_machine(machine_type)
+
 #endregion
 
 
