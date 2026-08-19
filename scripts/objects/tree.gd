@@ -144,7 +144,7 @@ func create_apple() -> void:
 	var apple_range: Array = Data.APPLE_RANGE[Data.difficulty]
 	var apple_count := randi_range(apple_range[0], apple_range[1])
 
-	var apple_markers := $AppleSpawnPositions.get_children().duplicate()
+	var apple_markers := $AppleSpawnPositions.get_children()
 	apple_markers.shuffle()
 
 	# Never create more apples than available spawn positions.
@@ -160,11 +160,13 @@ func create_apple() -> void:
 	apple_count = min(apple_count, int(tree_health))
 
 	for i in apple_count:
+		var marker: Marker2D = apple_markers[i]
+
 		var apple := Sprite2D.new()
 		apple.texture = APPLE_TEXTURE
-		apple.position = apple_markers[i].position
-		apples.add_child(apple)
+		apple.position = apples.to_local(marker.global_position)
 
+		apples.add_child(apple)
 
 func get_all_apples() -> void:
 	for apple in apples.get_children():

@@ -13,12 +13,13 @@ var _busy := false
 # SETUP
 # ============================================================
 
-func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D, curr_machine: int) -> void:
+func setup(grid_coord: Vector2i, level: Node2D, parent: Node2D, curr_machine: int) -> bool:
 	# Notify the level whenever this sprinkler waters nearby soil.
 	water_near_soils.connect(level._water_near_soils)
 
 	super.setup(grid_coord, level, parent, curr_machine)
 
+	return true
 
 # ============================================================
 # TIMER
