@@ -2714,6 +2714,9 @@ position = Vector2(132, -179)
 y_sort_enabled = true
 position = Vector2(325, -102)
 
+[node name="Plants" type="Node2D" parent="Objects" unique_id=930776178]
+y_sort_enabled = true
+
 [node name="Overlay" type="Node2D" parent="." unique_id=1816635256]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="Overlay" unique_id=1154969611]
@@ -2812,4 +2815,5 @@ autoplay = true
 [connection signal="tool_use" from="Objects/Player" to="." method="_on_player_tool_use"]
 [connection signal="update_control_ui" from="Objects/Player" to="Overlay/CanvasLayer/KeyboardControlHintUI" method="_on_player_update_control_ui"]
 [connection signal="close" from="Overlay/CanvasLayer/ShopUI" to="." method="_on_player_close_shop"]
+[connection signal="save_progress" from="Overlay/CanvasLayer/Inventory" to="." method="_on_inventory_save_progress"]
 [connection signal="timeout" from="Timers/BlobTimer" to="." method="_on_blob_timer_timeout"]

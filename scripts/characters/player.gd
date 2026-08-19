@@ -507,6 +507,10 @@ func save_player(save_path = null):
 		
 	file.store_string(JSON.stringify(save_data))
 	
+	
+func _on_inventory_save_progress() -> void:
+	save_player()
+	
 func load_player() -> void:
 	if !FileAccess.file_exists(Data.PLAYER_SAVE_PATH):
 		return

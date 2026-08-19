@@ -5,6 +5,7 @@ extends StaticBody2D
 # STATE
 # ============================================================
 
+@onready var sprite = $Sprite2D
 var coord: Vector2i
 var res: PlantResource
 var plant_info: PanelContainer
@@ -37,7 +38,7 @@ func setup(
 	res = plant_res
 	plant_info = plant_info_panel
 
-	$Sprite2D.texture = res.texture
+	sprite.texture = res.texture
 
 	# Connect callbacks provided by the parent.
 	# The signal doesn't need to know where the callback comes from.
@@ -51,7 +52,7 @@ func setup(
 
 func grow(watered: bool, damage_amount: int = 1) -> void:
 	if watered:
-		res.grow($Sprite2D)
+		res.grow(sprite)
 	else:
 		if res.decay(self, damage_amount):
 			_handle_death()

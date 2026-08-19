@@ -9,7 +9,6 @@ extends Node2D
 signal delete_machine(coord: Vector2i)
 signal update_hint_ui_keys
 
-
 # ============================================================
 # NODE REFERENCES
 # ============================================================
@@ -24,6 +23,7 @@ signal update_hint_ui_keys
 
 # Objects
 @onready var objects_container: Node2D = $Objects
+@onready var plants_container: Node2D = $Objects/Plants
 @onready var machines_container: Node2D = $Objects/Machines
 @onready var enemies_container: Node2D = $Objects/Enemies
 @onready var house = $Objects/House
@@ -319,15 +319,15 @@ func _start_day_transition() -> void:
 
 # Resets all systems that change when a new day begins.
 func _reset_for_new_day() -> void:
-	# Save Player at each day
-	player.save_player()
-	save_level()
-	
 	_update_plants()
 	_reset_soil()
 	_update_trees()
 	_update_weather()
-
+	
+	# Save Player at each day
+	player.save_player()
+	save_level()
+	
 	day_timer.start()
 
 
@@ -506,6 +506,28 @@ func _plant_seed(grid_coord: Vector2i) -> void:
 	planted_cells.append(grid_coord)
 
 
+
+func _plant_seed_from_load(grid_coord: Vector2i, seed_enum: int, age: float, death_count: int) -> void:
+	var plant_res := PlantResource.new()
+	plant_res.setup(seed_enum)
+	
+	plant_res.age = age
+	plant_res.death_count = death_count
+	
+	var plant = PLANT_SCENE.instantiate()
+
+	_create_plant_info(plant_res, plant)
+	_setup_plant(plant, grid_coord, plant_res)
+
+	planted_cells.append(grid_coord)
+	
+
+	plant_res.update_frame(plant.sprite)
+	plant.plant_info.update_info()
+	
+
+
+
 # Creates and displays the plant information UI.
 func _create_plant_info(
 	plant_res: PlantResource,
@@ -529,7 +551,7 @@ func _setup_plant(
 
 	plant.setup(
 		grid_coord,
-		objects_container,
+		plants_container,
 		plant_res,
 		plant_info,
 		plant_death,
@@ -778,6 +800,7 @@ func save_level(save_path = null):
 		"tree_alive_state": tree_alive_state,
 		"tree_frame_state": tree_frame_state,	
 		"machine_cells_json": machine_cells_json,
+		"plants_data": _get_plants_data(),
 	}
 	
 	var file
@@ -808,6 +831,25 @@ func _convert_machine_cells() -> Dictionary:
 	return json_machines
 	
 	
+func _get_plants_data() -> Dictionary:
+	var plants_data := {}
+
+	for plant in plants_container.get_children():
+		var coord: Vector2i = plant.coord
+
+		plants_data["%d,%d" % [coord.x, coord.y]] = {
+			"age": plant.res.age,
+			"death_count": plant.res.death_count,
+			"seed": plant.res.curr_seed_enum
+		}
+	
+	return plants_data
+	
+
+func _on_inventory_save_progress() -> void:
+	save_level()
+	
+	
 func load_level() -> void:
 	if !FileAccess.file_exists(Data.LEVEL_SAVE_PATH):
 		return
@@ -821,6 +863,7 @@ func load_level() -> void:
 	_load_soil_cells(data)
 	_load_tree_state(data)
 	_load_machine_cells(data)
+	_load_plants_data(data)
 	
 			
 func _load_soil_cells(data: Dictionary):
@@ -871,6 +914,35 @@ func _load_machine_cells(data: Dictionary) -> void:
 		machine_coord = coord
 		_build_machine(machine_type)
 
+
+func _load_plants_data(data: Dictionary) -> void:
+	if not data.has("plants_data"):
+		return
+
+	planted_cells.clear()
+	
+	var json_plants: Dictionary = data.plants_data
+
+	for key in json_plants:
+		var parts = key.split(",")
+
+		if parts.size() != 2:
+			continue
+
+		var coord := Vector2i(
+			int(parts[0]),
+			int(parts[1])
+		)
+
+		var plant_data: Dictionary = json_plants[key]
+
+		var age: float = float(plant_data["age"])
+		var death_count: int = int(plant_data["death_count"])
+		var seed_enum: int = int(plant_data["seed"])
+		
+		_plant_seed_from_load(coord, seed_enum, age, death_count)
+
+		
 #endregion
 
 
