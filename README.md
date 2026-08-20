@@ -74,7 +74,7 @@ Course by [Kristian Koch](https://www.udemy.com/user/christian-koch-59/)
 
 ## TODOS
 
-- [ ] Save/Load System
+- [x] Save/Load System [#7](https://github.com/RezaTaheri01/godot-valley/pull/7)
 - [ ] Player Health System
 - [ ] Day/Night Cycle Enhancement
 - [ ] 3 Map Sizes with Difficulty Tiers
