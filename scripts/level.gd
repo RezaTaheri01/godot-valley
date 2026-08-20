@@ -962,6 +962,9 @@ func _load_weather(data: Dictionary) -> void:
 	raining = data.weather[0]
 	Data.forecast_rain = data.weather[1]
 	
+	if raining:
+		_water_soils()
+	
 
 func _on_auto_save_timer_timeout() -> void:
 	save_level(Data.LEVEL_SAVE_PATH_BACKUP)
