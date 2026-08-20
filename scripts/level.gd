@@ -48,6 +48,9 @@ signal update_hint_ui_keys
 @onready var blob_spawn_positions: Node2D = $BlobSpawnPositions
 
 
+# Save
+@onready var _save_timer: Timer = $Timers/AutoSaveTimer
+
 # ============================================================
 # PRELOADED SCENES
 # ============================================================
@@ -148,7 +151,7 @@ func _ready() -> void:
 	_initialize_day_night()
 	_connect_shop_characters()
 	_initialize_controller()
-	
+	_set_timers()
 	load_level()
 
 
@@ -198,6 +201,13 @@ func _initialize_controller() -> void:
 
 	Data.controller_connected = Input.get_connected_joypads().size() > 0
 
+# ============================================================
+# Timers
+# ============================================================
+
+func _set_timers() -> void:
+	# Set Save Timer
+	_save_timer.wait_time = Data.BACKUP_SAVE_INTERVAL_TIME_IN_SEC
 #endregion
 
 
@@ -801,6 +811,7 @@ func save_level(save_path = null):
 		"tree_frame_state": tree_frame_state,	
 		"machine_cells_json": machine_cells_json,
 		"plants_data": _get_plants_data(),
+		"weather": [raining, Data.forecast_rain],
 	}
 	
 	var file
@@ -864,6 +875,7 @@ func load_level() -> void:
 	_load_tree_state(data)
 	_load_machine_cells(data)
 	_load_plants_data(data)
+	_load_weather(data)
 	
 			
 func _load_soil_cells(data: Dictionary):
@@ -942,10 +954,21 @@ func _load_plants_data(data: Dictionary) -> void:
 		
 		_plant_seed_from_load(coord, seed_enum, age, death_count)
 
+
+func _load_weather(data: Dictionary) -> void:
+	if not data.has("weather"):
+		return
 		
+	raining = data.weather[0]
+	Data.forecast_rain = data.weather[1]
+	
+
+func _on_auto_save_timer_timeout() -> void:
+	save_level(Data.LEVEL_SAVE_PATH_BACKUP)
+	
 #endregion
 
-
+#region Others
 # ============================================================
 # PROJECTILES
 # ============================================================
@@ -1121,3 +1144,4 @@ func _log_controller_connection(
 	print("Controller ", device_id, " connected!")
 	print("Controller name: ", controller_name)
 	print("GUID: ", controller_guid)
+#endregion

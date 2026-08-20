@@ -2768,6 +2768,10 @@ autostart = true
 wait_time = 10.0
 autostart = true
 
+[node name="AutoSaveTimer" type="Timer" parent="Timers" unique_id=685049189]
+wait_time = 300.0
+autostart = true
+
 [node name="BlobSpawnPositions" type="Node2D" parent="." unique_id=853621794]
 
 [node name="Marker2D" type="Marker2D" parent="BlobSpawnPositions" unique_id=1048912037]
@@ -2816,4 +2820,6 @@ autoplay = true
 [connection signal="update_control_ui" from="Objects/Player" to="Overlay/CanvasLayer/KeyboardControlHintUI" method="_on_player_update_control_ui"]
 [connection signal="close" from="Overlay/CanvasLayer/ShopUI" to="." method="_on_player_close_shop"]
 [connection signal="save_progress" from="Overlay/CanvasLayer/Inventory" to="." method="_on_inventory_save_progress"]
+[connection signal="save_progress" from="Overlay/CanvasLayer/Inventory" to="Objects/Player" method="_on_inventory_save_progress"]
 [connection signal="timeout" from="Timers/BlobTimer" to="." method="_on_blob_timer_timeout"]
+[connection signal="timeout" from="Timers/AutoSaveTimer" to="." method="_on_auto_save_timer_timeout"]

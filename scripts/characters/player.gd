@@ -119,6 +119,11 @@ const LIGHT_SCALE := 0.5
 @onready var hoe_sound: AudioStreamPlayer2D = $Sounds/Hoe
 @onready var water_sound: AudioStreamPlayer2D = $Sounds/Water
 
+# ============================================================
+# Player Save
+# ============================================================
+@onready var _auto_save_timer = $AutoSaveTimer
+
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
@@ -126,6 +131,8 @@ func _ready() -> void:
 	
 	# Wait one frame to ensure all nodes have finished their _ready() initialization.
 	await get_tree().process_frame
+	
+	_auto_save_timer.wait_time = Data.BACKUP_SAVE_INTERVAL_TIME_IN_SEC
 	
 	load_player()
 	update_style()

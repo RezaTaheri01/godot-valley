@@ -8,6 +8,7 @@ const PLAYER_SAVE_PATH := "user://player_save.json"
 const PLAYER_SAVE_PATH_BACKUP := "user://player_save_backup.json"
 const LEVEL_SAVE_PATH:= "user://level_save.json"
 const LEVEL_SAVE_PATH_BACKUP := "user://level_save_backup.json"
+const BACKUP_SAVE_INTERVAL_TIME_IN_SEC = 300
 
 
 const HOUSE_COST = {
