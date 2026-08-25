@@ -1607,9 +1607,11 @@ stream = ExtResource("6_qgnko")
 
 [node name="Hoe" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1682675593]
 stream = ExtResource("7_7vyk4")
+volume_db = -10.0
 
 [node name="Water" type="AudioStreamPlayer2D" parent="Sounds" unique_id=828296726]
 stream = ExtResource("8_eojnx")
+volume_db = -15.0
 
 [node name="Step" type="AudioStreamPlayer" parent="Sounds" unique_id=833564572]
 stream = ExtResource("9_qgnko")

@@ -141,6 +141,7 @@ var raining: bool:
 		rain_particles.emitting = value
 		rain_sound.playing = value
 		rain_particle.visible = value
+		rain_floor_particles.visible = value
 #endregion
 	
 		

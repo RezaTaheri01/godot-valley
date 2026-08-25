@@ -10,13 +10,6 @@ const LEVEL_SAVE_PATH:= "user://level_save.json"
 const LEVEL_SAVE_PATH_BACKUP := "user://level_save_backup.json"
 const BACKUP_SAVE_INTERVAL_TIME_IN_SEC = 300
 
-
-
-const PLAYER_SAVE_PATH_BACKUP := "user://player_save_backup.json"
-const LEVEL_SAVE_PATH:= "user://level_save.json"
-const LEVEL_SAVE_PATH_BACKUP := "user://level_save_backup.json"
-const BACKUP_SAVE_INTERVAL_TIME_IN_SEC = 300
-
 var day_time
 var night_time
 var blob_spawn_time
@@ -459,9 +452,9 @@ const DECO_TEXTURES := {
 	12: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/13.png"),
 	13: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/14.png"),
 	14: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/15.png"),
-	15: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/16.png"),
-	16: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/17.png"),
-	17: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/18.png"),
+	#15: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/16.png"),
+	#16: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/17.png"),
+	#17: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/18.png"),
 }
 
 
