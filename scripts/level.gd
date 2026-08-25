@@ -106,6 +106,7 @@ var planted_cells: Array[Vector2i]
 @export var daytimer_color: Gradient
 @export var rain_color: Color
 @export var volume_curve: Curve
+@onready var rain_particle: GPUParticles2D = $Overlay/RainParticles2D
 
 var _raining := false
 
@@ -120,6 +121,7 @@ var raining: bool:
 		rain_floor_particles.emitting = value
 		rain_particles.emitting = value
 		rain_sound.playing = value
+		rain_particle.visible = value
 #endregion
 	
 		
