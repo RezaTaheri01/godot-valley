@@ -5,8 +5,6 @@ var difficulty: Enum.Difficulty = Enum.Difficulty.EASY
 const TILE_SIZE = 16
 var forecast_rain: bool
 const PLAYER_SAVE_PATH := "user://player_save.json"
-
-
 const PLAYER_SAVE_PATH_BACKUP := "user://player_save_backup.json"
 const LEVEL_SAVE_PATH:= "user://level_save.json"
 const LEVEL_SAVE_PATH_BACKUP := "user://level_save_backup.json"
@@ -454,9 +452,9 @@ const DECO_TEXTURES := {
 	12: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/13.png"),
 	13: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/14.png"),
 	14: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/15.png"),
-	15: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/16.png"),
-	16: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/17.png"),
-	17: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/18.png"),
+	#15: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/16.png"),
+	#16: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/17.png"),
+	#17: preload("res://graphics/Tiny Swords/Tiny Swords (Update 010)/Deco/18.png"),
 }
 
 

@@ -1607,9 +1607,11 @@ stream = ExtResource("6_qgnko")
 
 [node name="Hoe" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1682675593]
 stream = ExtResource("7_7vyk4")
+volume_db = -10.0
 
 [node name="Water" type="AudioStreamPlayer2D" parent="Sounds" unique_id=828296726]
 stream = ExtResource("8_eojnx")
+volume_db = -15.0
 
 [node name="Step" type="AudioStreamPlayer" parent="Sounds" unique_id=833564572]
 stream = ExtResource("9_qgnko")
@@ -1619,9 +1621,14 @@ volume_db = -35.0
 wait_time = 0.4
 one_shot = true
 
+[node name="AutoSaveTimer" type="Timer" parent="." unique_id=507429863]
+wait_time = 300.0
+autostart = true
+
 [connection signal="animation_finished" from="Animation/AnimationTree" to="." method="_on_animation_tree_animation_finished"]
 [connection signal="animation_started" from="Animation/AnimationTree" to="." method="_on_animation_tree_animation_started"]
 [connection signal="fish_game_finish" from="FishingGame" to="." method="_on_fishing_game_fish_game_finish"]
 [connection signal="body_entered" from="InteractRangeArea2D" to="." method="_on_interact_range_area_2d_body_entered"]
 [connection signal="body_exited" from="InteractRangeArea2D" to="." method="_on_interact_range_area_2d_body_exited"]
 [connection signal="timeout" from="Sounds/StepTimer" to="." method="_on_step_timer_timeout"]
+[connection signal="timeout" from="AutoSaveTimer" to="." method="_on_auto_save_timer_timeout"]

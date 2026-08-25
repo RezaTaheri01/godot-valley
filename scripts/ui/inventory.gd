@@ -7,11 +7,10 @@ const RESOURCE_TEXTURE_SCENE := preload(
 	"res://scenes/ui/resourse_texture.tscn"
 )
 
-@onready var player = %Player
 @onready var resource_container = $VBoxContainer
 @onready var update_timer: Timer = $Timer
 
-
+signal save_progress
 # ============================================================
 # INITIALIZATION
 # ============================================================
@@ -48,4 +47,4 @@ func _on_timer_timeout() -> void:
 			inventory_changed = true
 
 	if inventory_changed:
-		player.save_player()
+		save_progress.emit()

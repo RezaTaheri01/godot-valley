@@ -43,3 +43,7 @@ func decay(plant: StaticBody2D, damage: int = 1):
 
 func get_complete():
 	return age >= h_frames
+
+
+func update_frame(sprite: Sprite2D):
+	sprite.frame = int(age)

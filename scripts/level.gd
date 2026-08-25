@@ -9,7 +9,6 @@ extends Node2D
 signal delete_machine(coord: Vector2i)
 signal update_hint_ui_keys
 
-
 # ============================================================
 # NODE REFERENCES
 # ============================================================
@@ -24,9 +23,11 @@ signal update_hint_ui_keys
 
 # Objects
 @onready var objects_container: Node2D = $Objects
+@onready var plants_container: Node2D = $Objects/Plants
 @onready var machines_container: Node2D = $Objects/Machines
 @onready var enemies_container: Node2D = $Objects/Enemies
 @onready var house = $Objects/House
+@onready var trees: Node = $Objects/Trees
 
 # UI
 @onready var machine_preview: Sprite2D = $Overlay/PreviewMachineSprite2D
@@ -47,6 +48,9 @@ signal update_hint_ui_keys
 @onready var blob_spawn_positions: Node2D = $BlobSpawnPositions
 @onready var blob_spawn_timer: Timer = $Timers/BlobTimer
 
+
+# Save
+@onready var _save_timer: Timer = $Timers/AutoSaveTimer
 
 # ============================================================
 # PRELOADED SCENES
@@ -84,13 +88,15 @@ var last_dir: Vector2
 # MACHINE STATE
 # ============================================================
 
-var machine_coord: Vector2
-var machine_cells: Array[Vector2i]
+var machine_coord: Vector2i
+# Key: Coord Value: Machine Type
+var machine_cells: Dictionary = {}
 var machine_counter = {
 	Enum.Machine.SCARECROW: 0,
 	Enum.Machine.SPRINKLER: 0,
 	Enum.Machine.FISHER: 0,
 }
+var machine_cells_json
 
 
 # ============================================================
@@ -99,6 +105,18 @@ var machine_counter = {
 
 var planted_cells: Array[Vector2i]
 
+# ============================================================
+# Soil Cells
+# ============================================================
+
+var soil_cells: Array[Array] = []
+
+# ============================================================
+# Tree STATE(Axeble)
+# ============================================================
+
+var tree_alive_state: Array = []
+var tree_frame_state: Array = []
 
 # ============================================================
 # DAY / WEATHER
@@ -123,6 +141,7 @@ var raining: bool:
 		rain_particles.emitting = value
 		rain_sound.playing = value
 		rain_particle.visible = value
+		rain_floor_particles.visible = value
 #endregion
 	
 		
@@ -136,6 +155,8 @@ func _ready() -> void:
 	_initialize_day_night()
 	_connect_shop_characters()
 	_initialize_controller()
+	_set_timers()
+	load_level()
 
 
 # ============================================================
@@ -330,7 +351,11 @@ func _reset_for_new_day() -> void:
 	_reset_soil()
 	_update_trees()
 	_update_weather()
-
+	
+	# Save Player at each day
+	player.save_player()
+	save_level()
+	
 	day_timer.start()
 
 
@@ -408,7 +433,7 @@ func _on_player_tool_use(tool: Enum.Tool, pos: Vector2, dir: Vector2) -> void:
 	var grid_coord := get_target_grid(pos, dir)
 
 	# Machines occupy their cells and cannot be interacted with.
-	if grid_coord in machine_cells:
+	if machine_cells.has(grid_coord):
 		return
 
 	match tool:
@@ -454,6 +479,8 @@ func _use_hoe(grid_coord: Vector2i) -> void:
 		0,
 		1
 	)
+	
+	soil_cells.append([grid_coord[0], grid_coord[1]])
 
 	if raining:
 		_water_soil(grid_coord)
@@ -507,6 +534,28 @@ func _plant_seed(grid_coord: Vector2i) -> void:
 	planted_cells.append(grid_coord)
 
 
+
+func _plant_seed_from_load(grid_coord: Vector2i, seed_enum: int, age: float, death_count: int) -> void:
+	var plant_res := PlantResource.new()
+	plant_res.setup(seed_enum)
+	
+	plant_res.age = age
+	plant_res.death_count = death_count
+	
+	var plant = PLANT_SCENE.instantiate()
+
+	_create_plant_info(plant_res, plant)
+	_setup_plant(plant, grid_coord, plant_res)
+
+	planted_cells.append(grid_coord)
+	
+
+	plant_res.update_frame(plant.sprite)
+	plant.plant_info.update_info()
+	
+
+
+
 # Creates and displays the plant information UI.
 func _create_plant_info(
 	plant_res: PlantResource,
@@ -530,7 +579,7 @@ func _setup_plant(
 
 	plant.setup(
 		grid_coord,
-		objects_container,
+		plants_container,
 		plant_res,
 		plant_info,
 		plant_death,
@@ -705,7 +754,7 @@ func _can_build_machine(grid_coord: Vector2i) -> bool:
 func _is_cell_occupied(grid_coord: Vector2i) -> bool:
 	return (
 		is_object_near_cell(grid_coord)
-		or grid_coord in machine_cells
+		or machine_cells.has(grid_coord)
 	)
 	
 	
@@ -743,8 +792,9 @@ func _build_machine(curr_machine: int) -> void:
 	)
 	
 	if result:
+		machine_cells[machine_coord] = curr_machine
 		machine_counter[curr_machine] += 1
-		machine_cells.append(machine_coord)
+		save_level()
 	
 	
 # ============================================================
@@ -753,11 +803,13 @@ func _build_machine(curr_machine: int) -> void:
 
 # Requests deletion of the machine at the current target cell.
 func _delete_machine() -> void:
-	if machine_coord not in machine_cells:
+	if not machine_cells.has(machine_coord):
 		return
 
 	delete_machine.emit(machine_coord)
 	machine_cells.erase(machine_coord)
+	
+	save_level()
 	
 
 func update_machine_count_after_delete(curr_machine: int):
@@ -766,6 +818,178 @@ func update_machine_count_after_delete(curr_machine: int):
 #endregion
 	
 	
+#region Level Save/Load
+func save_level(save_path = null):
+	_check_tree_state()
+	machine_cells_json = _convert_machine_cells()
+	
+	var save_data := {
+		"soil_cells": soil_cells,
+		"tree_alive_state": tree_alive_state,
+		"tree_frame_state": tree_frame_state,	
+		"machine_cells_json": machine_cells_json,
+		"plants_data": _get_plants_data(),
+		"weather": [raining, Data.forecast_rain],
+	}
+	
+	var file
+	if save_path:
+		file = FileAccess.open(save_path, FileAccess.WRITE)
+	else:
+		file = FileAccess.open(Data.LEVEL_SAVE_PATH, FileAccess.WRITE)
+		
+	file.store_string(JSON.stringify(save_data))
+	
+	
+func _check_tree_state():
+	var tree_nodes := trees.get_children()
+	tree_alive_state.resize(tree_nodes.size())
+	tree_frame_state.resize(tree_nodes.size())
+	
+	for i in tree_nodes.size():
+		tree_alive_state[i] = tree_nodes[i].tree_health > 0
+		tree_frame_state[i] = tree_nodes[i].tree_frame
+	
+	
+func _convert_machine_cells() -> Dictionary:
+	var json_machines := {}
+
+	for coord in machine_cells:
+		json_machines["%d,%d" % [coord.x, coord.y]] = machine_cells[coord]
+
+	return json_machines
+	
+	
+func _get_plants_data() -> Dictionary:
+	var plants_data := {}
+
+	for plant in plants_container.get_children():
+		var coord: Vector2i = plant.coord
+
+		plants_data["%d,%d" % [coord.x, coord.y]] = {
+			"age": plant.res.age,
+			"death_count": plant.res.death_count,
+			"seed": plant.res.curr_seed_enum
+		}
+	
+	return plants_data
+	
+
+func _on_inventory_save_progress() -> void:
+	save_level()
+	
+	
+func load_level() -> void:
+	if !FileAccess.file_exists(Data.LEVEL_SAVE_PATH):
+		return
+
+	var file := FileAccess.open(Data.LEVEL_SAVE_PATH, FileAccess.READ)
+	var data = JSON.parse_string(file.get_as_text())
+
+	if typeof(data) != TYPE_DICTIONARY:
+		return
+		
+	_load_soil_cells(data)
+	_load_tree_state(data)
+	_load_machine_cells(data)
+	_load_plants_data(data)
+	_load_weather(data)
+	
+			
+func _load_soil_cells(data: Dictionary):
+	if !data.has("soil_cells"):
+		return
+		
+	var soil_cells_temp = data.soil_cells
+	
+	for soil_cell in soil_cells_temp:
+		_use_hoe(Vector2i(soil_cell[0], soil_cell[1]))
+
+
+func _load_tree_state(data: Dictionary):
+	if !data.has("tree_alive_state") or !data.has("tree_frame_state"):
+		return
+	
+	var tree_nodes := trees.get_children()
+	tree_alive_state = data.tree_alive_state
+	tree_frame_state = data.tree_frame_state
+	
+	for i in tree_nodes.size():
+		if not tree_alive_state[i]:
+			tree_nodes[i].destroy_tree()
+		tree_nodes[i].set_frame(tree_frame_state[i])
+	
+				
+func _load_machine_cells(data: Dictionary) -> void:
+	if not data.has("machine_cells_json"):
+		return
+
+	machine_cells.clear()
+
+	var json_machines: Dictionary = data["machine_cells_json"]
+
+	for key in json_machines:
+		var parts = key.split(",")
+
+		if parts.size() != 2:
+			continue
+
+		var coord := Vector2i(
+			int(parts[0]),
+			int(parts[1])
+		)
+
+		var machine_type: int = int(json_machines[key])
+
+		machine_coord = coord
+		_build_machine(machine_type)
+
+
+func _load_plants_data(data: Dictionary) -> void:
+	if not data.has("plants_data"):
+		return
+
+	planted_cells.clear()
+	
+	var json_plants: Dictionary = data.plants_data
+
+	for key in json_plants:
+		var parts = key.split(",")
+
+		if parts.size() != 2:
+			continue
+
+		var coord := Vector2i(
+			int(parts[0]),
+			int(parts[1])
+		)
+
+		var plant_data: Dictionary = json_plants[key]
+
+		var age: float = float(plant_data["age"])
+		var death_count: int = int(plant_data["death_count"])
+		var seed_enum: int = int(plant_data["seed"])
+		
+		_plant_seed_from_load(coord, seed_enum, age, death_count)
+
+
+func _load_weather(data: Dictionary) -> void:
+	if not data.has("weather"):
+		return
+		
+	raining = data.weather[0]
+	Data.forecast_rain = data.weather[1]
+	
+	if raining:
+		_water_soils()
+	
+
+func _on_auto_save_timer_timeout() -> void:
+	save_level(Data.LEVEL_SAVE_PATH_BACKUP)
+	
+#endregion
+
+#region Others
 # ============================================================
 # PROJECTILES
 # ============================================================
@@ -941,3 +1165,4 @@ func _log_controller_connection(
 	print("Controller ", device_id, " connected!")
 	print("Controller name: ", controller_name)
 	print("GUID: ", controller_guid)
+#endregion

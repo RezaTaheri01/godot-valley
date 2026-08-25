@@ -26,6 +26,7 @@ const TREE_COLOR_TWEEN_DURATION := 0.2
 # STATE
 # ============================================================
 
+var tree_frame
 var tree_health: float = Data.APPLE_TREE_HEALTH[Data.difficulty]
 var color_tween: Tween
 
@@ -35,7 +36,7 @@ var color_tween: Tween
 # ============================================================
 
 func _ready() -> void:
-	flash_sprite_2d_upper.frame = Data.APPLE_TREE_SPRITES.pick_random()
+	set_frame(Data.APPLE_TREE_SPRITES.pick_random())
 
 	add_to_group("Tree")
 
@@ -43,6 +44,11 @@ func _ready() -> void:
 	$CollisionShapeStumpD2.disabled = true
 
 	create_apple()
+	
+
+func set_frame(frame):
+	flash_sprite_2d_upper.frame = frame
+	tree_frame = flash_sprite_2d_upper.frame
 
 
 # ============================================================
@@ -84,6 +90,21 @@ func _destroy_tree() -> void:
 	$CollisionShapeStumpD2.disabled = false
 
 	remove_from_group("Tree")
+	
+	
+
+func destroy_tree() -> void:
+	flash_sprite_2d_upper.hide()
+	flash_sprite_2d_bottom.hide()
+
+	$CollisionShapeTree2D.disabled = true
+
+	$Stump.show()
+	$CollisionShapeStumpD2.disabled = false
+
+	remove_from_group("Tree")
+	
+	get_all_apples()
 
 
 # ============================================================
@@ -147,6 +168,10 @@ func create_apple() -> void:
 
 		apples.add_child(apple)
 
+func get_all_apples() -> void:
+	for apple in apples.get_children():
+		if is_instance_valid(apple):
+			apple.queue_free()
 # ============================================================
 # PLAYER DETECTION
 # ============================================================
