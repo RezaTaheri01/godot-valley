@@ -127,6 +127,10 @@ const SEED_TEXTURES = {
 	Enum.Seed.PUMPKIN: preload("res://graphics/icons/pumpkin.png"),
 	Enum.Seed.WHEAT: preload("res://graphics/icons/wheat.png")
 	}
+
+const HARVEST_SHAKE_ANGLE := 4.0
+const HARVEST_SHAKE_DURATION := 0.2
+const HARVEST_SHAKE_INTERVAL := 5
 #endregion
 
 
