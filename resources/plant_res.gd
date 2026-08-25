@@ -30,6 +30,8 @@ func grow(sprite: Sprite2D):
 	age = min(age + grow_speed, h_frames)
 	sprite.frame = int(age)
 	
+	return age == h_frames
+	
 
 func decay(plant: StaticBody2D, damage: int = 1):
 	death_count += damage

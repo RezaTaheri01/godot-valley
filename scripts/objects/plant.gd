@@ -9,7 +9,8 @@ extends StaticBody2D
 var coord: Vector2i
 var res: PlantResource
 var plant_info: PanelContainer
-
+var ready_to_harvest: bool = false
+var harvest_shake_tween: Tween
 
 # ============================================================
 # SIGNALS
@@ -52,7 +53,10 @@ func setup(
 
 func grow(watered: bool, damage_amount: int = 1) -> void:
 	if watered:
-		res.grow(sprite)
+		if res.grow($Sprite2D) and not ready_to_harvest:
+			ready_to_harvest = true
+			# Start animation here
+			_start_harvest_shake()
 	else:
 		if res.decay(self, damage_amount):
 			_handle_death()
@@ -83,3 +87,35 @@ func _on_collision_area_body_entered(_body: Node2D) -> void:
 
 	plant_info.queue_free()
 	queue_free()
+	
+
+# ============================================================
+# Animation
+# ============================================================
+
+func _start_harvest_shake() -> void:
+	harvest_shake_tween = create_tween()
+	harvest_shake_tween.set_loops()
+
+	harvest_shake_tween.tween_interval(Data.HARVEST_SHAKE_INTERVAL)
+
+	harvest_shake_tween.tween_property(
+		$Sprite2D,
+		"rotation_degrees",
+		Data.HARVEST_SHAKE_ANGLE,
+		Data.HARVEST_SHAKE_DURATION
+	).set_trans(Tween.TRANS_SINE)
+
+	harvest_shake_tween.tween_property(
+		$Sprite2D,
+		"rotation_degrees",
+		-Data.HARVEST_SHAKE_ANGLE,
+		Data.HARVEST_SHAKE_DURATION * 2.0
+	).set_trans(Tween.TRANS_SINE)
+
+	harvest_shake_tween.tween_property(
+		$Sprite2D,
+		"rotation_degrees",
+		0.0,
+		Data.HARVEST_SHAKE_DURATION
+	).set_trans(Tween.TRANS_SINE)
