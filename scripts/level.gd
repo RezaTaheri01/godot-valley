@@ -46,6 +46,7 @@ signal update_hint_ui_keys
 
 # Enemy spawning
 @onready var blob_spawn_positions: Node2D = $BlobSpawnPositions
+@onready var blob_spawn_timer: Timer = $Timers/BlobTimer
 
 
 # Save
@@ -124,6 +125,7 @@ var tree_frame_state: Array = []
 @export var daytimer_color: Gradient
 @export var rain_color: Color
 @export var volume_curve: Curve
+@onready var rain_particle: GPUParticles2D = $Overlay/RainParticles2D
 
 var _raining := false
 
@@ -138,6 +140,7 @@ var raining: bool:
 		rain_floor_particles.emitting = value
 		rain_particles.emitting = value
 		rain_sound.playing = value
+		rain_particle.visible = value
 #endregion
 	
 		
@@ -201,13 +204,27 @@ func _initialize_controller() -> void:
 
 	Data.controller_connected = Input.get_connected_joypads().size() > 0
 
+
 # ============================================================
 # Timers
 # ============================================================
 
 func _set_timers() -> void:
+	Data.day_time = Data.DAY_TIMES[Data.difficulty]
+	Data.night_time = Data.NIGHT_TIMES[Data.difficulty]
+	Data.blob_spawn_time = Data.BLOB_SPAWN_TIMES[Data.difficulty]
+	
 	# Set Save Timer
 	_save_timer.wait_time = Data.BACKUP_SAVE_INTERVAL_TIME_IN_SEC
+	
+	# Set Day Timer
+	day_timer.wait_time = Data.day_time
+	
+	# Set Night Timer
+	
+	# Set Blob Spawn Timer
+	blob_spawn_timer.wait_time = Data.blob_spawn_time
+	
 #endregion
 
 

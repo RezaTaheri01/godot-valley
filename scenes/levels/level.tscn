@@ -2742,6 +2742,7 @@ color = Color(0.04780578, 0.015162113, 0.092368476, 1)
 [node name="KeyboardControlHintUI" parent="Overlay/CanvasLayer" unique_id=588791315 instance=ExtResource("17_jyre1")]
 
 [node name="RainParticles2D" type="GPUParticles2D" parent="Overlay" unique_id=703477973]
+visible = false
 material = SubResource("CanvasItemMaterial_8iyoh")
 position = Vector2(66, -102)
 emitting = false

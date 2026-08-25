@@ -11,6 +11,35 @@ const LEVEL_SAVE_PATH_BACKUP := "user://level_save_backup.json"
 const BACKUP_SAVE_INTERVAL_TIME_IN_SEC = 300
 
 
+
+const PLAYER_SAVE_PATH_BACKUP := "user://player_save_backup.json"
+const LEVEL_SAVE_PATH:= "user://level_save.json"
+const LEVEL_SAVE_PATH_BACKUP := "user://level_save_backup.json"
+const BACKUP_SAVE_INTERVAL_TIME_IN_SEC = 300
+
+var day_time
+var night_time
+var blob_spawn_time
+
+const DAY_TIMES = {
+	Enum.Difficulty.EASY: 150,
+	Enum.Difficulty.NORMAL: 125,
+	Enum.Difficulty.HARD: 100
+}
+
+const NIGHT_TIMES = {
+	Enum.Difficulty.EASY: 75,
+	Enum.Difficulty.NORMAL: 100,
+	Enum.Difficulty.HARD: 150
+}
+
+const BLOB_SPAWN_TIMES = {
+	Enum.Difficulty.EASY: 10,
+	Enum.Difficulty.NORMAL: 8,
+	Enum.Difficulty.HARD: 6
+}
+
+
 const HOUSE_COST = {
 	Enum.Difficulty.EASY: {1: {Enum.Item.WOOD: 25, Enum.Item.APPLE: 15}, 2: {Enum.Item.WOOD: 30, Enum.Item.APPLE: 25}},
 	Enum.Difficulty.NORMAL: {1: {Enum.Item.WOOD: 30, Enum.Item.APPLE: 20}, 2: {Enum.Item.WOOD: 40, Enum.Item.APPLE: 30}},
