@@ -45,6 +45,7 @@ signal update_hint_ui_keys
 
 # Enemy spawning
 @onready var blob_spawn_positions: Node2D = $BlobSpawnPositions
+@onready var blob_spawn_timer: Timer = $Timers/BlobTimer
 
 
 # ============================================================
@@ -183,6 +184,27 @@ func _initialize_controller() -> void:
 
 	Data.controller_connected = Input.get_connected_joypads().size() > 0
 
+
+# ============================================================
+# Timers
+# ============================================================
+
+func _set_timers() -> void:
+	Data.day_time = Data.DAY_TIMES[Data.difficulty]
+	Data.night_time = Data.NIGHT_TIMES[Data.difficulty]
+	Data.blob_spawn_time = Data.BLOB_SPAWN_TIMES[Data.difficulty]
+	
+	# Set Save Timer
+	_save_timer.wait_time = Data.BACKUP_SAVE_INTERVAL_TIME_IN_SEC
+	
+	# Set Day Timer
+	day_timer.wait_time = Data.day_time
+	
+	# Set Night Timer
+	
+	# Set Blob Spawn Timer
+	blob_spawn_timer.wait_time = Data.blob_spawn_time
+	
 #endregion
 
 
