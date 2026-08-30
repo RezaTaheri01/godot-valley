@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bfjaiku70hbc8" path="res://scenes/levels/house.tscn" id="12_8iyoh"]
 [ext_resource type="PackedScene" uid="uid://bu6p00q23wr75" path="res://scenes/characters/cat.tscn" id="12_mq31s"]
 [ext_resource type="Texture2D" uid="uid://da1u0rhfjt8a3" path="res://graphics/weather/drops.png" id="13_qogh7"]
+[ext_resource type="PackedScene" uid="uid://ds80ec7g7hxof" path="res://scenes/menu/pause_menu.tscn" id="14_lp2ca"]
 [ext_resource type="PackedScene" uid="uid://bipt8ibmsue4m" path="res://scenes/characters/mouse.tscn" id="15_jyre1"]
 [ext_resource type="Texture2D" uid="uid://capn581vt8q7g" path="res://graphics/icons/sprinkler.png" id="15_mq31s"]
 [ext_resource type="PackedScene" uid="uid://dg6oaylgfaiwo" path="res://scenes/ui/inventory.tscn" id="16_jyre1"]
@@ -2372,6 +2373,7 @@ z_index = -2
 tile_set = SubResource("TileSet_d4w6o")
 
 [node name="RainFloorsParticles" type="GPUParticles2D" parent="Layers" unique_id=1357239788]
+process_mode = 3
 z_index = -1
 material = SubResource("CanvasItemMaterial_mq31s")
 emitting = false
@@ -2708,9 +2710,11 @@ y_sort_enabled = true
 y_sort_enabled = true
 
 [node name="Cat" parent="Objects/Shopkeepers" unique_id=177865440 instance=ExtResource("12_mq31s")]
+process_mode = 3
 position = Vector2(132, -179)
 
 [node name="Mouse" parent="Objects/Shopkeepers" unique_id=692057752 instance=ExtResource("15_jyre1")]
+process_mode = 3
 y_sort_enabled = true
 position = Vector2(325, -102)
 
@@ -2720,6 +2724,8 @@ y_sort_enabled = true
 [node name="Overlay" type="Node2D" parent="." unique_id=1816635256]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="Overlay" unique_id=1154969611]
+
+[node name="PauseMenu" parent="Overlay" unique_id=145764824 instance=ExtResource("14_lp2ca")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Overlay" unique_id=1770389290]
 
@@ -2742,6 +2748,7 @@ color = Color(0.04780578, 0.015162113, 0.092368476, 1)
 [node name="KeyboardControlHintUI" parent="Overlay/CanvasLayer" unique_id=588791315 instance=ExtResource("17_jyre1")]
 
 [node name="RainParticles2D" type="GPUParticles2D" parent="Overlay" unique_id=703477973]
+process_mode = 3
 visible = false
 material = SubResource("CanvasItemMaterial_8iyoh")
 position = Vector2(66, -102)
@@ -2806,6 +2813,7 @@ stream = SubResource("AudioStreamMP3_jyre1")
 volume_db = -35.0
 
 [node name="BG" type="AudioStreamPlayer2D" parent="Sounds" unique_id=923040806]
+process_mode = 3
 stream = SubResource("AudioStreamMP3_lp2ca")
 volume_db = -20.0
 autoplay = true
@@ -2819,6 +2827,8 @@ autoplay = true
 [connection signal="do_action" from="Objects/Player" to="." method="_on_player_do_action"]
 [connection signal="tool_use" from="Objects/Player" to="." method="_on_player_tool_use"]
 [connection signal="update_control_ui" from="Objects/Player" to="Overlay/CanvasLayer/KeyboardControlHintUI" method="_on_player_update_control_ui"]
+[connection signal="save_progress" from="Overlay/PauseMenu" to="." method="save_level"]
+[connection signal="save_progress" from="Overlay/PauseMenu" to="Objects/Player" method="save_player"]
 [connection signal="close" from="Overlay/CanvasLayer/ShopUI" to="." method="_on_player_close_shop"]
 [connection signal="save_progress" from="Overlay/CanvasLayer/Inventory" to="." method="_on_inventory_save_progress"]
 [connection signal="save_progress" from="Overlay/CanvasLayer/Inventory" to="Objects/Player" method="_on_inventory_save_progress"]

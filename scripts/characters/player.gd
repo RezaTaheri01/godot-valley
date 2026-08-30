@@ -504,6 +504,7 @@ func save_player(save_path = null):
 		"player_level": Data.player_level,
 		"player_position": [position.x, position.y],
 		"target_highlighter": Data.target_highlighter,
+		"difficulty": Data.difficulty,
 	}
 	
 	var file
@@ -528,6 +529,7 @@ func load_player() -> void:
 	if typeof(data) != TYPE_DICTIONARY:
 		return
 
+	_load_difficulty(data)
 	_load_unlocked_styles(data)
 	_load_current_style(data)
 	_load_unlocked_machines(data)
@@ -538,6 +540,14 @@ func load_player() -> void:
 	_load_upgrades(data)
 	_load_player_position(data)
 	_load_highlight(data)
+	
+	
+func _load_difficulty(data: Dictionary) -> void:
+	if !data.has("difficulty"):
+		return
+		
+	Data.difficulty = data.difficulty
+
 	
 func _load_unlocked_styles(data: Dictionary) -> void:
 	if !data.has("unlocked_styles"):
