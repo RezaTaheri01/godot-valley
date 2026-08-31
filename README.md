@@ -83,7 +83,7 @@ Course by [Kristian Koch](https://www.udemy.com/user/christian-koch-59/)
 - [ ] Tool Upgrade System (Axe/Sword)
 - [x] Machine Limitation System [#3](https://github.com/RezaTaheri01/godot-valley/pull/3)
 - [ ] Main Menu
-- [ ] In-Game Menu
+- [x] In-Game Menu
 - [ ] HUD Improvements
 - [ ] Performance Optimization
 - [ ] Visual Feedback & Particles
