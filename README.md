@@ -87,3 +87,27 @@ Course by [Kristian Koch](https://www.udemy.com/user/christian-koch-59/)
 - [ ] HUD Improvements
 - [ ] Performance Optimization
 - [ ] Visual Feedback & Particles
+
+
+## 🎨 Asset Credits
+
+This project uses assets from the following talented creators and asset packs:
+
+### Ninja Adventure Asset Pack
+
+* **Creator:** [Pixel-boy](https://pixel-boy.itch.io/)
+* **Contributors:** [AAA](https://www.instagram.com/challenger.aaa/?hl=fr)
+* **Asset Pack:** [Ninja Adventure Asset Pack](https://pixel-boy.itch.io/ninja-adventure-asset-pack)
+
+### Sprout Lands – Basic Pack
+
+* **Creator:** [Cup Nooble](https://cupnooble.itch.io/)
+* **Asset Pack:** [Sprout Lands – Basic Pack](https://cupnooble.itch.io/sprout-lands-asset-pack)
+
+### Tiny Swords
+
+* **Creator:** [Pixel Frog](https://pixelfrog-assets.itch.io/)
+* **Asset Pack:** [Tiny Swords](https://pixelfrog-assets.itch.io/tiny-swords)
+
+> **Note:** All assets remain the property of their respective creators and are used according to their applicable licenses and terms.
+
