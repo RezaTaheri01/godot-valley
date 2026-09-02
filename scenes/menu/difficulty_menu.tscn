@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://xpsqbu8fhm1j"]
+
+[ext_resource type="Script" uid="uid://8nmq2ale3l5d" path="res://scenes/menu/scripts/difficulty_menu.gd" id="1_i1j5u"]
+[ext_resource type="Texture2D" uid="uid://kjdobi8syvai" path="res://graphics/Tiny Swords/Tiny Swords (Update 010)/UI/Banners/Carved_3Slides.png" id="1_m7xj0"]
+[ext_resource type="FontFile" uid="uid://dixbpuyvwixp8" path="res://graphics/fonts/PixeloidSans.ttf" id="3_i1j5u"]
+
+[node name="DifficultyMenu" type="Control" unique_id=1084775112]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i1j5u")
+
+[node name="Root" type="Control" parent="." unique_id=1156688644]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Root" unique_id=1432984167]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.27221105, 0.21255437, 0.17919874, 0.12156863)
+
+[node name="Background" type="TextureRect" parent="Root" unique_id=433238547]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -100.0
+offset_right = 225.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_m7xj0")
+
+[node name="CenterContainer" type="CenterContainer" parent="Root" unique_id=51471853]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -52.0
+offset_right = 50.0
+offset_bottom = 52.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ButtonPanel" type="PanelContainer" parent="Root/CenterContainer" unique_id=936578945]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Root/CenterContainer/ButtonPanel" unique_id=890123706]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Root/CenterContainer/ButtonPanel/VBoxContainer" unique_id=26778840]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Easy" type="Button" parent="Root/CenterContainer/ButtonPanel/VBoxContainer/HBoxContainer" unique_id=1558619992]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_i1j5u")
+text = "Easy"
+
+[node name="Normal" type="Button" parent="Root/CenterContainer/ButtonPanel/VBoxContainer/HBoxContainer" unique_id=2087729637]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_i1j5u")
+text = "Medium"
+
+[node name="Hard" type="Button" parent="Root/CenterContainer/ButtonPanel/VBoxContainer/HBoxContainer" unique_id=884122146]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_i1j5u")
+text = "Hard"
+
+[node name="Back" type="Button" parent="Root/CenterContainer/ButtonPanel/VBoxContainer" unique_id=838109849]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_i1j5u")
+text = "Back"
+
+[connection signal="pressed" from="Root/CenterContainer/ButtonPanel/VBoxContainer/HBoxContainer/Easy" to="." method="_on_easy_pressed"]
+[connection signal="pressed" from="Root/CenterContainer/ButtonPanel/VBoxContainer/HBoxContainer/Normal" to="." method="_on_normal_pressed"]
+[connection signal="pressed" from="Root/CenterContainer/ButtonPanel/VBoxContainer/HBoxContainer/Hard" to="." method="_on_hard_pressed"]
+[connection signal="pressed" from="Root/CenterContainer/ButtonPanel/VBoxContainer/Back" to="." method="_on_back_pressed"]

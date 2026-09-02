@@ -4,12 +4,95 @@ var player_level = 0
 var difficulty: Enum.Difficulty = Enum.Difficulty.EASY
 const TILE_SIZE = 16
 var forecast_rain: bool
+
+#region Save
 const PLAYER_SAVE_PATH := "user://player_save.json"
 const PLAYER_SAVE_PATH_BACKUP := "user://player_save_backup.json"
 const LEVEL_SAVE_PATH:= "user://level_save.json"
 const LEVEL_SAVE_PATH_BACKUP := "user://level_save_backup.json"
 const BACKUP_SAVE_INTERVAL_TIME_IN_SEC = 300
 
+const OPTIONS_SAVE_PATH := "user://settings.json"
+#endregion
+
+
+#region New Game
+func new_game(difficulty_temp: Enum.Difficulty) -> void:
+	# -------------------------
+	# Reset game state
+	# -------------------------
+	player_level = 0
+	difficulty = difficulty_temp
+	forecast_rain = false
+	target_highlighter = false
+
+	day_time = DAY_TIMES[difficulty]
+	night_time = NIGHT_TIMES[difficulty]
+	blob_spawn_time = BLOB_SPAWN_TIMES[difficulty]
+
+	# -------------------------
+	# Reset unlocks
+	# -------------------------
+	unlocked_styles.clear()
+	unlocked_styles.append(Enum.Style.STRAW)
+	unlocked_styles.append(Enum.Style.BASIC)
+
+	unlocked_machines.clear()
+	unlocked_machines.append(Enum.Machine.DELETE)
+	
+	# -------------------------
+	# Reset inventory
+	# -------------------------
+	items_amount = {
+		Enum.Difficulty.EASY: {
+			Enum.Item.WOOD: 50,
+			Enum.Item.APPLE: 50,
+			Enum.Item.FISH: 50,
+			Enum.Item.CORN: 50,
+			Enum.Item.WHEAT: 50,
+			Enum.Item.PUMPKIN: 50,
+			Enum.Item.TOMATO: 50
+		},
+		Enum.Difficulty.NORMAL: {
+			Enum.Item.WOOD: 40,
+			Enum.Item.APPLE: 40,
+			Enum.Item.FISH: 40,
+			Enum.Item.CORN: 40,
+			Enum.Item.WHEAT: 40,
+			Enum.Item.PUMPKIN: 40,
+			Enum.Item.TOMATO: 40
+		},
+		Enum.Difficulty.HARD: {
+			Enum.Item.WOOD: 30,
+			Enum.Item.APPLE: 30,
+			Enum.Item.FISH: 30,
+			Enum.Item.CORN: 30,
+			Enum.Item.WHEAT: 30,
+			Enum.Item.PUMPKIN: 30,
+			Enum.Item.TOMATO: 30
+		},
+	}
+
+	# -------------------------
+	# Delete saves
+	# -------------------------
+	_delete_save(PLAYER_SAVE_PATH)
+	_delete_save(PLAYER_SAVE_PATH_BACKUP)
+	_delete_save(LEVEL_SAVE_PATH)
+	_delete_save(LEVEL_SAVE_PATH_BACKUP)
+
+
+func _delete_save(path: String) -> void:
+	if FileAccess.file_exists(path):
+		var error := DirAccess.remove_absolute(path)
+
+		if error != OK:
+			push_error("Failed to delete save: %s" % path)
+
+#endregion
+
+
+#region Timers
 var day_time
 var night_time
 var blob_spawn_time
@@ -31,6 +114,7 @@ const BLOB_SPAWN_TIMES = {
 	Enum.Difficulty.NORMAL: 8,
 	Enum.Difficulty.HARD: 6
 }
+#endregion
 
 
 const HOUSE_COST = {
@@ -41,6 +125,7 @@ const HOUSE_COST = {
 
 func get_level_value(values: Array, level: int):
 	return values[min(level, values.size() - 1)]
+	
 
 #region Plants
 const PLANT_DATA = {

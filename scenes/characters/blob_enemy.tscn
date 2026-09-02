@@ -6,7 +6,7 @@
 [ext_resource type="Shader" uid="uid://b6nm5dtkeitqy" path="res://shaders/flash.tres" id="3_tg4bn"]
 [ext_resource type="AudioStream" uid="uid://ca7wu5nswwv0y" path="res://audio/slime.ogg" id="5_tg4bn"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kei2d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tg4bn"]
 resource_local_to_scene = true
 shader = ExtResource("3_tg4bn")
 shader_parameter/Color = Color(1, 1, 1, 1)
@@ -581,7 +581,7 @@ collision_mask = 15
 script = ExtResource("1_yb4yq")
 
 [node name="FlashSprite2D" parent="." unique_id=116580978 instance=ExtResource("2_n3vki")]
-material = SubResource("ShaderMaterial_kei2d")
+material = SubResource("ShaderMaterial_tg4bn")
 texture = ExtResource("1_281xh")
 hframes = 14
 vframes = 4
@@ -616,7 +616,7 @@ collision_mask = 65
 shape = SubResource("CircleShape2D_n3vki")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1283263465]
-volume_db = -20.0
+volume_db = -25.0
 
 [connection signal="animation_finished" from="Animation/AnimationTree" to="." method="_on_animation_tree_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
