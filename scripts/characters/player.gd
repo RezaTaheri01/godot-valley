@@ -134,6 +134,7 @@ const LIGHT_SCALE := 0.5
 
 
 func _ready() -> void:
+	Data.player = self
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	_create_player_light()
 	

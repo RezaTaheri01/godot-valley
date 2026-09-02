@@ -1,5 +1,6 @@
 extends Node
 
+var player
 var player_level = 0
 var difficulty: Enum.Difficulty = Enum.Difficulty.EASY
 const TILE_SIZE = 16
