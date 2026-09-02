@@ -9,6 +9,8 @@
 [ext_resource type="AudioStream" uid="uid://cdymyhvnjr52r" path="res://audio/hoe.wav" id="7_7vyk4"]
 [ext_resource type="AudioStream" uid="uid://c3f7txlnei6mm" path="res://audio/water.ogg" id="8_eojnx"]
 [ext_resource type="AudioStream" uid="uid://do4sqscm88cyg" path="res://audio/step.mp3" id="9_qgnko"]
+[ext_resource type="FontFile" uid="uid://dixbpuyvwixp8" path="res://graphics/fonts/PixeloidSans.ttf" id="10_2l4js"]
+[ext_resource type="Texture2D" uid="uid://cufccts2vhufa" path="res://graphics/icons/goldfish.png" id="10_7vyk4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_atpat"]
 radius = 4.0
@@ -1555,6 +1557,7 @@ limit_smoothed = true
 texture = ExtResource("2_eojnx")
 hframes = 33
 vframes = 4
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032790205]
 shape = SubResource("CapsuleShape2D_atpat")
@@ -1589,6 +1592,34 @@ parameters/FishIdleBlendSpace2D/blend_position = Vector2(0, 0)
 [node name="FishingGame" parent="." unique_id=1161393087 instance=ExtResource("4_dyp2m")]
 visible = false
 position = Vector2(40, 0)
+
+[node name="CatchedFishVisual" type="Node2D" parent="." unique_id=1260316535]
+
+[node name="CatchedFishLabel" type="Label" parent="CatchedFishVisual" unique_id=2094642111]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -27.0
+offset_top = -45.0
+offset_right = 27.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.8156733, 0, 0.18282723, 1)
+theme_override_fonts/font = ExtResource("10_2l4js")
+theme_override_font_sizes/font_size = 8
+text = "Missed!"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="CatchedFishSprite" type="Sprite2D" parent="CatchedFishVisual" unique_id=1958167292]
+visible = false
+position = Vector2(0, -24)
+texture = ExtResource("10_7vyk4")
 
 [node name="InteractRangeArea2D" type="Area2D" parent="." unique_id=283439756]
 collision_layer = 0

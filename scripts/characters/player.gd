@@ -27,7 +27,7 @@ var last_interactable
 
 @onready var move_state_machine = $Animation/AnimationTree.get("parameters/StateMachine/playback")
 @onready var tool_state_machine = $Animation/AnimationTree.get("parameters/ToolStateMachine/playback")
-
+@onready var animation_tree = $Animation/AnimationTree
 
 # ============================================================
 # Player State
@@ -70,6 +70,14 @@ var current_machine: Enum.Machine = Enum.Machine.DELETE
 var machine_index: int = 0
 var machine_count: int = Data.unlocked_machines.size()
 
+# ============================================================
+# Fishing
+# ============================================================
+
+var catched_fish_tween: Tween
+var fish_escape_tween: Tween
+@onready var catched_fish_sprite: Sprite2D = $CatchedFishVisual/CatchedFishSprite
+@onready var catched_fish_label: Label = $CatchedFishVisual/CatchedFishLabel
 
 # ============================================================
 # Signals
@@ -279,8 +287,8 @@ func get_basic_input():
 			last_interactable.interact(self)
 		else:
 			tool_state_machine.travel(Data.TOOL_STATE_ANIMATIONS[current_tool])
-			do_action.emit($Animation/AnimationTree, "parameters/OneShot/request", current_tool, position, animation_direction)
-			#$Animation/AnimationTree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+			do_action.emit(animation_tree, "parameters/OneShot/request", current_tool, position, animation_direction)
+			#animation_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		
 	if Input.is_action_just_pressed("highlighter"):
 		Data.target_highlighter = not Data.target_highlighter 
@@ -382,13 +390,13 @@ func animate():
 	if direction:
 		move_state_machine.travel("walk")
 		animation_direction = Vector2(round(direction.x), round(direction.y))
-		$Animation/AnimationTree.set("parameters/StateMachine/idle/blend_position", animation_direction)	
-		$Animation/AnimationTree.set("parameters/StateMachine/walk/blend_position", animation_direction)
-		$Animation/AnimationTree.set("parameters/FishIdleBlendSpace2D/blend_position", animation_direction)	
+		animation_tree.set("parameters/StateMachine/idle/blend_position", animation_direction)	
+		animation_tree.set("parameters/StateMachine/walk/blend_position", animation_direction)
+		animation_tree.set("parameters/FishIdleBlendSpace2D/blend_position", animation_direction)	
 		
 		# Update tools animation
 		for tool_animation in Data.TOOL_STATE_ANIMATIONS.values():
-			$Animation/AnimationTree.set("parameters/ToolStateMachine/" + tool_animation + "/blend_position", animation_direction)		
+			animation_tree.set("parameters/ToolStateMachine/" + tool_animation + "/blend_position", animation_direction)		
 	else:
 		move_state_machine.travel("idle")
 	
@@ -405,15 +413,277 @@ func _on_animation_tree_animation_finished(_anim_name: StringName) -> void:
 #region Fishing
 func start_fishing():
 	$FishingGame.reveal()
-	$Animation/AnimationTree.set("parameters/FishBlend/blend_amount", 1)
+	animation_tree.set("parameters/FishBlend/blend_amount", 1)
 	current_state = Enum.State.FISHING
 
 
-func _on_fishing_game_fish_game_finish(is_success: bool) -> void:
+func _on_fishing_game_fish_game_finish(is_success: bool, fish_type: Enum.Fish) -> void:
+	catched_fish_sprite.texture = load(Data.FISH_DATA[Data.difficulty][fish_type]["icon_texture"])
+	
 	if is_success:
+		await play_catched_fish_animation()
+		
 		Data.items_amount[Data.difficulty][Enum.Item.FISH] += 1
-	$Animation/AnimationTree.set("parameters/FishBlend/blend_amount", 0)
+	else:
+		await play_fish_escape_animation()
+
+	animation_tree.set("parameters/FishBlend/blend_amount", 0)
 	current_state = Enum.State.DEFAULT
+
+
+func play_catched_fish_animation() -> void:
+	var fish: Sprite2D = catched_fish_sprite
+
+	# Stop previous animation if another fish was caught
+	if catched_fish_tween and catched_fish_tween.is_valid():
+		catched_fish_tween.kill()
+
+	fish.show()
+
+	# Starting state
+	fish.modulate.a = 0.0
+	fish.scale = Vector2(0.4, 0.4)
+
+	# Make sure Sprite2D scales from its center
+	fish.centered = true
+
+	# --------------------------------
+	# SHOW / POP IN
+	# --------------------------------
+
+	catched_fish_tween = create_tween()
+	catched_fish_tween.set_parallel(true)
+
+	# Fade in
+	catched_fish_tween.tween_property(
+		fish,
+		"modulate:a",
+		1.0,
+		0.18
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+	# Pop from 0.4 -> 1.15
+	catched_fish_tween.tween_property(
+		fish,
+		"scale",
+		Vector2(1.15, 1.15),
+		0.28
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+	await catched_fish_tween.finished
+
+	# --------------------------------
+	# SETTLE
+	# --------------------------------
+
+	catched_fish_tween = create_tween()
+
+	catched_fish_tween.tween_property(
+		fish,
+		"scale",
+		Vector2.ONE,
+		0.12
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+	await catched_fish_tween.finished
+
+	# Keep fish visible
+	await get_tree().create_timer(0.7).timeout
+
+	# --------------------------------
+	# HIDE
+	# --------------------------------
+
+	catched_fish_tween = create_tween()
+	catched_fish_tween.set_parallel(true)
+
+	# Fade out
+	catched_fish_tween.tween_property(
+		fish,
+		"modulate:a",
+		0.0,
+		0.2
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	# Shrink
+	catched_fish_tween.tween_property(
+		fish,
+		"scale",
+		Vector2(0.7, 0.7),
+		0.2
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+
+	await catched_fish_tween.finished
+
+	fish.hide()#endregion
+
+
+func play_fish_escape_animation() -> void:
+	var fish: Sprite2D = catched_fish_sprite
+	var label: Label = catched_fish_label
+
+	# Stop previous animation
+	if fish_escape_tween and fish_escape_tween.is_valid():
+		fish_escape_tween.kill()
+
+	# Save original position
+	var original_position := fish.position
+
+	# --------------------------------
+	# PREPARE
+	# --------------------------------
+
+	fish.show()
+	label.show()
+
+	fish.modulate.a = 1.0
+	fish.scale = Vector2.ONE
+	fish.rotation = 0.0
+
+	label.modulate.a = 0.0
+	label.scale = Vector2(0.7, 0.7)
+
+	# Center label pivot
+	label.pivot_offset = label.size / 2.0
+
+	# --------------------------------
+	# FISH SHAKE
+	# --------------------------------
+
+	fish_escape_tween = create_tween()
+
+	fish_escape_tween.tween_property(
+		fish,
+		"rotation",
+		deg_to_rad(-8.0),
+		0.05
+	)
+
+	fish_escape_tween.tween_property(
+		fish,
+		"rotation",
+		deg_to_rad(8.0),
+		0.05
+	)
+
+	fish_escape_tween.tween_property(
+		fish,
+		"rotation",
+		deg_to_rad(-6.0),
+		0.05
+	)
+
+	fish_escape_tween.tween_property(
+		fish,
+		"rotation",
+		0.0,
+		0.05
+	)
+
+	await fish_escape_tween.finished
+
+	# --------------------------------
+	# ESCAPE
+	# --------------------------------
+
+	var escape_tween := create_tween()
+	escape_tween.set_parallel(true)
+
+	# Fish moves down and away
+	escape_tween.tween_property(
+		fish,
+		"position",
+		original_position + Vector2(0, 80),
+		0.3
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	# Fish shrinks
+	escape_tween.tween_property(
+		fish,
+		"scale",
+		Vector2(0.55, 0.55),
+		0.3
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	# Fish fades
+	escape_tween.tween_property(
+		fish,
+		"modulate:a",
+		0.0,
+		0.3
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	# --------------------------------
+	# LABEL POP
+	# --------------------------------
+
+	escape_tween.tween_property(
+		label,
+		"modulate:a",
+		1.0,
+		0.15
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+	escape_tween.tween_property(
+		label,
+		"scale",
+		Vector2(1.1, 1.1),
+		0.2
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+	await escape_tween.finished
+
+	# --------------------------------
+	# LABEL SETTLE
+	# --------------------------------
+
+	var settle_tween := create_tween()
+
+	settle_tween.tween_property(
+		label,
+		"scale",
+		Vector2.ONE,
+		0.1
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+	await settle_tween.finished
+
+	# Keep message visible
+	await get_tree().create_timer(0.5).timeout
+
+	# --------------------------------
+	# HIDE LABEL
+	# --------------------------------
+
+	var hide_tween := create_tween()
+	hide_tween.set_parallel(true)
+
+	hide_tween.tween_property(
+		label,
+		"modulate:a",
+		0.0,
+		0.2
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	hide_tween.tween_property(
+		label,
+		"scale",
+		Vector2(0.8, 0.8),
+		0.2
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	await hide_tween.finished
+
+	# --------------------------------
+	# RESET
+	# --------------------------------
+
+	fish.position = original_position
+	fish.rotation = 0.0
+	fish.scale = Vector2.ONE
+
+	fish.hide()
+	label.hide()
 #endregion
 
 

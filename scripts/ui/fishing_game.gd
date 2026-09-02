@@ -23,7 +23,7 @@ var catch_speed: float = 0.0                # How fast progress increases when c
 var lose_speed: float = 0.0                 # How fast progress decreases when missing
 
 # Signals
-signal fish_game_finish(is_success: bool)   # Emitted when game ends, true if caught
+signal fish_game_finish(is_success: bool, fish_type: Enum.Fish)   # Emitted when game ends, true if caught
 
 
 # ============================================================================
@@ -185,10 +185,10 @@ func _on_texture_progress_bar_value_changed(value: float) -> void:
 		# Success - fish caught!
 		hide()
 		print("Fish caught successfully!")
-		fish_game_finish.emit(true)
+		fish_game_finish.emit(true, fish_enum)
 		
 	elif value <= 0.0:
 		# Failure - fish escaped
 		hide()
 		print("Fish escaped!")
-		fish_game_finish.emit(false)
+		fish_game_finish.emit(false, fish_enum)
