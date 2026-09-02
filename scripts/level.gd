@@ -1175,34 +1175,3 @@ func _log_controller_connection(
 	print("Controller name: ", controller_name)
 	print("GUID: ", controller_guid)
 #endregion
-
-
-#region Pause Menu
-
-func _input(event):
-	# Check if the player pressed the "pause" action.
-	# Example: Escape key.
-	if event.is_action_pressed("pause") and player.current_state != Enum.State.SHOP:
-		toggle_pause()
-
-
-func toggle_pause():
-	# If the game is currently paused...
-	if get_tree().paused:
-		
-		# Resume the game.
-		get_tree().paused = false
-		
-		# Play the pause menu hide animation.
-		pause_menu.hide_menu()
-	
-	# If the game is currently running...
-	else:
-		
-		# Pause the game.
-		get_tree().paused = true
-		
-		# Play the pause menu show animation.
-		pause_menu.show_menu()
-
-#endregion
