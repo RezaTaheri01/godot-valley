@@ -1550,7 +1550,7 @@ collision_mask = 149
 script = ExtResource("2_76oj4")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=622558378]
-zoom = Vector2(3, 3)
+zoom = Vector2(4, 4)
 limit_smoothed = true
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2114625821]
