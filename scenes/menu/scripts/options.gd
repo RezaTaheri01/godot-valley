@@ -8,6 +8,7 @@ extends MenuBase
 @onready var master_volume_slider: HSlider = $Panel/MarginContainer/VBoxContainer/MasterVolumeRow/MasterVolumeSlider
 @onready var display_size_option_button: OptionButton = $Panel/MarginContainer/VBoxContainer/DisplaySizeRow/DisplaySizeOptionButton
 @onready var v_sync_check_box: CheckBox = $Panel/MarginContainer/VBoxContainer/VSyncRow/VSyncCheckBox
+@onready var touch_input_check_box: CheckBox = $Panel/MarginContainer/VBoxContainer/TouchInput/TouchInputCheckBox
 @onready var display_mode_option_button: OptionButton = $Panel/MarginContainer/VBoxContainer/DisplayModeRow/DisplayModeOptionButton
 @onready var first_button = $Panel/MarginContainer/VBoxContainer/MasterVolumeRow/MasterVolumeSlider
 
@@ -154,7 +155,8 @@ func save_settings() -> void:
 		"master_volume": master_volume_slider.value,
 		"display_size": display_size_option_button.selected,
 		"vsync": v_sync_check_box.button_pressed,
-		"display_mode": display_mode_option_button.selected
+		"display_mode": display_mode_option_button.selected,
+		"touch_input": touch_input_check_box.button_pressed,
 	}
 
 	var file := FileAccess.open(
@@ -170,17 +172,17 @@ func save_settings() -> void:
 # ============================================================
 
 func load_settings() -> void:
+	var settings = {}
+
 
 	# Check if a settings file exists.
-	if not FileAccess.file_exists(Data.OPTIONS_SAVE_PATH):
-		return
+	if  FileAccess.file_exists(Data.OPTIONS_SAVE_PATH):
+		var file := FileAccess.open(
+			Data.OPTIONS_SAVE_PATH,
+			FileAccess.READ
+		)
 
-	var file := FileAccess.open(
-		Data.OPTIONS_SAVE_PATH,
-		FileAccess.READ
-	)
-
-	var settings = file.get_var()
+		settings = file.get_var()
 
 
 	# --------------------------------------------------------
@@ -230,7 +232,7 @@ func load_settings() -> void:
 		"vsync",
 		true
 	)
-
+	
 	v_sync_check_box.button_pressed = vsync_enabled
 
 	if vsync_enabled:
@@ -242,6 +244,19 @@ func load_settings() -> void:
 			DisplayServer.VSYNC_DISABLED
 		)
 
+
+	# --------------------------------------------------------
+	# Touch Input
+	# --------------------------------------------------------
+
+	var touch_input_enabled: bool = settings.get(
+		"touch_input",
+		false
+	)
+
+	touch_input_check_box.button_pressed = touch_input_enabled
+	
+	Data.touch_input = touch_input_enabled
 
 	# --------------------------------------------------------
 	# DISPLAY MODE
@@ -293,3 +308,9 @@ func apply_display_mode(index: int) -> void:
 			DisplayServer.window_set_mode(
 				DisplayServer.WINDOW_MODE_FULLSCREEN
 			)
+
+
+func _on_touch_input_check_box_toggled(_toggled_on: bool) -> void:
+	Data.touch_input = !Data.touch_input
+	
+	save_settings()

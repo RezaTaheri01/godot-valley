@@ -5,6 +5,7 @@ var player_level = 0
 var difficulty: Enum.Difficulty = Enum.Difficulty.EASY
 const TILE_SIZE = 16
 var forecast_rain: bool
+var touch_input = false
 
 #region Save
 const PLAYER_SAVE_PATH := "user://player_save.json"
@@ -789,6 +790,17 @@ const KEYBOARD_CONTROLLER = {
 	Enum.Keyboard.CHANGE_MACHINE : preload("res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Gamepad/ButtonRB.png"),
 	Enum.Keyboard.ACTION : preload("res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Gamepad/ButtonDown.png"),
 	Enum.Keyboard.CHANGE_DAY : preload("res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Gamepad/ButtonPlusUp.png"),
+}
+
+const KEYBOARD_KEYS_TO_ACTION = {
+	Enum.Keyboard.CHANGE_HIGHLIGHT : "highlighter",
+	Enum.Keyboard.CHANGE_MODE : "build",
+	Enum.Keyboard.CHANGE_TOOL : "tool_forward",
+	Enum.Keyboard.CHANGE_SEED : "seed_forward",
+	Enum.Keyboard.CHANGE_STYLE : "style_toggle",
+	Enum.Keyboard.CHANGE_MACHINE : "tool_forward",
+	Enum.Keyboard.ACTION : "action",
+	Enum.Keyboard.CHANGE_DAY :  "day_change"
 }
 
 const MODE_TEXTURE = {
