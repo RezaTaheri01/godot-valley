@@ -6,6 +6,9 @@ var difficulty: Enum.Difficulty = Enum.Difficulty.EASY
 const TILE_SIZE = 16
 var forecast_rain: bool
 var touch_input = false
+const MIN_ZOOM = Vector2(3.0, 3.0)
+const MAX_ZOOM = Vector2(6.0, 6.0)
+
 
 #region Save
 const PLAYER_SAVE_PATH := "user://player_save.json"

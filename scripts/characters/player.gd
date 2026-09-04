@@ -22,6 +22,13 @@ var last_interactable
 
 @onready var joystick = %VirtualJoystick
 
+
+# ============================================================
+# Camera
+# ============================================================
+
+@onready var camera: Camera2D = $Camera2D
+
 # ============================================================
 # Animation
 # ============================================================
@@ -325,6 +332,24 @@ func get_basic_input():
 		update_control_ui.emit(Enum.Keyboard.CHANGE_HIGHLIGHT, 0)
 		update_control_ui.emit(Enum.Keyboard.CHANGE_MACHINE, current_machine, Enum.State.BUILDING)
 		
+	if Input.is_action_just_pressed("camera_zoom_in"):
+		var zoom = camera.zoom
+		zoom += Vector2.ONE
+		camera.zoom = zoom.clamp(Data.MIN_ZOOM, Data.MAX_ZOOM)
+
+	if Input.is_action_just_pressed("camera_zoom_out"):
+		var zoom = camera.zoom
+		zoom -= Vector2.ONE
+		camera.zoom = zoom.clamp(Data.MIN_ZOOM, Data.MAX_ZOOM)
+
+		
+func _input(event):
+	if event is InputEventMagnifyGesture:
+		camera.zoom *= event.factor
+		camera.zoom = camera.zoom.clamp(
+			Data.MIN_ZOOM,
+			Data.MAX_ZOOM
+		)
 		
 func get_fishing_input():
 	if Input.is_action_just_pressed("action"):
@@ -785,6 +810,7 @@ func save_player(save_path = null):
 		"player_position": [position.x, position.y],
 		"target_highlighter": Data.target_highlighter,
 		"difficulty": Data.difficulty,
+		"camera_zoom": camera.zoom[0]
 	}
 	
 	var file
@@ -809,6 +835,7 @@ func load_player() -> void:
 	if typeof(data) != TYPE_DICTIONARY:
 		return
 
+	_load_camera_zoom(data)
 	_load_difficulty(data)
 	_load_unlocked_styles(data)
 	_load_current_style(data)
@@ -821,6 +848,13 @@ func load_player() -> void:
 	_load_player_position(data)
 	_load_highlight(data)
 	
+	
+func  _load_camera_zoom(data: Dictionary) -> void:
+	if !data.has("camera_zoom"):
+		return
+		
+	camera.zoom = Vector2(data.camera_zoom, data.camera_zoom)
+		
 	
 func _load_difficulty(data: Dictionary) -> void:
 	if !data.has("difficulty"):
