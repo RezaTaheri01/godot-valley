@@ -37,6 +37,10 @@ window/size/viewport_height=720
 
 project/assembly_name="GodewValley"
 
+[editor_plugins]
+
+enabled=PackedStringArray()
+
 [file_customization]
 
 folder_colors={

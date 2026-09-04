@@ -5,6 +5,16 @@ extends Control
 var shop_button_scene = preload("res://scenes/ui/shop_button.tscn")
 signal close
 
+func _ready() -> void:
+	$TouchButton.move_to_front()
+	
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		print("TOUCH:", event.position)
+
+	if event is InputEventMouseButton:
+		print("MOUSE:", event.position)
+
 func reveal(shop_type: Enum.Shop = Enum.Shop.HAT):
 	for child in $GridContainer.get_children():
 		child.queue_free()
@@ -32,3 +42,7 @@ func reveal(shop_type: Enum.Shop = Enum.Shop.HAT):
 func remove_items():
 	for child in $GridContainer.get_children():
 		child.queue_free()
+
+
+func _on_touch_button_pressed() -> void:
+	close.emit()

@@ -3,6 +3,11 @@ extends CanvasLayer
 @warning_ignore("unused_signal")
 signal save_progress
 
+
+func _ready() -> void:
+	if DisplayServer.is_touchscreen_available():
+		$Control/TouchScreenButton.visible = true
+
 func hide_menu():
 	$Root.hide_menu()
 	
@@ -15,10 +20,13 @@ func show_menu():
 #region Pause Menu
 
 func _input(event):
-	# Check if the player pressed the "pause" action.
-	# Example: Escape key.
-	if event.is_action_pressed("pause") and Data.player.current_state != Enum.State.SHOP:
+	# Check if the player pressed the "pause" action.	
+	if Data.player.current_state == Enum.State.SHOP:
+		return
+	
+	if event.is_action_pressed("pause"):
 		toggle_pause()
+
 
 
 func toggle_pause():
@@ -41,3 +49,11 @@ func toggle_pause():
 		show_menu()
 
 #endregion
+
+
+func open_menu() -> void:
+	toggle_pause()
+
+
+func _on_touch_screen_button_pressed() -> void:
+	toggle_pause()

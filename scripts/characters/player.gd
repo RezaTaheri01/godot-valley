@@ -20,6 +20,7 @@ var can_move: bool = true
 var can_interact: bool = false
 var last_interactable
 
+@onready var joystick = %VirtualJoystick
 
 # ============================================================
 # Animation
@@ -241,7 +242,15 @@ func _handle_shop_state() -> void:
 
 func move() -> void:
 	# Read movement input.
-	direction = Input.get_vector("left", "right", "up", "down")
+	if joystick.visible != Data.touch_input:
+		joystick.visible = !joystick.visible
+		
+	var joystick_direction = joystick.get_value()
+
+	if joystick_direction != Vector2.ZERO:
+		direction = joystick_direction
+	else:
+		direction = Input.get_vector("left", "right", "up", "down")
 
 	# Apply movement velocity.
 	velocity = direction * speed

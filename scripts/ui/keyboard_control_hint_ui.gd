@@ -27,6 +27,8 @@ func _create_key_hints() -> void:
 
 	for key in Enum.Keyboard.values():
 		var key_hint = KEY_HINT_SCENE.instantiate()
+		if DisplayServer.is_touchscreen_available():
+			key_hint.custom_minimum_size = Vector2(125, 35)
 		var key_icon = keys[key]
 		var item_icon = Data.KEYBOARD_TO_ICONS[key][0]
 
