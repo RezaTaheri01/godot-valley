@@ -12,5 +12,6 @@ func _process(_delta: float) -> void:
 func add(child: PanelContainer):
 	$MarginContainer/ScrollContainer/VBoxContainer.add_child(child)
 
-func hide_show_ui():
+func hide_show_ui() -> bool:
 	$MarginContainer.visible = not $MarginContainer.visible
+	return $MarginContainer.visible

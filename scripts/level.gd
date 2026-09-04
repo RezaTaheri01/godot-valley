@@ -104,6 +104,7 @@ var machine_cells_json
 # ============================================================
 
 var planted_cells: Array[Vector2i]
+var plant_info_visible: bool = true
 
 # ============================================================
 # Soil Cells
@@ -624,7 +625,7 @@ func _hit_nearby_objects(
 
 # Toggles the plant information panel.
 func _on_player_diagnose() -> void:
-	plant_info_control.hide_show_ui()
+	plant_info_visible = plant_info_control.hide_show_ui()
 #endregion
 
 
@@ -838,6 +839,7 @@ func save_level(save_path = null):
 		"machine_cells_json": machine_cells_json,
 		"plants_data": _get_plants_data(),
 		"weather": [raining, Data.forecast_rain],
+		"plant_info_visible": plant_info_visible,
 	}
 	
 	var file
@@ -901,6 +903,7 @@ func load_level() -> void:
 	_load_tree_state(data)
 	_load_machine_cells(data)
 	_load_plants_data(data)
+	_load_plants_info_visibility(data)
 	_load_weather(data)
 	
 			
@@ -980,6 +983,17 @@ func _load_plants_data(data: Dictionary) -> void:
 		
 		_plant_seed_from_load(coord, seed_enum, age, death_count)
 
+
+func _load_plants_info_visibility(data: Dictionary) -> void:
+	if not data.has("plant_info_visible"):
+		return
+		
+	plant_info_visible = data.plant_info_visible
+	
+	# plant info is visible by defualt
+	if not plant_info_visible:
+		_on_player_diagnose()	
+	
 
 func _load_weather(data: Dictionary) -> void:
 	if not data.has("weather"):
