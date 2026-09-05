@@ -1,5 +1,8 @@
 extends Control
 
+# Manages the tool and seed selection UI, including creating icons,
+# revealing the appropriate selection bar, and highlighting the active item.
+
 @onready var tool_container: HBoxContainer = $ToolContainer
 @onready var seed_container: HBoxContainer = $SeedContainer
 

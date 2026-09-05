@@ -14,11 +14,13 @@
 [ext_resource type="PackedScene" uid="uid://bfjaiku70hbc8" path="res://scenes/levels/house.tscn" id="12_8iyoh"]
 [ext_resource type="PackedScene" uid="uid://bu6p00q23wr75" path="res://scenes/characters/cat.tscn" id="12_mq31s"]
 [ext_resource type="Texture2D" uid="uid://da1u0rhfjt8a3" path="res://graphics/weather/drops.png" id="13_qogh7"]
+[ext_resource type="PackedScene" uid="uid://ds80ec7g7hxof" path="res://scenes/menu/pause_menu.tscn" id="14_lp2ca"]
 [ext_resource type="PackedScene" uid="uid://bipt8ibmsue4m" path="res://scenes/characters/mouse.tscn" id="15_jyre1"]
 [ext_resource type="Texture2D" uid="uid://capn581vt8q7g" path="res://graphics/icons/sprinkler.png" id="15_mq31s"]
 [ext_resource type="PackedScene" uid="uid://dg6oaylgfaiwo" path="res://scenes/ui/inventory.tscn" id="16_jyre1"]
 [ext_resource type="PackedScene" uid="uid://tqv0e2o3f1h1" path="res://scenes/ui/shop_ui.tscn" id="16_qhnmj"]
 [ext_resource type="PackedScene" uid="uid://4t651cjey82n" path="res://scenes/ui/keyboard_control_hint_ui.tscn" id="17_jyre1"]
+[ext_resource type="PackedScene" uid="uid://bqboa0mkgrxte" path="res://scenes/ui/virtual_joystick.tscn" id="19_4ab0e"]
 
 [sub_resource type="Gradient" id="Gradient_rmjfq"]
 offsets = PackedFloat32Array(0, 0.21830986, 0.42488262, 1)
@@ -2372,6 +2374,7 @@ z_index = -2
 tile_set = SubResource("TileSet_d4w6o")
 
 [node name="RainFloorsParticles" type="GPUParticles2D" parent="Layers" unique_id=1357239788]
+process_mode = 3
 z_index = -1
 material = SubResource("CanvasItemMaterial_mq31s")
 emitting = false
@@ -2454,7 +2457,7 @@ position = Vector2(-44, -156)
 position = Vector2(-316, 178)
 
 [node name="tree21" parent="Objects/Trees" unique_id=637452369 instance=ExtResource("9_7pb6i")]
-position = Vector2(-316, 178)
+position = Vector2(200, 108)
 
 [node name="tree22" parent="Objects/Trees" unique_id=2022987018 instance=ExtResource("9_7pb6i")]
 position = Vector2(-328, -296)
@@ -2484,6 +2487,7 @@ position = Vector2(-328, -89)
 y_sort_enabled = true
 
 [node name="Decorations" type="Node2D" parent="Objects" unique_id=1154521367]
+y_sort_enabled = true
 
 [node name="SimpleObject" parent="Objects/Decorations" unique_id=1529564000 instance=ExtResource("10_rmjfq")]
 position = Vector2(78, 29)
@@ -2707,19 +2711,24 @@ y_sort_enabled = true
 y_sort_enabled = true
 
 [node name="Cat" parent="Objects/Shopkeepers" unique_id=177865440 instance=ExtResource("12_mq31s")]
+process_mode = 3
 position = Vector2(132, -179)
 
 [node name="Mouse" parent="Objects/Shopkeepers" unique_id=692057752 instance=ExtResource("15_jyre1")]
+process_mode = 3
 y_sort_enabled = true
 position = Vector2(325, -102)
+
+[node name="Plants" type="Node2D" parent="Objects" unique_id=930776178]
+y_sort_enabled = true
 
 [node name="Overlay" type="Node2D" parent="." unique_id=1816635256]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="Overlay" unique_id=1154969611]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Overlay" unique_id=1770389290]
+[node name="PauseMenu" parent="Overlay" unique_id=145764824 instance=ExtResource("14_lp2ca")]
 
-[node name="PlantInfoControl" parent="Overlay/CanvasLayer" unique_id=627218757 instance=ExtResource("11_7pb6i")]
+[node name="CanvasLayer" type="CanvasLayer" parent="Overlay" unique_id=1770389290]
 
 [node name="DayTransitionLayer" type="ColorRect" parent="Overlay/CanvasLayer" unique_id=1652177625]
 z_index = 10
@@ -2729,15 +2738,38 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.04780578, 0.015162113, 0.092368476, 1)
 
-[node name="ShopUI" parent="Overlay/CanvasLayer" unique_id=1397887581 instance=ExtResource("16_qhnmj")]
-
 [node name="Inventory" parent="Overlay/CanvasLayer" unique_id=1204295102 instance=ExtResource("16_jyre1")]
+mouse_filter = 2
+
+[node name="PlantInfoControl" parent="Overlay/CanvasLayer" unique_id=627218757 instance=ExtResource("11_7pb6i")]
+mouse_filter = 2
+
+[node name="ShopUI" parent="Overlay/CanvasLayer" unique_id=1397887581 instance=ExtResource("16_qhnmj")]
+mouse_filter = 2
 
 [node name="KeyboardControlHintUI" parent="Overlay/CanvasLayer" unique_id=588791315 instance=ExtResource("17_jyre1")]
 
+[node name="VirtualJoystick" parent="Overlay/CanvasLayer" unique_id=16808489 instance=ExtResource("19_4ab0e")]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 2
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 185.0
+offset_top = -137.0
+offset_right = 185.0
+offset_bottom = -137.0
+grow_horizontal = 1
+grow_vertical = 0
+
 [node name="RainParticles2D" type="GPUParticles2D" parent="Overlay" unique_id=703477973]
+process_mode = 3
+visible = false
 material = SubResource("CanvasItemMaterial_8iyoh")
 position = Vector2(66, -102)
 emitting = false
@@ -2762,6 +2794,10 @@ autostart = true
 
 [node name="BlobTimer" type="Timer" parent="Timers" unique_id=1280653253]
 wait_time = 10.0
+autostart = true
+
+[node name="AutoSaveTimer" type="Timer" parent="Timers" unique_id=685049189]
+wait_time = 300.0
 autostart = true
 
 [node name="BlobSpawnPositions" type="Node2D" parent="." unique_id=853621794]
@@ -2797,6 +2833,7 @@ stream = SubResource("AudioStreamMP3_jyre1")
 volume_db = -35.0
 
 [node name="BG" type="AudioStreamPlayer2D" parent="Sounds" unique_id=923040806]
+process_mode = 3
 stream = SubResource("AudioStreamMP3_lp2ca")
 volume_db = -20.0
 autoplay = true
@@ -2810,5 +2847,10 @@ autoplay = true
 [connection signal="do_action" from="Objects/Player" to="." method="_on_player_do_action"]
 [connection signal="tool_use" from="Objects/Player" to="." method="_on_player_tool_use"]
 [connection signal="update_control_ui" from="Objects/Player" to="Overlay/CanvasLayer/KeyboardControlHintUI" method="_on_player_update_control_ui"]
+[connection signal="save_progress" from="Overlay/PauseMenu" to="." method="save_level"]
+[connection signal="save_progress" from="Overlay/PauseMenu" to="Objects/Player" method="save_player"]
+[connection signal="save_progress" from="Overlay/CanvasLayer/Inventory" to="." method="_on_inventory_save_progress"]
+[connection signal="save_progress" from="Overlay/CanvasLayer/Inventory" to="Objects/Player" method="_on_inventory_save_progress"]
 [connection signal="close" from="Overlay/CanvasLayer/ShopUI" to="." method="_on_player_close_shop"]
 [connection signal="timeout" from="Timers/BlobTimer" to="." method="_on_blob_timer_timeout"]
+[connection signal="timeout" from="Timers/AutoSaveTimer" to="." method="_on_auto_save_timer_timeout"]

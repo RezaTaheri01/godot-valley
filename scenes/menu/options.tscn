@@ -1,0 +1,165 @@
+[gd_scene format=3 uid="uid://davcnjtsqglmc"]
+
+[ext_resource type="Script" uid="uid://4hu4ghciklrt" path="res://scenes/menu/scripts/options.gd" id="1_iyjud"]
+[ext_resource type="Texture2D" uid="uid://bvqndhpe3lk3b" path="res://graphics/Tiny Swords/Tiny Swords (Update 010)/UI/Banners/Carved_9Slides.png" id="1_w0a33"]
+[ext_resource type="FontFile" uid="uid://dixbpuyvwixp8" path="res://graphics/fonts/PixeloidSans.ttf" id="3_ubx11"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iyjud"]
+
+[node name="OptionsMenu" type="Control" unique_id=578370250]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iyjud")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=86682480]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_w0a33")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=796690265]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_iyjud")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1789353180]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=524787623]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="Title" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=1098926121]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("3_ubx11")
+theme_override_font_sizes/font_size = 36
+text = "Options"
+
+[node name="MasterVolumeRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1566824693]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="MasterVolumeLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/MasterVolumeRow" unique_id=526758189]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ubx11")
+text = "Master Volume"
+
+[node name="MasterVolumeSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/MasterVolumeRow" unique_id=1705334891]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+value = 100.0
+
+[node name="DisplaySizeRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=266574752]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="DisplaySizeLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/DisplaySizeRow" unique_id=296669763]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ubx11")
+text = "Display Size"
+
+[node name="DisplaySizeOptionButton" type="OptionButton" parent="Panel/MarginContainer/VBoxContainer/DisplaySizeRow" unique_id=2019708427]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ubx11")
+selected = 0
+item_count = 4
+popup/item_0/text = "1280 x 720"
+popup/item_0/id = 0
+popup/item_1/text = "1600 x 900"
+popup/item_1/id = 1
+popup/item_2/text = "1920 x 1080"
+popup/item_2/id = 2
+popup/item_3/text = "2560 x 1440"
+popup/item_3/id = 3
+
+[node name="VSyncRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1208521145]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="VSyncLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/VSyncRow" unique_id=182959210]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ubx11")
+text = "Vsync "
+
+[node name="VSyncCheckBox" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/VSyncRow" unique_id=419936942]
+layout_mode = 2
+
+[node name="TouchInput" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=626212125]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="TouchInputLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TouchInput" unique_id=189571369]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ubx11")
+text = "Touch Input"
+
+[node name="TouchInputCheckBox" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/TouchInput" unique_id=1796420807]
+layout_mode = 2
+
+[node name="DisplayModeRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=2124957496]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="DisplayModeLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/DisplayModeRow" unique_id=211857018]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ubx11")
+text = "Display Size"
+
+[node name="DisplayModeOptionButton" type="OptionButton" parent="Panel/MarginContainer/VBoxContainer/DisplayModeRow" unique_id=186573298]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ubx11")
+selected = 0
+item_count = 3
+popup/item_0/text = "Windowed"
+popup/item_0/id = 0
+popup/item_1/text = "Borderless"
+popup/item_1/id = 1
+popup/item_2/text = "Fullscreen"
+popup/item_2/id = 2
+
+[node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=1134272666]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("3_ubx11")
+text = "back
+"
+
+[connection signal="drag_ended" from="Panel/MarginContainer/VBoxContainer/MasterVolumeRow/MasterVolumeSlider" to="." method="_on_master_volume_slider_drag_ended"]
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/MasterVolumeRow/MasterVolumeSlider" to="." method="_on_master_volume_slider_value_changed"]
+[connection signal="item_selected" from="Panel/MarginContainer/VBoxContainer/DisplaySizeRow/DisplaySizeOptionButton" to="." method="_on_display_mode_option_button_item_selected"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/VSyncRow/VSyncCheckBox" to="." method="_on_v_sync_check_box_toggled"]
+[connection signal="toggled" from="Panel/MarginContainer/VBoxContainer/TouchInput/TouchInputCheckBox" to="." method="_on_touch_input_check_box_toggled"]
+[connection signal="item_selected" from="Panel/MarginContainer/VBoxContainer/DisplayModeRow/DisplayModeOptionButton" to="." method="_on_display_mode_option_button_item_selected"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]

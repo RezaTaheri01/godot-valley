@@ -1,0 +1,150 @@
+[gd_scene format=3 uid="uid://ds80ec7g7hxof"]
+
+[ext_resource type="Script" uid="uid://bah4yevak0ui4" path="res://scenes/menu/scripts/pause_menu_show_hide.gd" id="1_mb26x"]
+[ext_resource type="Script" uid="uid://piih453d0nxd" path="res://scenes/menu/scripts/pause_menu.gd" id="1_xtxec"]
+[ext_resource type="Texture2D" uid="uid://bvxx14pa5cli7" path="res://graphics/Tiny Swords/Tiny Swords (Update 010)/UI/Banners/Banner_Vertical.png" id="2_ux7g8"]
+[ext_resource type="FontFile" uid="uid://dixbpuyvwixp8" path="res://graphics/fonts/PixeloidSans.ttf" id="3_2yk66"]
+[ext_resource type="PackedScene" uid="uid://davcnjtsqglmc" path="res://scenes/menu/options.tscn" id="3_xtxec"]
+[ext_resource type="PackedScene" uid="uid://xpsqbu8fhm1j" path="res://scenes/menu/difficulty_menu.tscn" id="4_msl3b"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=948369099]
+process_mode = 3
+layer = 10
+script = ExtResource("1_mb26x")
+
+[node name="Root" type="Control" parent="." unique_id=1444136439]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xtxec")
+
+[node name="ColorRect" type="ColorRect" parent="Root" unique_id=617738955]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.27221105, 0.21255437, 0.17919874, 0.12156863)
+
+[node name="Background" type="TextureRect" parent="Root" unique_id=798165665]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_ux7g8")
+
+[node name="CenterContainer" type="CenterContainer" parent="Root" unique_id=1464350103]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -52.0
+offset_right = 50.0
+offset_bottom = 52.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ButtonPanel" type="PanelContainer" parent="Root/CenterContainer" unique_id=16967387]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Root/CenterContainer/ButtonPanel" unique_id=2047567112]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ResumeButton" type="Button" parent="Root/CenterContainer/ButtonPanel/VBoxContainer" unique_id=160144905]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2yk66")
+text = "Resume"
+
+[node name="NewGameButton" type="Button" parent="Root/CenterContainer/ButtonPanel/VBoxContainer" unique_id=60668890]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2yk66")
+text = "New Game"
+
+[node name="OptionsButton" type="Button" parent="Root/CenterContainer/ButtonPanel/VBoxContainer" unique_id=1502034475]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2yk66")
+text = "Options"
+
+[node name="MainMenuButton" type="Button" parent="Root/CenterContainer/ButtonPanel/VBoxContainer" unique_id=1826111901]
+visible = false
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2yk66")
+text = "Main Menu"
+
+[node name="QuitButton" type="Button" parent="Root/CenterContainer/ButtonPanel/VBoxContainer" unique_id=1692599058]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("3_2yk66")
+text = "Quit"
+
+[node name="OptionsMenu" parent="Root" unique_id=578370250 instance=ExtResource("3_xtxec")]
+visible = false
+layout_mode = 1
+
+[node name="DifficultyMenu" parent="Root" unique_id=1084775112 instance=ExtResource("4_msl3b")]
+visible = false
+layout_mode = 1
+
+[node name="Control" type="Control" parent="." unique_id=1329003692]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -74.0
+offset_top = 8.0
+offset_right = -34.0
+offset_bottom = 48.0
+grow_horizontal = 0
+
+[node name="TouchScreenButton" type="Button" parent="Control" unique_id=1039466025]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -39.0
+offset_top = -15.0
+offset_right = 36.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Menu"
+
+[connection signal="pressed" from="Root/CenterContainer/ButtonPanel/VBoxContainer/ResumeButton" to="Root" method="_on_resume_button_pressed"]
+[connection signal="pressed" from="Root/CenterContainer/ButtonPanel/VBoxContainer/NewGameButton" to="Root" method="_on_new_game_button_pressed"]
+[connection signal="pressed" from="Root/CenterContainer/ButtonPanel/VBoxContainer/OptionsButton" to="Root" method="_on_options_button_pressed"]
+[connection signal="pressed" from="Root/CenterContainer/ButtonPanel/VBoxContainer/QuitButton" to="Root" method="_on_quit_button_pressed"]
+[connection signal="pause_menu_foucs" from="Root/OptionsMenu" to="Root" method="set_pause_buttons_focus"]
+[connection signal="difficulty" from="Root/DifficultyMenu" to="Root" method="_on_difficulty_menu_difficulty"]
+[connection signal="pause_menu_foucs" from="Root/DifficultyMenu" to="Root" method="set_pause_buttons_focus"]
+[connection signal="pressed" from="Control/TouchScreenButton" to="." method="_on_touch_screen_button_pressed"]

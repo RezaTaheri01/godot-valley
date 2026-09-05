@@ -6,51 +6,48 @@
 [ext_resource type="Texture2D" uid="uid://pvdbd5ebc2xt" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Gamepad/ButtonPlusRight.png" id="4_01cku"]
 
 [node name="PlantInfoContainer" type="Control" unique_id=627218757]
+z_index = -10
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 20.0
-offset_right = -1280.0
-offset_bottom = -700.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gwqxr")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1851965530]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 200.0
-offset_bottom = 18.0
+offset_top = 25.0
+offset_right = 140.0
+offset_bottom = -245.0
 grow_vertical = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 
-[node name="VScrollBar" type="VScrollBar" parent="MarginContainer" unique_id=1448461005]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1477195999]
 z_index = 10
 layout_mode = 2
+horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VScrollBar" unique_id=230267119]
-layout_mode = 1
-offset_left = 15.0
-offset_top = 30.0
-offset_right = 117.0
-offset_bottom = 1139.0
-
-[node name="PlantInfo" parent="MarginContainer/VScrollBar/VBoxContainer" unique_id=804374826 instance=ExtResource("1_b2h05")]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=230267119]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlantInfo" parent="MarginContainer/ScrollContainer/VBoxContainer" unique_id=804374826 instance=ExtResource("1_b2h05")]
+visible = false
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+mouse_filter = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=1487930350]
 layout_mode = 0
 offset_left = 40.0
-offset_top = -1.0
+offset_top = 14.0
 offset_right = 104.0
-offset_bottom = 29.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_bottom = 44.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
@@ -65,3 +62,14 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("4_01cku")
 stretch_mode = 5
+
+[node name="TouchButton" type="Button" parent="." unique_id=1762507143]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(70, 30)
+layout_mode = 0
+offset_left = 36.0
+offset_top = 15.0
+offset_right = 106.0
+offset_bottom = 45.0
+
+[connection signal="pressed" from="TouchButton" to="." method="hide_show_ui"]
