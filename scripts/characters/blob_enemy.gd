@@ -29,10 +29,10 @@ var animation_direction: Vector2 = Vector2.DOWN
 # ============================================================
 
 # Current health.
-var blob_health: int = Data.BLOB_ENEMY_HEALTH[Data.difficulty]
+var blob_health: float = Data.BLOB_ENEMY_HEALTH[Data.difficulty]
 
 # Damage dealt to the player.
-var blob_damage: int = Data.BLOB_DAMAGE[Data.difficulty]
+var blob_damage: float = Data.BLOB_DAMAGE[Data.difficulty]
 
 # Prevents updates after death.
 var is_dead: bool = false

@@ -583,9 +583,9 @@ const COLLISION_SIZES := [2, 5, 8, 11, 12, 15, 16, 17]
 
 #region Blob
 const BLOB_ENEMY_HEALTH = {
-	Enum.Difficulty.EASY: 3,
-	Enum.Difficulty.NORMAL: 4,
-	Enum.Difficulty.HARD: 5,
+	Enum.Difficulty.EASY: 3.0,
+	Enum.Difficulty.NORMAL: 4.0,
+	Enum.Difficulty.HARD: 4.0,
 }
 const BLOB_SPEED = {
 	Enum.Difficulty.EASY: 26,
