@@ -133,6 +133,33 @@ func get_level_value(values: Array, level: int):
 	
 
 #region Plants
+const PLANT_HARVEST_AMOUNT = {
+	Enum.Seed.TOMATO: {
+		Enum.Difficulty.EASY: [3, 4],
+		Enum.Difficulty.NORMAL: [3, 4],
+		Enum.Difficulty.HARD: [2, 3],
+	},
+
+	Enum.Seed.CORN: {
+		Enum.Difficulty.EASY: [3, 4],
+		Enum.Difficulty.NORMAL: [3, 4],
+		Enum.Difficulty.HARD: [2, 3],
+	},
+
+	Enum.Seed.PUMPKIN: {
+		Enum.Difficulty.EASY: [4, 6],
+		Enum.Difficulty.NORMAL: [3, 5],
+		Enum.Difficulty.HARD: [3, 4],
+	},
+
+	Enum.Seed.WHEAT: {
+		Enum.Difficulty.EASY: [3, 5],
+		Enum.Difficulty.NORMAL: [3, 4],
+		Enum.Difficulty.HARD: [2, 4],
+	}
+}
+
+
 const PLANT_DATA = {
 	Enum.Difficulty.EASY: {
 		Enum.Seed.TOMATO: {
@@ -156,7 +183,7 @@ const PLANT_DATA = {
 			'icon_texture': "res://graphics/icons/pumpkin.png",
 			'name':'Pumpkin',
 			'h_frames': 3,
-			'grow_speed': 0.25,
+			'grow_speed': 0.4,
 			'death_max': 3,
 			'reward': Enum.Item.PUMPKIN},
 		Enum.Seed.WHEAT: {
@@ -190,7 +217,7 @@ const PLANT_DATA = {
 			'icon_texture': "res://graphics/icons/pumpkin.png",
 			'name':'Pumpkin',
 			'h_frames': 3,
-			'grow_speed': 0.22,
+			'grow_speed': 0.35,
 			'death_max': 3,
 			'reward': Enum.Item.PUMPKIN},
 		Enum.Seed.WHEAT: {
@@ -224,7 +251,7 @@ const PLANT_DATA = {
 			'icon_texture': "res://graphics/icons/pumpkin.png",
 			'name':'Pumpkin',
 			'h_frames': 3,
-			'grow_speed': 0.2,
+			'grow_speed': 0.3,
 			'death_max': 3,
 			'reward': Enum.Item.PUMPKIN},
 		Enum.Seed.WHEAT: {

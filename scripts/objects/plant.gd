@@ -79,7 +79,8 @@ func _on_collision_area_body_entered(_body: Node2D) -> void:
 		return
 
 	var item = Data.SEED_TO_ITEM[res.curr_seed_enum]
-	Data.items_amount[Data.difficulty][item] += 2
+	var item_amount = Data.PLANT_HARVEST_AMOUNT[res.curr_seed_enum][Data.difficulty]
+	Data.items_amount[Data.difficulty][item] += randi_range(item_amount[0], item_amount[1])
 
 	print(res.plant_name + " collected")
 
