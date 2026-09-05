@@ -15,6 +15,15 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_ygcrn")
 
+[node name="BG" type="ColorRect" parent="." unique_id=1851229902]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5294118)
+
 [node name="GridContainer" type="GridContainer" parent="." unique_id=609050978]
 layout_mode = 1
 anchors_preset = -1
@@ -31,7 +40,14 @@ columns = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1559314994]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -103.0
+offset_top = 16.0
+offset_right = -19.0
+offset_bottom = 56.0
+grow_horizontal = 0
 mouse_filter = 2
 
 [node name="ExitButton" type="TextureRect" parent="HBoxContainer" unique_id=216202831]

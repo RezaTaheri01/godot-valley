@@ -4,6 +4,7 @@
 
 [node name="KeyboardControlHintUI" type="Control" unique_id=588791315]
 modulate = Color(1, 1, 1, 0.78431374)
+z_index = -10
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
