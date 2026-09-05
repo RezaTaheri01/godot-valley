@@ -36,6 +36,8 @@ func toggle_pause():
 		# Resume the game.
 		get_tree().paused = false
 		
+		$Root/OptionsMenu.hide_menu()
+		$Root/DifficultyMenu.hide_menu()
 		# Play the pause menu hide animation.
 		hide_menu()
 	

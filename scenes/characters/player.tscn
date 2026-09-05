@@ -1557,6 +1557,7 @@ limit_smoothed = true
 texture = ExtResource("2_eojnx")
 hframes = 33
 vframes = 4
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032790205]
 shape = SubResource("CapsuleShape2D_atpat")
