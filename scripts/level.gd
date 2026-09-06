@@ -135,6 +135,7 @@ var tree_frame_state: Array = []
 @export var rain_color: Color
 @export var volume_curve: Curve
 @onready var rain_particle: GPUParticles2D = $Overlay/RainParticles2D
+var can_change_day: bool = true
 
 var _raining := false
 
@@ -164,8 +165,10 @@ func _ready() -> void:
 	_initialize_day_night()
 	_connect_shop_characters()
 	_initialize_controller()
-	_set_timers()
 	load_level()
+	player.load_player()
+	_set_timers()
+	
 
 
 # ============================================================
@@ -223,17 +226,18 @@ func _set_timers() -> void:
 	Data.day_time = Data.DAY_TIMES[Data.difficulty]
 	Data.night_time = Data.NIGHT_TIMES[Data.difficulty]
 	Data.blob_spawn_time = Data.BLOB_SPAWN_TIMES[Data.difficulty]
-	
-	# Set Save Timer
+
+	# Set timer durations
 	_save_timer.wait_time = Data.BACKUP_SAVE_INTERVAL_TIME_IN_SEC
-	
-	# Set Day Timer
 	day_timer.wait_time = Data.day_time
-	
-	# Set Night Timer
-	
-	# Set Blob Spawn Timer
+	#night_timer.wait_time = Data.night_time
 	blob_spawn_timer.wait_time = Data.blob_spawn_time
+
+	# Reset timers
+	_save_timer.start()
+	day_timer.start()
+	#night_timer.start()
+	blob_spawn_timer.start()
 	
 #endregion
 
@@ -326,7 +330,9 @@ func _update_machine_preview() -> void:
 # Starts the transition to the next day when the player triggers
 # a day change.
 func _on_player_day_change() -> void:
-	_start_day_transition()
+	if day_timer.time_left <= 0 and can_change_day:
+		can_change_day = false
+		_start_day_transition()
 
 
 # Plays the day-transition animation and resets the level
@@ -348,8 +354,12 @@ func _start_day_transition() -> void:
 		0.0,
 		1.0
 	)
+	tween.tween_interval(0.5)
+	tween.tween_callback(active_change_day)
 
-
+func active_change_day():
+	can_change_day = true
+	
 # ============================================================
 # NEW DAY RESET
 # ============================================================
