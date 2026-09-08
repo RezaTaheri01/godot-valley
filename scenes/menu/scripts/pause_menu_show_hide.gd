@@ -32,7 +32,8 @@ func _input(event):
 func toggle_pause():
 	# If the game is currently paused...
 	if $Root.visible:
-		
+		# Gameplay
+		Input.emulate_mouse_from_touch = false
 		# Resume the game.
 		get_tree().paused = false
 		
@@ -43,7 +44,8 @@ func toggle_pause():
 	
 	# If the game is currently running...
 	else:
-		
+		# Menu
+		Input.emulate_mouse_from_touch = true
 		# Pause the game.
 		get_tree().paused = true
 		

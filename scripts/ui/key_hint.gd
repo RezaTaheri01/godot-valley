@@ -9,13 +9,19 @@ var last_icon_texture
 func setup(texture, icon, key: Enum.Keyboard):
 	last_icon_texture = icon
 	keyboard_key = key
-	$HBoxContainer/Key.texture = texture
+	if DisplayServer.is_touchscreen_available():
+		$HBoxContainer/Key.texture = null
+		$HBoxContainer.scale = Vector2(1.5, 1.5)
+		$HBoxContainer/Item/Button.modulate = Color("ffffff20")
+	else:
+		$HBoxContainer/Key.texture = texture
+		
 	if icon != null:
 		$HBoxContainer/Item.texture = icon
 		
 	
 func _ready() -> void:
-	$Button.pressed.connect(_on_button_pressed)
+	$HBoxContainer/Item/Button.pressed.connect(_on_button_pressed)
 	
 		
 func update(item_enum):
