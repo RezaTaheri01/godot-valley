@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://k8r8or1u2l6y" path="res://scripts/ui/plant_info_control.gd" id="1_gwqxr"]
 [ext_resource type="Texture2D" uid="uid://b87gfl326liki" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Keyboard/KeyN.png" id="3_sl0nk"]
 [ext_resource type="Texture2D" uid="uid://pvdbd5ebc2xt" path="res://graphics/Ninja Adventure - Asset Pack/Ninja Adventure - Asset Pack/Ui/Input/Gamepad/ButtonPlusRight.png" id="4_01cku"]
+[ext_resource type="Texture2D" uid="uid://c8w5bgiupw84o" path="res://graphics/ui/frame.png" id="5_01cku"]
 
 [node name="PlantInfoContainer" type="Control" unique_id=627218757]
 z_index = -10
@@ -63,13 +64,11 @@ layout_mode = 2
 texture = ExtResource("4_01cku")
 stretch_mode = 5
 
-[node name="TouchButton" type="Button" parent="." unique_id=1762507143]
-modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(70, 30)
-layout_mode = 0
-offset_left = 36.0
-offset_top = 15.0
-offset_right = 106.0
-offset_bottom = 45.0
+[node name="TouchButton" type="TouchScreenButton" parent="." unique_id=653587044]
+modulate = Color(0, 0, 0, 0)
+position = Vector2(30.999998, 11)
+scale = Vector2(2.6999998, 1.3333333)
+texture_normal = ExtResource("5_01cku")
+visibility_mode = 1
 
 [connection signal="pressed" from="TouchButton" to="." method="hide_show_ui"]

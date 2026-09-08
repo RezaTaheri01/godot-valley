@@ -6,6 +6,7 @@
 [ext_resource type="FontFile" uid="uid://dixbpuyvwixp8" path="res://graphics/fonts/PixeloidSans.ttf" id="3_2yk66"]
 [ext_resource type="PackedScene" uid="uid://davcnjtsqglmc" path="res://scenes/menu/options.tscn" id="3_xtxec"]
 [ext_resource type="PackedScene" uid="uid://xpsqbu8fhm1j" path="res://scenes/menu/difficulty_menu.tscn" id="4_msl3b"]
+[ext_resource type="Texture2D" uid="uid://c8w5bgiupw84o" path="res://graphics/ui/frame.png" id="7_5nn8h"]
 
 [node name="PauseMenu" type="CanvasLayer" unique_id=948369099]
 process_mode = 3
@@ -124,21 +125,12 @@ offset_right = -34.0
 offset_bottom = 48.0
 grow_horizontal = 0
 
-[node name="TouchScreenButton" type="Button" parent="Control" unique_id=1039466025]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -39.0
-offset_top = -15.0
-offset_right = 36.0
-offset_bottom = 35.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Menu"
+[node name="TouchScreenButton" type="TouchScreenButton" parent="Control" unique_id=1102104217]
+modulate = Color(0, 0, 0, 0.49019608)
+position = Vector2(-4.000049, 6.9999995)
+scale = Vector2(2.0999994, 1.2)
+texture_normal = ExtResource("7_5nn8h")
+visibility_mode = 1
 
 [connection signal="pressed" from="Root/CenterContainer/ButtonPanel/VBoxContainer/ResumeButton" to="Root" method="_on_resume_button_pressed"]
 [connection signal="pressed" from="Root/CenterContainer/ButtonPanel/VBoxContainer/NewGameButton" to="Root" method="_on_new_game_button_pressed"]

@@ -16,6 +16,8 @@ const KEY_HINT_SCENE := preload("res://scenes/ui/key_hint.tscn")
 
 func _ready() -> void:
 	_create_key_hints()
+	if DisplayServer.is_touchscreen_available():
+		$VBoxContainer.position = Vector2($VBoxContainer.position[0] - 65, $VBoxContainer.position[1] - 25)
 
 
 # ============================================================

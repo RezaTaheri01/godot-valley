@@ -140,6 +140,14 @@ const LIGHT_SCALE := 0.5
 # ============================================================
 @onready var _auto_save_timer = $AutoSaveTimer
 
+# ============================================================
+# Touch Zoom
+# ============================================================
+var touches := {}
+
+var pinch_start_distance := 0.0
+var pinch_start_zoom := Vector2.ONE
+var pinching := false
 
 func _ready() -> void:
 	Data.player = self
@@ -341,14 +349,44 @@ func get_basic_input():
 		zoom -= Vector2.ONE
 		camera.zoom = zoom.clamp(Data.MIN_ZOOM, Data.MAX_ZOOM)
 
-		
+# Touch Zoom		
 func _input(event):
-	if event is InputEventMagnifyGesture:
-		camera.zoom *= event.factor
-		camera.zoom = camera.zoom.clamp(
-			Data.MIN_ZOOM,
-			Data.MAX_ZOOM
-		)
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			touches[event.index] = event.position
+		else:
+			touches.erase(event.index)
+
+			if touches.size() < 2:
+				pinching = false
+
+	elif event is InputEventScreenDrag:
+		if event.index in touches:
+			touches[event.index] = event.position
+
+		if touches.size() >= 2:
+			var touch_positions = touches.values()
+
+			var distance = touch_positions[0].distance_to(
+				touch_positions[1]
+			)
+
+			if not pinching:
+				pinching = true
+				pinch_start_distance = distance
+				pinch_start_zoom = camera.zoom
+				return
+
+			if pinch_start_distance > 0:
+				var factor = distance / pinch_start_distance
+
+				camera.zoom = (
+					pinch_start_zoom * factor
+				).clamp(
+					Data.MIN_ZOOM,
+					Data.MAX_ZOOM
+				)
+	
 		
 func get_fishing_input():
 	if Input.is_action_just_pressed("action"):

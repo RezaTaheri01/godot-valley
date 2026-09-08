@@ -33,7 +33,11 @@ func reveal(shop_type: Enum.Shop = Enum.Shop.HAT):
 			
 		await get_tree().process_frame
 		$GridContainer.get_child(0).grab_focus()
+		# Menu/Shop
+		Input.emulate_mouse_from_touch = true
 	else:
+		# Gameplay
+		Input.emulate_mouse_from_touch = false
 		close.emit()
 		
 #func _ready() -> void:
@@ -45,4 +49,6 @@ func remove_items():
 
 
 func _on_touch_button_pressed() -> void:
+	# Gameplay
+	Input.emulate_mouse_from_touch = false
 	close.emit()
